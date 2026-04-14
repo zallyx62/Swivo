@@ -71,14 +71,15 @@
                 
                 <input type="email" id="login-email" class="swivo-input" placeholder="Email">
 <input type="password" id="login-pass" class="swivo-input" placeholder="Mot de passe">
-                
-                <button class="btn-accent" style="margin-top: 10px;" onclick="doLogin()">Connexion</button>
-                
-                <span class="helper-link" onclick="showAuthStep('forgot-screen')">Mot de passe oublié ?</span>
-                
-                <div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
-                    <p style="font-size: 0.8rem; opacity: 0.6;">Pas encore de compte ?</p>
-                    <button class="btn-accent btn-outline" onclick="inscription(document.getElementById('login-email').value, document.getElementById('login-pass').value)">Créer un profil Swivo</button>>
+
+<button class="btn-accent" style="margin-top: 10px;" onclick="doLogin()">Connexion</button>
+
+<span class="helper-link" onclick="showAuthStep('forgot-screen')">Mot de passe oublié ?</span>
+
+<div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
+    <p style="font-size: 0.8rem; opacity: 0.6;">Pas encore de compte ?</p>
+    <button class="btn-accent btn-outline" onclick="inscription(document.getElementById('login-email').value, document.getElementById('login-pass').value)">Créer un profil Swivo</button>
+</div>
                 </div>
             </div>
         </div>
