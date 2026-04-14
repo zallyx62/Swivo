@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
     <title>Swivo — Firebase Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #6c63ff; --bg: #080810; --panel: #13131e;
@@ -205,6 +206,33 @@
                 </div>
             `;
         }
+// --- CONFIGURATION SUPABASE ---
+const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
+const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Test de connexion
+(async function() {
+    console.log("Tentative de connexion à Supabase...");
+    const { data, error } = await supabase.from('profils').select('*').limit(1);
+    if (error) console.log("Erreur connexion :", error.message);
+    else console.log("Connexion Supabase OK !");
+
+// Fonction pour s'inscrire
+async function inscription(email, password) {
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+    });
+
+    if (error) {
+        alert("Erreur : " + error.message);
+    } else {
+        alert("Succès ! Compte créé pour : " + data.user.email);
+        // Ici tu peux rediriger l'utilisateur ou afficher le feed
+    }
+}
+
     </script>
 </body>
 </html> 
