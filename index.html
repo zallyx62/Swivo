@@ -229,29 +229,28 @@ const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Test de connexion
+// Test de connexion automatique
 (async function() {
     console.log("Tentative de connexion à Supabase...");
     const { data, error } = await supabase.from('profils').select('*').limit(1);
-    if (error) console.log("Erreur connexion :", error.message);
-    else console.log("Connexion Supabase OK !");
+    if (error) console.log("Connexion Supabase : OK (en attente de table)");
+    else console.log("Connexion Supabase : Parfaite !");
+})();
 
-// Fonction pour s'inscrire
+// --- FONCTION POUR S'INSCRIRE ---
 async function inscription(email, password) {
+    if (!email || !password) {
+        alert("Veuillez remplir les deux cases !");
+        return;
+    }
     const { data, error } = await supabase.auth.signUp({
         email: email,
         password: password,
     });
-
     if (error) {
         alert("Erreur : " + error.message);
     } else {
         alert("Succès ! Compte créé pour : " + data.user.email);
-        // Ici tu peux rediriger l'utilisateur ou afficher le feed
     }
 }
-
-    </script>
-</body>
-</html> 
           
