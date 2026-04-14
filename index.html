@@ -63,5 +63,254 @@
 
         /* NAV BAR */
         .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 15px; }
-        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column
-  
+        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; }
+        .nav-item.active { color: var(--accent); }
+        .btn-create { width: 45px; height: 45px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4); transform: translateY(-5px); cursor: pointer; }
+
+        /* FORM ELEMENTS */
+        .swivo-input { background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 12px; width: 100%; outline: none; margin-top: 5px; font-family: inherit; }
+        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: var(--text); }
+    </style>
+</head>
+<body>
+
+    <div id="app-shell">
+        
+        <div class="header">
+            <div class="logo" onclick="location.reload()">Swivo</div>
+            <div style="display:flex; gap:20px;">
+                <span onclick="openSimpleModal('Recherche', 'Tapez votre recherche...')">🔍</span>
+                <span onclick="openSimpleModal('Notifications', 'Vous n\'avez pas de nouvelles notifications.')">🔔</span>
+            </div>
+        </div>
+
+        <div class="screen active" id="home">
+            <div class="feed-tabs">
+                <span class="tab-item active" onclick="switchFeed('pour-toi', this)">Pour toi</span>
+                <span class="tab-item" onclick="switchFeed('abonnement', this)">Abonnements</span>
+            </div>
+
+            <div class="card" onclick="openAdviceDetail()" style="border: 2px solid var(--accent); background: linear-gradient(135deg, rgba(108,99,255,0.05), transparent);">
+                <span style="font-size: 0.6rem; font-weight: 900; color: var(--accent);">CONSEIL DU JOUR 💡</span>
+                <h3 id="daily-title" style="margin: 5px 0; font-family: 'Syne';">Chargement...</h3>
+                <p style="font-size: 0.8rem; opacity: 0.7;">Clique pour voir les détails et exercices...</p>
+            </div>
+
+            <div id="feed-container">
+                </div>
+        </div>
+
+        <div class="screen" id="messages">
+            <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Messagerie</h2>
+            <div id="chat-list">
+                <div class="chat-list-item" onclick="openChat('Thomas (Local)')">
+                    <div style="width:50px; height:50px; background:#43e97b; border-radius:var(--pfp-shape);"></div>
+                    <div style="flex:1">
+                        <div style="font-weight: 700;">Thomas (Local Baker)</div>
+                        <div style="font-size: 0.8rem; opacity: 0.6;">C'est super ton idée de...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="create">
+            <h2 style="font-family: 'Syne';">Créer un Swivo</h2>
+            <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <label class="card" style="text-align: center; display: block;">
+                    <span style="font-size: 2rem;">📸</span>
+                    <p>Caméra</p>
+                    <input type="file" accept="video/*" capture="user" style="display: none;" onchange="alert('Fichier capturé ! Prêt pour l\'upload 1080p 60fps.')">
+                </label>
+                <label class="card" style="text-align: center; display: block;">
+                    <span style="font-size: 2rem;">📁</span>
+                    <p>Galerie</p>
+                    <input type="file" accept="video/*,image/*" style="display: none;" onchange="alert('Fichier sélectionné !')">
+                </label>
+            </div>
+            <p style="text-align: center; font-size: 0.7rem; opacity: 0.5; margin-top: 20px;">Qualité max : 1080p 60fps</p>
+        </div>
+
+        <div class="screen" id="profile">
+            <div style="text-align: center; padding: 20px 0;">
+                <div id="main-pfp" style="width: 100px; height: 100px; background: var(--accent); border-radius: var(--pfp-shape); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: 0.3s;">👤</div>
+                <input type="text" class="swivo-input" style="text-align: center; font-weight: 800; font-family: 'Syne'; border:none; background:transparent; font-size: 1.2rem;" value="Apprenti_Swivo">
+                
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                    <button class="swivo-input" style="width:auto; padding: 5px 15px;" onclick="setPfpShape('50%')">Rond</button>
+                    <button class="swivo-input" style="width:auto; padding: 5px 15px;" onclick="setPfpShape('15%')">Carré</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 style="font-family: 'Syne'; margin-bottom: 5px;">Ma Bio</h4>
+                <textarea class="swivo-input" style="height: 60px; resize: none;" placeholder="Décris-toi en quelques mots..."></textarea>
+            </div>
+
+            <div class="card" style="border-color: #ff6584;">
+                <h4 style="color: #ff6584">Soutenir le projet</h4>
+                <button class="swivo-input" style="background: #ff6584; color: white; border:none; font-weight:700; margin-top: 10px;" onclick="alert('Lancement de la publicité...')">Regarder une pub 📺</button>
+                <button class="swivo-input" style="background: #0070ba; color: white; border:none; font-weight:700; margin-top: 10px;" onclick="alert('Lien PayPal : tonemail@exemple.com')">Don via PayPal 💎</button>
+            </div>
+        </div>
+
+        <div class="screen" id="settings">
+            <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Paramètres</h2>
+            
+            <div class="card">
+                <p style="margin-bottom: 10px;">Couleur d'accentuation</p>
+                <div style="display:flex; gap:10px;">
+                    <div class="color-dot active" style="background: #6c63ff" onclick="setAccent('#6c63ff', this)"></div>
+                    <div class="color-dot" style="background: #ff6584" onclick="setAccent('#ff6584', this)"></div>
+                    <div class="color-dot" style="background: #43e97b" onclick="setAccent('#43e97b', this)"></div>
+                    <div class="color-dot" style="background: #f7971e" onclick="setAccent('#f7971e', this)"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <p>Taille du texte</p>
+                <input type="range" min="0.8" max="1.2" step="0.05" value="1" style="width:100%; margin-top:10px; accent-color: var(--accent);" oninput="setFontScale(this.value)">
+            </div>
+
+            <div class="card" onclick="toggleTheme()">
+                <p>Changer le mode (Sombre / Clair)</p>
+            </div>
+        </div>
+
+        <div class="nav-bar">
+            <div class="nav-item active" onclick="switchTab('home', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span>Flux</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('messages', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                <span>Chat</span>
+            </div>
+            <div class="btn-create" onclick="switchTab('create', this)">+</div>
+            <div class="nav-item" onclick="switchTab('profile', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                <span>Profil</span>
+            </div>
+            <div class="nav-item" onclick="switchTab('settings', this)">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span>Infos</span>
+            </div>
+        </div>
+
+        <div id="app-modal" class="modal">
+            <div class="modal-header">
+                <span class="close-btn" onclick="closeModal()">✕</span>
+                <h2 id="modal-title" style="font-family: 'Syne';">Détails</h2>
+            </div>
+            <div id="modal-content" style="line-height: 1.6;"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const POSTS = [
+            { user: "Artisan_Local", content: "Regardez comment je fabrique mes meubles à la main. 🪚 #Local #SavoirFaire", type: "pour-toi", isLocal: true },
+            { user: "Diction_Vibe", content: "Comment ne plus bégayer en 3 étapes simples. 🗣️ #Education", type: "pour-toi", isLocal: false },
+            { user: "Mon_Abo_Prefere", content: "Nouvelle photo de ma ville ce matin ! 📸", type: "abonnement", isLocal: true }
+        ];
+
+        const ADVICES = [
+            { title: "Gérer son stress", detail: "1. Inspirez par le nez 4s.<br>2. Bloquez 7s.<br>3. Expirez par la bouche 8s.<br><br>Répétez 3 fois pour calmer le rythme cardiaque immédiatement." },
+            { title: "Mieux articuler", detail: "Mettez un bouchon ou un stylo entre vos dents et lisez un texte à voix haute pendant 2 minutes par jour." }
+        ];
+
+        // INIT
+        window.onload = () => {
+            const tip = ADVICES[new Date().getDate() % ADVICES.length];
+            document.getElementById('daily-title').innerText = tip.title;
+            loadFeed('pour-toi');
+        };
+
+        // NAVIGATION FLUX
+        function switchFeed(type, el) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            loadFeed(type);
+        }
+
+        function loadFeed(type) {
+            const container = document.getElementById('feed-container');
+            container.innerHTML = "";
+            const filtered = POSTS.filter(p => p.type === type || type === 'pour-toi');
+            // Algo local prioritaire
+            const sorted = filtered.sort((a,b) => (a.isLocal ? -1 : 1));
+
+            sorted.forEach(post => {
+                container.innerHTML += `
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div style="font-weight:700;">@${post.user}</div>
+                            ${post.isLocal ? '<span style="color:var(--accent); font-size:0.6rem; border:1px solid; padding:2px 5px; border-radius:5px;">LOCAL</span>' : ''}
+                        </div>
+                        <p style="margin:8px 0; font-size:0.9rem;">${post.content}</p>
+                        <div class="video-placeholder"></div>
+                    </div>
+                `;
+            });
+        }
+
+        // NAVIGATION TABS PRINCIPAUX
+        function switchTab(id, el) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(!el.classList.contains('btn-create')) el.classList.add('active');
+        }
+
+        // INTERACTIVITE
+        function openAdviceDetail() {
+            const tip = ADVICES[new Date().getDate() % ADVICES.length];
+            openSimpleModal(tip.title, tip.detail);
+        }
+
+        function openChat(name) {
+            const content = `
+                <div style="display:flex; flex-direction:column; height:80%;">
+                    <div class="chat-bubble">Salut ! Tu as aimé mon dernier post ?</div>
+                    <div class="chat-bubble my-bubble">Oui grave, le côté local c'est le top !</div>
+                    <div class="chat-bubble">Merci ! On se capte plus tard.</div>
+                </div>
+                <div style="position:absolute; bottom:20px; left:20px; right:20px; display:flex; gap:10px;">
+                    <input type="text" class="swivo-input" placeholder="Répondre à ${name}...">
+                    <button class="swivo-input" style="width:auto; background:var(--accent); border:none; color:white;">Envoyer</button>
+                </div>
+            `;
+            openSimpleModal("Chat : " + name, content);
+        }
+
+        function openSimpleModal(title, content) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('app-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('app-modal').style.display = 'none';
+        }
+
+        // CUSTOMISATION
+        function setAccent(color, el) {
+            document.documentElement.style.setProperty('--accent', color);
+            document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function setFontScale(val) {
+            document.documentElement.style.setProperty('--font-scale', val);
+        }
+
+        function setPfpShape(shape) {
+            document.documentElement.style.setProperty('--pfp-shape', shape);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+        }
+    </script>
+</body>
+</html>
