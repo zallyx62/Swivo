@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo App</title>
+    <title>Swivo App — Evolution</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Variables par défaut (Sombre) */
             --accent: #6c63ff;
             --bg: #080810;
             --panel: #13131e;
@@ -14,138 +15,109 @@
             --text-dim: #9090a8;
             --border: rgba(255,255,255,0.08);
             --radius: 20px;
+            --font-scale: 1;
         }
 
-        /* RESET & FULLSCREEN */
+        .light-mode {
+            --bg: #f5f5fa;
+            --panel: #ffffff;
+            --text: #111111;
+            --text-dim: #666666;
+            --border: rgba(0,0,0,0.08);
+        }
+
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
         
         body, html { 
-            width: 100%; 
-            height: 100%; 
-            background: var(--bg); 
-            color: var(--text);
+            width: 100%; height: 100%; 
+            background: var(--bg); color: var(--text);
             font-family: 'DM Sans', sans-serif;
-            overflow: hidden; /* Empêche le rebond Safari */
+            overflow: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* APP CONTAINER - ADAPTATIF TOUT ÉCRAN */
         #app-shell {
-            width: 100%;
-            max-width: 500px; /* Limite sur PC pour garder le look mobile */
-            height: 100%;
-            margin: 0 auto;
-            position: relative;
-            display: flex;
-            flex-direction: column;
+            width: 100%; max-width: 500px; height: 100%;
+            margin: 0 auto; position: relative;
+            display: flex; flex-direction: column;
             background: var(--bg);
         }
 
-        /* SCREENS SYSTEM */
+        /* TYPOGRAPHIE DYNAMIQUE */
+        h2, h3, .post-user { font-family: 'Syne', sans-serif; }
+        p, span, input { font-size: calc(0.9rem * var(--font-scale)); }
+
         .screen {
-            flex: 1;
-            display: none;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 20px 16px 100px; /* Padding bas pour la nav bar */
+            flex: 1; display: none; flex-direction: column;
+            padding: 20px 16px 100px; overflow-y: auto;
             scrollbar-width: none;
         }
         .screen::-webkit-scrollbar { display: none; }
         .screen.active { display: flex; animation: fadeIn 0.3s ease; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* HEADER FIXED */
+        /* HEADER */
         .header {
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg);
-            z-index: 10;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg); z-index: 10;
         }
-        .header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; }
-        .accent-text { background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .accent-text { 
+            font-family: 'Syne'; font-weight: 800; font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--accent), #ff6584); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        }
 
         /* CARDS */
         .card {
-            background: var(--panel);
-            margin-bottom: 16px;
-            border-radius: var(--radius);
-            padding: 18px;
-            border: 1px solid var(--border);
-            transition: 0.3s;
+            background: var(--panel); margin-bottom: 16px; border-radius: var(--radius);
+            padding: 18px; border: 1px solid var(--border);
         }
-        .card:active { transform: scale(0.98); }
 
-        /* DAILY ADVICE (AUTOMATIQUE) */
+        /* CONSEIL DU JOUR */
         .daily-box {
-            background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(255,101,132,0.15));
-            border: 1px solid var(--accent);
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,101,132,0.1));
+            border: 2px solid var(--accent);
         }
-        .daily-tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
-        .daily-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; margin-bottom: 6px; }
+        .daily-tag { font-size: 0.7rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; display: block; }
+
+        /* PUB & SOUTIEN */
+        .ad-btn {
+            background: #ff6584; color: white; border: none; padding: 12px;
+            border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer;
+            margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .paypal-btn {
+            background: #0070ba; color: white; border: none; padding: 12px;
+            border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer; margin-top: 10px;
+        }
+
+        /* SETTINGS UI */
+        .setting-section { margin-bottom: 25px; }
+        .setting-section h4 { font-family: 'Syne'; color: var(--accent); margin-bottom: 12px; text-transform: uppercase; font-size: 0.75rem; }
         
-        /* FEED ITEMS */
-        .post-user { font-weight: 700; font-family: 'Syne', sans-serif; font-size: 0.95rem; }
-        .post-handle { color: var(--text-dim); font-size: 0.8rem; margin-bottom: 10px; display: block; }
-        .post-content { font-size: 0.9rem; color: #d0d0d8; line-height: 1.4; }
+        .color-grid { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 15px; }
+        .swatch { width: 35px; height: 35px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
+        .swatch.active { border-color: var(--text); transform: scale(1.1); }
 
-        /* SUPPORT SECTION */
-        .support-card {
-            background: #1a1a2e;
-            border: 1px dashed var(--accent);
-            text-align: center;
-            margin-top: 20px;
-        }
-        .support-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            margin-top: 12px;
-            width: 100%;
-            cursor: pointer;
+        .slider { width: 100%; margin: 10px 0; accent-color: var(--accent); }
+
+        /* PROFIL UI */
+        .profile-input {
+            background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text);
+            padding: 10px; border-radius: 10px; width: 100%; margin-top: 10px; outline: none;
+            text-align: center; font-family: 'Syne'; font-weight: 700;
         }
 
-        /* NAVIGATION BAR (FIXED BOTTOM) */
+        /* NAV BAR */
         .nav-bar {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 75px;
-            background: rgba(8, 8, 16, 0.9);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: 10px;
-            z-index: 100;
+            position: absolute; bottom: 0; left: 0; right: 0; height: 75px;
+            background: var(--panel); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            color: var(--text-dim); font-size: 0.6rem; cursor: pointer;
-        }
+        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; }
         .nav-item.active { color: var(--accent); }
-        .nav-item svg { width: 24px; height: 24px; }
-
-        /* SETTINGS OPTIONS */
-        .setting-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 0; border-bottom: 1px solid var(--border);
-        }
-        
-        /* MASCOTTE */
-        .mascot-bubble {
-            display: flex; gap: 10px; align-items: center; margin: 20px 0;
-        }
-        .mascot-avatar { width: 40px; height: 40px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; }
 
     </style>
 </head>
@@ -154,84 +126,92 @@
     <div id="app-shell">
         
         <div class="header">
-            <h2><span class="accent-text">Swivo</span></h2>
-            <div id="date-display" style="font-size: 0.8rem; font-weight: 600; color: var(--text-dim);"></div>
+            <div class="accent-text">Swivo</div>
+            <div id="date-display" style="font-size: 0.8rem; opacity: 0.6"></div>
         </div>
 
         <div class="screen active" id="home">
-            
             <div class="card daily-box">
-                <span class="daily-tag">Conseil du moment</span>
-                <div class="daily-title" id="daily-title">Chargement...</div>
-                <p class="post-content" id="daily-body">...</p>
+                <span class="daily-tag">Conseil du Jour 📅</span>
+                <h3 id="daily-title" style="margin-bottom: 8px;">...</h3>
+                <p id="daily-body" style="opacity: 0.9;">Chargement du conseil...</p>
             </div>
 
-            <div class="mascot-bubble">
-                <div class="mascot-avatar">🦊</div>
-                <div style="font-size: 0.8rem; opacity: 0.8">"Prêt pour tes découvertes du jour ?"</div>
+            <div class="card" style="border-style: dashed; border-color: #ff6584;">
+                <h4 style="font-family: 'Syne'">Soutenir Swivo gratuitement</h4>
+                <p style="font-size: 0.8rem; margin: 8px 0; opacity: 0.7;">Regarde une courte vidéo pour nous aider à financer l'application !</p>
+                <button class="ad-btn" onclick="simulateAd()">
+                    <span>📺</span> Regarder une pub
+                </button>
             </div>
 
             <div id="feed">
                 <div class="card">
-                    <span class="post-user">HugoDécrypte @hugo</span>
-                    <p class="post-content">Comprendre le système des bourses en 2024. Voici ce qu'il ne faut pas rater... 🎓</p>
-                    <div style="margin-top: 10px; height: 150px; background: #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #444;">[Vidéo Youtube @Hugo]</div>
+                    <div style="display:flex; gap:10px; align-items: center; margin-bottom: 12px;">
+                        <div style="width:35px; height:35px; background:var(--accent); border-radius:50%"></div>
+                        <div>
+                            <div class="post-user">Diction Master @Diction</div>
+                            <div style="font-size:0.7rem; opacity:0.5">Il y a 2h</div>
+                        </div>
+                    </div>
+                    <p>Pour ne plus bégayer quand tu es stressé, appuie ton pouce contre ton index. Ce point d'ancrage physique calme le cerveau. 🧠</p>
                 </div>
-
-                <div class="card">
-                    <span class="post-user">Diction Prof @diction</span>
-                    <p class="post-content">Exercice du jour : répétez "Un chasseur sachant chasser sans son chien..." 5 fois sans bégayer. 🗣️</p>
-                </div>
-                
-                <div class="card support-card">
-                    <h3>Soutenir le projet Swivo ? 💎</h3>
-                    <p style="font-size: 0.8rem; margin-top: 8px;">Aidez-nous à garder l'application gratuite et sans pub.</p>
-                    <button class="support-btn" onclick="alert('Lien vers don/abonnement')">Faire un don</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="screen" id="settings">
-            <h3 style="font-family: 'Syne'; margin-bottom: 20px;">Paramètres</h3>
-            
-            <div class="card">
-                <div class="setting-row">
-                    <span>Mode Sombre</span>
-                    <input type="checkbox" checked disabled>
-                </div>
-                <div class="setting-row">
-                    <span>Notifications conseils</span>
-                    <input type="checkbox" checked>
-                </div>
-            </div>
-
-            <div class="card">
-                <h4 style="margin-bottom: 10px;">Personnalisation</h4>
-                <div style="display: flex; gap: 10px;">
-                    <div style="width:30px; height:30px; border-radius: 50%; background: #6c63ff;" onclick="changeAccent('#6c63ff')"></div>
-                    <div style="width:30px; height:30px; border-radius: 50%; background: #ff6584;" onclick="changeAccent('#ff6584')"></div>
-                    <div style="width:30px; height:30px; border-radius: 50%; background: #43e97b;" onclick="changeAccent('#43e97b')"></div>
-                </div>
-            </div>
-
-            <div class="card support-card">
-                <p>Vous aimez Swivo ?</p>
-                <button class="support-btn">Voulez-vous nous soutenir ?</button>
             </div>
         </div>
 
         <div class="screen" id="profile">
-            <div style="text-align: center; padding: 20px;">
-                <div style="width: 80px; height: 80px; background: var(--accent); border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem;">👤</div>
-                <h3 style="font-family: 'Syne'">Utilisateur Swivo</h3>
-                <p style="color: var(--text-dim); font-size: 0.8rem;">Membre depuis aujourd'hui</p>
+            <div style="text-align: center; padding: 30px 0;">
+                <div style="width: 90px; height: 90px; background: var(--accent); border-radius: 30px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">👤</div>
+                <input type="text" id="user-pseudo" class="profile-input" value="Apprenti_Swivo" oninput="updatePseudo(this.value)">
+                <p style="font-size: 0.75rem; margin-top: 5px; opacity: 0.5;">Appuyez pour modifier votre pseudo</p>
             </div>
+
             <div class="card">
-                <div class="post-user">Progression</div>
-                <div style="width: 100%; height: 8px; background: #000; border-radius: 4px; margin-top: 10px;">
-                    <div style="width: 35%; height: 100%; background: var(--accent); border-radius: 4px;"></div>
+                <h4 style="font-family: 'Syne'; margin-bottom: 10px;">Statistiques</h4>
+                <div style="display: flex; justify-content: space-around; text-align: center;">
+                    <div><div style="font-weight: 800;">12</div><div style="font-size: 0.7rem; opacity:0.6">Conseils lus</div></div>
+                    <div><div style="font-weight: 800;">3</div><div style="font-size: 0.7rem; opacity:0.6">Dons</div></div>
+                    <div><div style="font-weight: 800;">Niv. 2</div><div style="font-size: 0.7rem; opacity:0.6">Rang</div></div>
                 </div>
-                <p style="font-size: 0.7rem; margin-top: 5px;">35% vers le niveau supérieur</p>
+            </div>
+
+            <div class="card" style="background: rgba(0,112,186,0.1); border-color: #0070ba;">
+                <h4 style="color: #0070ba; font-family: 'Syne'">Faire un don direct</h4>
+                <p style="font-size: 0.8rem; margin: 5px 0;">Soutenez-nous via PayPal pour aller plus vite !</p>
+                <button class="paypal-btn" onclick="alert('Lien PayPal : [Ton adresse email plus tard]')">Soutenir via PayPal 💎</button>
+            </div>
+        </div>
+
+        <div class="screen" id="settings">
+            <h3 style="margin-bottom: 20px;">Paramètres & Design</h3>
+
+            <div class="setting-section">
+                <h4>Thème Principal</h4>
+                <div style="display: flex; gap: 10px;">
+                    <button class="ad-btn" style="background: #13131e; flex: 1;" onclick="setTheme('dark')">🌙 Sombre</button>
+                    <button class="ad-btn" style="background: #ffffff; color: #000; flex: 1; border: 1px solid #ddd;" onclick="setTheme('light')">☀️ Clair</button>
+                </div>
+            </div>
+
+            <div class="setting-section">
+                <h4>Couleur d'accentuation</h4>
+                <div class="color-grid">
+                    <div class="swatch active" style="background: #6c63ff;" onclick="setAccent('#6c63ff', this)"></div>
+                    <div class="swatch" style="background: #ff6584;" onclick="setAccent('#ff6584', this)"></div>
+                    <div class="swatch" style="background: #43e97b;" onclick="setAccent('#43e97b', this)"></div>
+                    <div class="swatch" style="background: #f7971e;" onclick="setAccent('#f7971e', this)"></div>
+                    <div class="swatch" style="background: #4facfe;" onclick="setAccent('#4facfe', this)"></div>
+                    <div class="swatch" style="background: #9b59b6;" onclick="setAccent('#9b59b6', this)"></div>
+                </div>
+            </div>
+
+            <div class="setting-section">
+                <h4>Taille du texte (<span id="font-val">100%</span>)</h4>
+                <input type="range" min="0.8" max="1.3" step="0.1" value="1" class="slider" oninput="setFontSize(this.value)">
+            </div>
+
+            <div class="card" style="text-align: center; opacity: 0.6; font-size: 0.7rem;">
+                Swivo App v2.1<br>Fait avec ❤️ pour la communauté
             </div>
         </div>
 
@@ -249,49 +229,67 @@
                 <span>Réglages</span>
             </div>
         </div>
-
     </div>
 
     <script>
-        // DONNEES : CONSEILS AUTOMATIQUES
         const ADVICES = [
-            { title: "🗣️ Parler avec clarté", body: "Articulez chaque syllabe comme si vous parliez à quelqu'un d'un peu sourd. Cela ralentit votre débit naturellement." },
-            { title: "💰 Économiser sans effort", body: "Appliquez la règle des 48h : attendez 2 jours avant tout achat non essentiel. 80% du temps, vous n'en voudrez plus." },
-            { title: "🧠 Mémoire de travail", body: "Expliquer un concept à quelqu'un d'autre (ou à votre chat) permet de retenir 90% de l'information." },
-            { title: "🧘 Stress & Respiration", body: "La technique du 4-7-8 : inspirez 4s, bloquez 7s, expirez 8s. Radical pour calmer l'anxiété." }
+            { title: "L'art de la pause", body: "En public, une pause de 3 secondes avant une info capitale multiplie son impact par 10. Ne craignez pas le silence." },
+            { title: "Budget 50/30/20", body: "50% besoins, 30% loisirs, 20% épargne. C'est la base pour ne plus jamais être à découvert." },
+            { title: "Sommeil Alpha", body: "Pas d'écrans 30min avant de dormir. La lumière bleue bloque la mélatonine, l'hormone de la récupération." }
         ];
 
-        // INITIALISATION AUTOMATIQUE
-        function initApp() {
-            // Affichage de la date
+        // INITIALISATION
+        window.onload = () => {
             const now = new Date();
-            document.getElementById('date-display').innerText = now.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-            // Conseil du jour aléatoire basé sur la date (change toutes les 24h)
-            const daySeed = now.getDate() % ADVICES.length;
-            const tip = ADVICES[daySeed];
+            document.getElementById('date-display').innerText = now.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+            
+            // Conseil du jour
+            const tip = ADVICES[now.getDate() % ADVICES.length];
             document.getElementById('daily-title').innerText = tip.title;
             document.getElementById('daily-body').innerText = tip.body;
-        }
+        };
 
-        // NAVIGATION ENTRE ONGLETS
-        function switchTab(tabId, el) {
-            // Masquer tous les écrans
+        // NAVIGATION
+        function switchTab(id, el) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // Dé-sélectionner les icônes
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            // Activer le bon
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(id).classList.add('active');
             el.classList.add('active');
         }
 
-        // PERSONNALISATION COULEUR
-        function changeAccent(color) {
-            document.documentElement.style.setProperty('--accent', color);
+        // CUSTOMISATION
+        function setTheme(mode) {
+            if(mode === 'light') document.body.classList.add('light-mode');
+            else document.body.classList.remove('light-mode');
         }
 
-        window.onload = initApp;
+        function setAccent(color, el) {
+            document.documentElement.style.setProperty('--accent', color);
+            document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function setFontSize(val) {
+            document.documentElement.style.setProperty('--font-scale', val);
+            document.getElementById('font-val').innerText = Math.round(val * 100) + '%';
+        }
+
+        function updatePseudo(val) {
+            console.log("Nouveau pseudo :", val);
+            // Ici on pourrait sauvegarder dans le localStorage
+        }
+
+        // SIMULATION PUB
+        function simulateAd() {
+            const btn = event.currentTarget;
+            btn.innerText = "⏳ Chargement de la vidéo...";
+            btn.style.opacity = "0.7";
+            setTimeout(() => {
+                alert("Merci ! La publicité a été visionnée. Vous avez soutenu Swivo ! 💎");
+                btn.innerHTML = "<span>✅</span> Pub visionnée !";
+                btn.style.background = "#43e97b";
+            }, 2500);
+        }
     </script>
 </body>
 </html>
