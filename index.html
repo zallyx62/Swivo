@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Swivo App — Officiel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c63ff; --secondary: #ff6584; --bg: #080810;
+            --card: #13131e; --text: #f0f0f8; --accent: #43e97b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+        /* HEADER */
+        header { padding: 40px 20px 10px; text-align: center; position: sticky; top: 0; background: rgba(8,8,16,0.9); backdrop-filter: blur(10px); z-index: 100; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* ONGLETS */
+        .tabs { display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .tab { padding: 15px; font-size: 0.85rem; font-weight: 600; opacity: 0.5; cursor: pointer; }
+        .tab.active { opacity: 1; border-bottom: 2px solid var(--primary); }
+
+        /* FEED (CONTENU SCROLLABLE) */
+        #feed { padding: 16px 16px 100px; height: calc(100vh - 150px); overflow-y: auto; }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .tag { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .card h2 { font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
+
+        /* NAV BAS */
+        nav { position: fixed; bottom: 0; width: 100%; background: rgba(13,13,30,0.95); display: flex; justify-content: space-around; padding: 15px 10px 30px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .nav-item { font-size: 1.3rem; opacity: 0.4; }
+        .nav-item.active { opacity: 1; color: var(--primary); }
+        .add-btn { background: var(--primary); width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; margin-top: -10px; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
+    </style>
+</head>
+<body>
+    <header><div class="logo">Swivo</div></header>
+    <div class="tabs">
+        <div class="tab active">Pour toi</div>
+        <div class="tab">Suivis</div>
+        <div class="tab">Live</div>
+    </div>
+    <div id="feed">
+        <div class="card">
+            <span class="tag">Conseil</span>
+            <h2>Bienvenue sur Swivo !</h2>
+            <p>Ici, tu trouveras tout ce qu'il te faut pour gérer ta vie d'adulte. Scrolle vers le bas pour découvrir les astuces.</p>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--secondary);">
+            <span class="tag" style="color:var(--secondary)">Sondage</span>
+            <h2>Ton avis compte</h2>
+            <p>Est-ce que l'interface te plaît ?</p>
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button style="flex:1; padding:10px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:700;">Oui !</button>
+                <button style="flex:1; padding:10px; border-radius:10px; border:1px solid #333; background:none; color:white;">Bof</button>
+            </div>
+        </div>
+        <div class="card">
+            <span class="tag">Finance</span>
+            <h2>Gérer son budget</h2>
+            <p>Utilise la méthode du 50/30/20 pour ne jamais finir le mois dans le rouge.</p>
+        </div>
+    </div>
+    <nav>
+        <div class="nav-item active">🏠</div>
+        <div class="nav-item">🔍</div>
+        <div class="add-btn">+</div>
+        <div class="nav-item">💬</div>
+        <div class="nav-item">👤</div>
+    </nav>
+</body>
+</html>
