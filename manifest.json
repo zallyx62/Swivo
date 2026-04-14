@@ -1,15 +1,15 @@
 {
+  "name": "Swivo",
   "short_name": "Swivo",
-  "name": "Swivo — Personnalisation",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#a855f7",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/888/888853.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#080810",
-  "background_color": "#080810"
+  ]
 }
