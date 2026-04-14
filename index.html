@@ -3,73 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo App — Officiel</title>
+    <title>Swivo App - Officiel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6c63ff; --secondary: #ff6584; --bg: #080810;
-            --card: #13131e; --text: #f0f0f8; --accent: #43e97b;
+            --primary: #6c63ff;
+            --secondary: #ff6584;
+            --bg: #080810;
+            --card: #13131e;
+            --text: #f0f0f8;
+            --accent: #43e97b;
+            --font-size: 0.9rem;
         }
+
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { font-family: 'DM Sans', sans-serif; background: #000; color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+        /* --- PANNEAU DE PERSONNALISATION (GAUCHE) --- */
+        #config-panel {
+            width: 300px; background: #111; border-right: 1px solid #222; padding: 20px;
+            display: flex; flex-direction: column; gap: 20px; overflow-y: auto;
+        }
+        .config-title { font-family: 'Syne', sans-serif; color: var(--primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .color-grid { display: flex; gap: 10px; }
+        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .color-dot.active { border-color: white; }
+        .btn-group { display: flex; gap: 5px; }
+        .btn-opt { flex:1; padding: 8px; background: #222; border: 1px solid #333; color: white; border-radius: 8px; cursor: pointer; font-size: 0.7rem; }
+        .btn-opt.active { background: var(--primary); border-color: var(--primary); }
+
+        /* --- SIMULATEUR MOBILE --- */
+        #mobile-viewport { flex: 1; display: flex; justify-content: center; align-items: center; background: var(--bg); position: relative; }
+        #phone {
+            width: 360px; height: 740px; background: var(--bg); border: 8px solid #1a1a1a; border-radius: 40px;
+            position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
 
         /* HEADER */
-        header { padding: 40px 20px 10px; text-align: center; position: sticky; top: 0; background: rgba(8,8,16,0.9); backdrop-filter: blur(10px); z-index: 100; }
-        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header { padding: 40px 20px 10px; text-align: center; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* ONGLETS */
-        .tabs { display: flex; justify-content: space-around; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .tab { padding: 15px; font-size: 0.85rem; font-weight: 600; opacity: 0.5; cursor: pointer; }
-        .tab.active { opacity: 1; border-bottom: 2px solid var(--primary); }
+        .tabs { display: flex; justify-content: space-around; margin-top: 10px; }
+        .tab { padding: 10px; font-size: 0.8rem; font-weight: 600; opacity: 0.4; cursor: pointer; transition: 0.3s; }
+        .tab.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
 
-        /* FEED (CONTENU SCROLLABLE) */
-        #feed { padding: 16px 16px 100px; height: calc(100vh - 150px); overflow-y: auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05); }
-        .tag { color: var(--accent); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px; display: block; }
-        .card h2 { font-family: 'Syne', sans-serif; font-size: 1.2rem; margin-bottom: 10px; }
-        .card p { font-size: 0.9rem; opacity: 0.8; line-height: 1.4; }
+        /* CONTENT AREA */
+        #app-content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; scroll-behavior: smooth; }
+        #app-content::-webkit-scrollbar { display: none; }
 
-        /* NAV BAS */
-        nav { position: fixed; bottom: 0; width: 100%; background: rgba(13,13,30,0.95); display: flex; justify-content: space-around; padding: 15px 10px 30px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .nav-item { font-size: 1.3rem; opacity: 0.4; }
+        .card { background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .tag { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; margin-bottom: 8px; }
+        .card p { font-size: var(--font-size); opacity: 0.7; line-height: 1.4; }
+
+        /* NAVIGATION BAR */
+        #main-nav {
+            position: absolute; bottom: 0; width: 100%; background: rgba(13,13,25,0.95);
+            display: flex; justify-content: space-around; align-items: center; padding: 15px 10px 25px;
+            border-top: 1px solid rgba(255,255,255,0.05); z-index: 10;
+        }
+        .nav-item { font-size: 1.4rem; opacity: 0.3; cursor: pointer; transition: 0.2s; }
         .nav-item.active { opacity: 1; color: var(--primary); }
-        .add-btn { background: var(--primary); width: 45px; height: 45px; border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; margin-top: -10px; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
+        .plus-btn { background: var(--primary); width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-top: -10px; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            #config-panel { display: none; }
+            #phone { width: 100vw; height: 100vh; border: none; border-radius: 0; }
+        }
     </style>
 </head>
 <body>
-    <header><div class="logo">Swivo</div></header>
-    <div class="tabs">
-        <div class="tab active">Pour toi</div>
-        <div class="tab">Suivis</div>
-        <div class="tab">Live</div>
-    </div>
-    <div id="feed">
-        <div class="card">
-            <span class="tag">Conseil</span>
-            <h2>Bienvenue sur Swivo !</h2>
-            <p>Ici, tu trouveras tout ce qu'il te faut pour gérer ta vie d'adulte. Scrolle vers le bas pour découvrir les astuces.</p>
-        </div>
-        <div class="card" style="border-left: 4px solid var(--secondary);">
-            <span class="tag" style="color:var(--secondary)">Sondage</span>
-            <h2>Ton avis compte</h2>
-            <p>Est-ce que l'interface te plaît ?</p>
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <button style="flex:1; padding:10px; border-radius:10px; border:none; background:var(--primary); color:white; font-weight:700;">Oui !</button>
-                <button style="flex:1; padding:10px; border-radius:10px; border:1px solid #333; background:none; color:white;">Bof</button>
+
+    <div id="config-panel">
+        <h2 style="font-family:'Syne';">Swivo Custom</h2>
+        
+        <div>
+            <p class="config-title">Couleur Principale</p>
+            <div class="color-grid">
+                <div class="color-dot active" style="background:#6c63ff" onclick="changeColor('#6c63ff', this)"></div>
+                <div class="color-dot" style="background:#ff6584" onclick="changeColor('#ff6584', this)"></div>
+                <div class="color-dot" style="background:#43e97b" onclick="changeColor('#43e97b', this)"></div>
+                <div class="color-dot" style="background:#f7971e" onclick="changeColor('#f7971e', this)"></div>
             </div>
         </div>
-        <div class="card">
-            <span class="tag">Finance</span>
-            <h2>Gérer son budget</h2>
-            <p>Utilise la méthode du 50/30/20 pour ne jamais finir le mois dans le rouge.</p>
+
+        <div>
+            <p class="config-title">Menu Navigation</p>
+            <div class="btn-group">
+                <button class="btn-opt active" onclick="changeNav('bottom', this)">Bas</button>
+                <button class="btn-opt" onclick="changeNav('top', this)">Haut</button>
+            </div>
+        </div>
+
+        <div>
+            <p class="config-title">Taille Texte</p>
+            <div class="btn-group">
+                <button class="btn-opt" onclick="changeFont('0.8rem', this)">Petit</button>
+                <button class="btn-opt active" onclick="changeFont('0.9rem', this)">Moyen</button>
+            </div>
+        </div>
+
+        <button onclick="refreshContent()" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">Actualiser le flux</button>
+    </div>
+
+    <div id="mobile-viewport">
+        <div id="phone">
+            <header id="app-header">
+                <div class="logo">Swivo</div>
+                <div class="tabs">
+                    <div class="tab active" onclick="loadTab('pourtoi', this)">Pour toi</div>
+                    <div class="tab" onclick="loadTab('suivis', this)">Suivis</div>
+                    <div class="tab" onclick="loadTab('live', this)">Live</div>
+                </div>
+            </header>
+
+            <div id="app-content">
+                </div>
+
+            <nav id="main-nav">
+                <div class="nav-item active" onclick="navigate('home', this)">🏠</div>
+                <div class="nav-item" onclick="navigate('search', this)">🔍</div>
+                <div class="plus-btn" onclick="navigate('add', this)">+</div>
+                <div class="nav-item" onclick="navigate('chat', this)">💬</div>
+                <div class="nav-item" onclick="navigate('profile', this)">👤</div>
+            </nav>
         </div>
     </div>
-    <nav>
-        <div class="nav-item active">🏠</div>
-        <div class="nav-item">🔍</div>
-        <div class="add-btn">+</div>
-        <div class="nav-item">💬</div>
-        <div class="nav-item">👤</div>
-    </nav>
-</body>
-</html>
+
+    <script>
+        // DONNÉES ALÉATOIRES
+        const CONTENT = {
+            pourtoi: [
+                { tag: "Finance", title: "Règle du 50/30/20", desc: "50% besoins, 30% envies, 20% épargne. La base pour ne plus être à découvert." },
+                { tag: "Cuisine", title: "Pasta Express", desc: "Moins de 5€, moins de 10 min. Idéal pour les fins de mois." },
+                { tag: "Droit", title: "Loyer trop cher ?", desc: "Vérifie l'encadrement des loyers dans ta ville. Tu pourrais économiser 100€/mois." }
+            ],
+            live: [
+                { tag: "Direct", title: "On parle d'orientation", desc: "Pose tes questions en direct à @LucasCoach." },
+                { tag: "Gaming", title: "Tournoi Swivo", desc: "On s'affronte sur le serveur n°4 !" }
+            ]
+        };
+
+        // FONCTIONS DE L'INTERFACE
+        function loadTab(type, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
