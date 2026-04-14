@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo — L'App Master</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
+    <title>Swivo — Secure & Share</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,6 +18,9 @@
         body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; font-size: calc(16px * var(--font-scale)); transition: background 0.3s; }
 
         #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+
+        /* AUTH SCREEN */
+        #auth-screen { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
 
         /* HEADER & TABS */
         .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; }
@@ -40,7 +44,9 @@
 
         /* MODALS */
         .modal { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; padding: 20px; animation: slideIn 0.3s ease; }
+        .bottom-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: var(--panel); border-top-left-radius: 25px; border-top-right-radius: 25px; padding: 20px; z-index: 2000; display: none; flex-direction: column; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); animation: slideUp 0.3s ease; border: 1px solid var(--border); }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         /* DESIGN SYSTEM */
         .swivo-input { background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; margin: 5px 0; }
@@ -50,25 +56,40 @@
         .dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
         .dot.active { border-color: var(--text); transform: scale(1.1); }
 
-        /* NAV BAR (Avec Icônes) */
-        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; }
+        /* SHARE ICONS */
+        .share-grid { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
+        .share-item { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 60px; cursor: pointer; }
+        .share-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+
+        /* NAV BAR */
+        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; z-index: 100;}
         .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; transition: 0.2s; }
         .nav-item.active { color: var(--accent); }
         .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; }
         .btn-plus { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4); cursor: pointer; }
 
-        /* SIMULATION LIVE */
-        .live-badge { background: #ff4757; color: white; font-size: 0.6rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; display: inline-block; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        .live-comments { height: 60px; overflow: hidden; font-size: 0.75rem; opacity: 0.8; margin-top: 10px; position: relative; }
-        .live-comment-item { animation: slideUpMsg 0.3s ease; }
-        @keyframes slideUpMsg { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        /* PROGRESS BAR UPLOAD */
+        .progress-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 10px; display: none; }
+        .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; }
 
     </style>
 </head>
 <body>
 
     <div id="app-shell">
+
+        <div id="auth-screen">
+            <h1 style="font-family: 'Syne'; font-size: 3rem; background: linear-gradient(135deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Swivo</h1>
+            <p style="margin-top: 10px; opacity: 0.8; margin-bottom: 30px;">La plateforme locale & bienveillante.</p>
+            
+            <div style="width: 100%; max-width: 300px;">
+                <input type="email" id="auth-email" class="swivo-input" placeholder="Adresse Email">
+                <input type="password" id="auth-pass" class="swivo-input" placeholder="Mot de passe">
+                <button class="btn-accent" style="margin-top: 15px;" onclick="doLogin()">Se connecter</button>
+                <button class="btn-accent btn-outline" style="margin-top: 10px;" onclick="doLogin()">Créer un compte</button>
+            </div>
+            <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 20px;">Sécurisé par chiffrement de bout en bout.</p>
+        </div>
         
         <div class="header">
             <div class="header-top">
@@ -85,7 +106,6 @@
         </div>
 
         <div class="screen active" id="home">
-            
             <div class="card clickable-card" onclick="openAdviceDetail()" style="border: 2px solid var(--accent);">
                 <div class="mascot-fox">🦊</div>
                 <span style="font-size: 0.65rem; font-weight: 900; color: var(--accent);">CONSEIL DU JOUR</span>
@@ -97,15 +117,11 @@
             <div class="card" style="border-color: #ff4757;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight: 800;">@Event_Local</span>
-                    <div class="live-badge">🔴 LIVE</div>
+                    <span style="background: #ff4757; color: white; font-size: 0.6rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">🔴 LIVE</span>
                 </div>
                 <p style="font-size: 0.85rem; margin-top: 5px;">Concert acoustique en direct 🎸</p>
                 <div style="width: 100%; height: 150px; background: #000; border-radius: 12px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Syne'; font-weight: 700;">
                     1080p 60fps (Simulé)
-                </div>
-                <div class="live-comments" id="live-chat-sim">
-                    <div class="live-comment-item"><b>User1:</b> Super son !</div>
-                    <div class="live-comment-item"><b>Mika:</b> J'adore 🔥</div>
                 </div>
             </div>
 
@@ -137,7 +153,11 @@
         <div class="screen" id="profile">
             <div style="text-align: center; padding: 10px 0;">
                 <div id="pfp-preview" style="width: 90px; height: 90px; background: var(--accent); border-radius: var(--pfp-shape); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: 0.3s;">👤</div>
-                <input type="text" class="swivo-input" style="text-align:center; border:none; background:transparent; font-weight:800; font-size:1.2rem;" value="Apprenti_Swivo">
+                
+                <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 15px;">
+                    <input type="text" id="username-input" class="swivo-input" style="text-align:center; font-weight:800; font-size:1.1rem; margin:0;" value="Apprenti_Swivo">
+                    <button id="btn-save-pseudo" class="btn-accent" style="width:auto; margin:0; padding:12px 15px;" onclick="savePseudo()">Sauver</button>
+                </div>
             </div>
 
             <div class="card">
@@ -153,7 +173,7 @@
             <div class="card">
                 <h4 style="font-family: 'Syne'; margin-bottom: 5px;">Ma Bio</h4>
                 <textarea id="bio-area" class="swivo-input" style="height:60px; resize:none;" placeholder="Parle-nous de toi..."></textarea>
-                <button class="btn-accent" style="padding:8px; font-size:0.8rem;" onclick="saveBio(this)">Sauvegarder</button>
+                <button class="btn-accent" style="padding:8px; font-size:0.8rem;" onclick="saveBio(this)">Sauvegarder Bio</button>
                 <div style="display:flex; gap:10px; margin-top:15px; justify-content: center;">
                     <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('50%')">Rond</button>
                     <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('15%')">Carré</button>
@@ -191,9 +211,8 @@
 
             <div class="card">
                 <p style="font-weight: 700; margin-bottom: 10px;">Compte & Support</p>
-                <button class="btn-accent btn-outline" onclick="alert('Ouverture du centre d\'assistance...')">Assistance</button>
-                <button class="btn-accent btn-outline" onclick="alert('Redirection vers la connexion...')">Ajouter un compte</button>
-                <button class="btn-accent" style="background: #ff4757; color: white;" onclick="alert('Vous allez être déconnecté.')">Déconnexion</button>
+                <button class="btn-accent btn-outline" onclick="alert('Ouverture du centre d\'assistance sécurisé...')">Assistance</button>
+                <button class="btn-accent btn-outline" onclick="logout()">Déconnexion / Changer de compte</button>
             </div>
         </div>
 
@@ -217,6 +236,52 @@
             </div>
         </div>
 
+        <div id="upload-modal" class="modal">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                <span style="font-size:1.5rem; cursor:pointer;" onclick="toggleModal('upload-modal', false)">←</span>
+                <h3 style="font-family:'Syne'">Nouveau Swivo</h3>
+            </div>
+            <p style="font-size:0.8rem; opacity:0.8; margin-bottom: 20px;">Nos algorithmes de compression optimisent votre fichier pour un rendu parfait sans prendre de place.</p>
+            
+            <input type="file" accept="video/*" class="swivo-input" style="padding: 10px;">
+            <input type="text" class="swivo-input" placeholder="Description de la vidéo...">
+            
+            <p style="margin-top: 15px; font-weight:bold; font-size:0.9rem;">Qualité d'encodage</p>
+            <select id="video-quality" class="swivo-input">
+                <option value="1080">1080p 60fps (Qualité Max)</option>
+                <option value="720">720p 30fps (Éco Data)</option>
+            </select>
+
+            <button id="btn-publish" class="btn-accent" style="margin-top: 20px;" onclick="simulateUpload()">Publier la vidéo</button>
+            
+            <div id="upload-progress-bar" class="progress-bg">
+                <div id="upload-fill" class="progress-fill"></div>
+            </div>
+            <p id="upload-status" style="font-size: 0.7rem; text-align: center; margin-top: 5px; opacity: 0;"></p>
+        </div>
+
+        <div id="share-modal" class="bottom-sheet">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 style="font-family:'Syne'">Partager à</h3>
+                <span style="font-size:1.2rem; cursor:pointer;" onclick="closeShare()">✕</span>
+            </div>
+            
+            <p style="font-size: 0.8rem; font-weight:bold; margin-bottom:5px;">Amis Swivo</p>
+            <div class="share-grid">
+                <div class="share-item" onclick="alert('Envoyé à Lucas !')"><div class="share-icon" style="background:var(--accent);">👤</div><span style="font-size:0.7rem;">Lucas</span></div>
+                <div class="share-item" onclick="alert('Envoyé à Sophie !')"><div class="share-icon" style="background:#ff6584;">👤</div><span style="font-size:0.7rem;">Sophie</span></div>
+                <div class="share-item" onclick="alert('Envoyé à Marc !')"><div class="share-icon" style="background:#43e97b;">👤</div><span style="font-size:0.7rem;">Marc</span></div>
+            </div>
+
+            <p style="font-size: 0.8rem; font-weight:bold; margin-top:15px; margin-bottom:5px;">Réseaux & Autres</p>
+            <div class="share-grid">
+                <div class="share-item" onclick="alert('Ouverture Snapchat...')"><div class="share-icon" style="background:#FFFC00; color:black;">👻</div><span style="font-size:0.7rem;">Snapchat</span></div>
+                <div class="share-item" onclick="alert('Ouverture WhatsApp...')"><div class="share-icon" style="background:#25D366;">💬</div><span style="font-size:0.7rem;">WhatsApp</span></div>
+                <div class="share-item" onclick="alert('Ouverture Messenger...')"><div class="share-icon" style="background:#00B2FF;">⚡</div><span style="font-size:0.7rem;">Messenger</span></div>
+                <div class="share-item" onclick="alert('Lien copié dans le presse-papier !')"><div class="share-icon" style="background:#555;">🔗</div><span style="font-size:0.7rem;">Copier Lien</span></div>
+            </div>
+        </div>
+
         <div class="nav-bar">
             <div class="nav-item active" onclick="switchTab('home', this)">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -226,7 +291,7 @@
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
                 <span>Chat</span>
             </div>
-            <div class="btn-plus" onclick="alert('Ouverture Caméra / Galerie 1080p 60fps...')">
+            <div class="btn-plus" onclick="toggleModal('upload-modal', true)">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             </div>
             <div class="nav-item" onclick="switchTab('profile', this)">
@@ -242,10 +307,33 @@
     </div>
 
     <script>
+        /* SECURITE FRONTEND : Fonction pour nettoyer les inputs (Eviter les failles XSS) */
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag])
+            );
+        }
+
+        /* SYSTEME D'AUTHENTIFICATION SIMULE */
+        function doLogin() {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) { alert("Veuillez remplir les champs !"); return; }
+            // Simulation connexion serveur réussie
+            document.getElementById('auth-screen').style.display = 'none';
+        }
+
+        function logout() {
+            document.getElementById('auth-email').value = '';
+            document.getElementById('auth-pass').value = '';
+            document.getElementById('auth-screen').style.display = 'flex';
+            switchTab('home', document.querySelector('.nav-item.active'));
+        }
+
         const DATA = [
-            { user: "ADN_Officiel", text: "Le meilleur catalogue global d'animés est ici ! 🐉", tags: "adn anime manga", local: true },
-            { user: "Gypso", text: "Apprendre à mieux dormir pour mieux réussir. 😴", tags: "gypso conseils", local: true },
-            { user: "Crunchyroll", text: "Le catalogue le plus complet dispo maintenant ! 🎌", tags: "crunchyroll anime", local: false }
+            { id: 1, user: "ADN_Officiel", text: "Le meilleur catalogue global d'animés est ici ! 🐉", tags: "adn anime manga", local: true },
+            { id: 2, user: "Gypso", text: "Apprendre à mieux dormir pour mieux réussir. 😴", tags: "gypso conseils", local: true },
+            { id: 3, user: "Crunchyroll", text: "Le catalogue le plus complet dispo maintenant ! 🎌", tags: "crunchyroll anime", local: false }
         ];
 
         const TIPS = [
@@ -258,14 +346,61 @@
             document.getElementById('tip-title').textContent = t.title;
             document.getElementById('tip-summary').textContent = t.sum;
             renderFeed(DATA, 'main-feed');
-            simulateLiveComments();
         };
 
         function renderFeed(list, id) {
             const c = document.getElementById(id); c.innerHTML = "";
             list.sort((a,b) => b.local - a.local).forEach(p => {
-                c.innerHTML += `<div class="card"><div style="display:flex;justify-content:space-between"><b>@${p.user}</b>${p.local?'<small style="color:var(--accent);font-weight:bold;">LOCAL / RECOMMANDÉ</small>':''}</div><p style="font-size:0.9rem;margin:10px 0">${p.text}</p><div style="width:100%;height:180px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#444;font-family:'Syne';font-weight:bold;">Vidéo 1080p 60fps</div></div>`;
+                c.innerHTML += `
+                <div class="card">
+                    <div style="display:flex;justify-content:space-between"><b>@${p.user}</b>${p.local?'<small style="color:var(--accent);font-weight:bold;">LOCAL / RECOMMANDÉ</small>':''}</div>
+                    <p style="font-size:0.9rem;margin:10px 0">${p.text}</p>
+                    <div style="width:100%;height:180px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#444;font-family:'Syne';font-weight:bold;">Vidéo 1080p 60fps</div>
+                    <div style="display:flex; gap:15px; margin-top:12px; font-size:0.8rem; font-weight:bold;">
+                        <span style="color:var(--text-dim); cursor:pointer;">❤️ J'aime</span>
+                        <span style="color:var(--text-dim); cursor:pointer;">💬 Coms</span>
+                        <span style="color:var(--text-dim); cursor:pointer;" onclick="openShare()">📤 Partager</span>
+                    </div>
+                </div>`;
             });
+        }
+
+        /* PARTAGE TIKTOK STYLE */
+        function openShare() { document.getElementById('share-modal').style.display = 'flex'; }
+        function closeShare() { document.getElementById('share-modal').style.display = 'none'; }
+
+        /* UPLOAD VIDEO SIMULATION */
+        function simulateUpload() {
+            const btn = document.getElementById('btn-publish');
+            const bg = document.getElementById('upload-progress-bar');
+            const fill = document.getElementById('upload-fill');
+            const status = document.getElementById('upload-status');
+            const quality = document.getElementById('video-quality').value;
+            
+            btn.style.display = 'none';
+            bg.style.display = 'block';
+            status.style.opacity = '1';
+            
+            let prog = 0;
+            status.innerText = `Compression et Envoi (${quality}p) - 0%`;
+            
+            const interval = setInterval(() => {
+                prog += Math.floor(Math.random() * 15) + 5;
+                if(prog >= 100) {
+                    prog = 100;
+                    clearInterval(interval);
+                    status.innerText = "Upload réussi ! La vidéo est en ligne. ✅";
+                    fill.style.width = '100%';
+                    setTimeout(() => {
+                        toggleModal('upload-modal', false);
+                        // Reset form
+                        btn.style.display = 'block'; bg.style.display = 'none'; fill.style.width = '0%'; status.style.opacity = '0';
+                    }, 2000);
+                } else {
+                    fill.style.width = prog + '%';
+                    status.innerText = `Compression et Envoi (${quality}p) - ${prog}%`;
+                }
+            }, 300);
         }
 
         function switchTab(id, el) {
@@ -280,9 +415,24 @@
             renderFeed(type === 'pour-toi' ? DATA : DATA.filter(d => d.local), 'main-feed');
         }
 
+        /* NOUVEAU: SAUVEGARDER PSEUDO AVEC SECURITE */
+        function savePseudo() {
+            const input = document.getElementById('username-input');
+            const btn = document.getElementById('btn-save-pseudo');
+            const cleanName = escapeHTML(input.value); // Protection XSS
+            
+            if(!cleanName || cleanName.length < 3) { alert("Pseudo trop court !"); return; }
+            
+            input.value = cleanName;
+            btn.textContent = "Sauvé ✅"; btn.style.background = "#43e97b"; btn.style.color = "#000";
+            setTimeout(() => { btn.textContent = "Sauver"; btn.style.background = "var(--accent)"; btn.style.color = "#fff"; }, 1500);
+        }
+
         function saveBio(btn) {
+            const bioArea = document.getElementById('bio-area');
+            bioArea.value = escapeHTML(bioArea.value); // Protection XSS
             btn.textContent = "Sauvé ! ✅"; btn.style.background = "#43e97b"; btn.style.color = "#000";
-            setTimeout(() => { btn.textContent = "Sauvegarder"; btn.style.background = "var(--accent)"; btn.style.color = "#fff"; }, 1500);
+            setTimeout(() => { btn.textContent = "Sauvegarder Bio"; btn.style.background = "var(--accent)"; btn.style.color = "#fff"; }, 1500);
         }
 
         function setAccent(c, el) {
@@ -295,11 +445,11 @@
         function toggleModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
 
         function runSearch(v) {
-            const res = DATA.filter(d => d.tags.includes(v.toLowerCase()) || d.user.toLowerCase().includes(v.toLowerCase()));
-            renderFeed(v ? res : [], 'search-results');
+            const cleanV = escapeHTML(v.toLowerCase());
+            const res = DATA.filter(d => d.tags.includes(cleanV) || d.user.toLowerCase().includes(cleanV));
+            renderFeed(cleanV ? res : [], 'search-results');
         }
 
-        /* LOGIQUE DE CHAT INTERACTIF */
         let msgs = [];
         function openChat(n, m) {
             document.getElementById('chat-title').textContent = n;
@@ -308,7 +458,8 @@
 
         function pushMessage() {
             const i = document.getElementById('chat-in'); if(!i.value) return;
-            msgs.push({t:'me', txt:i.value}); i.value = ""; renderChat();
+            const cleanMsg = escapeHTML(i.value); // Protection XSS
+            msgs.push({t:'me', txt:cleanMsg}); i.value = ""; renderChat();
             setTimeout(() => { msgs.push({t:'them', txt:'Entendu ! Je regarde ça.'}); renderChat(); }, 800);
         }
 
@@ -320,21 +471,7 @@
 
         function openAdviceDetail() {
             const t = TIPS[new Date().getDate() % TIPS.length];
-            alert("🦊 Conseil : " + t.title + "\n\n" + t.detail);
-        }
-
-        /* SIMULATION DE COMMENTAIRES LIVE */
-        const fakeComments = ["Incroyable !", "Ah ouais lourd", "Bonjour tout le monde", "1080p 60fps c'est propre", "Local en force 💪"];
-        function simulateLiveComments() {
-            const box = document.getElementById('live-chat-sim');
-            setInterval(() => {
-                const randomMsg = fakeComments[Math.floor(Math.random() * fakeComments.length)];
-                const newDiv = document.createElement('div');
-                newDiv.className = 'live-comment-item';
-                newDiv.innerHTML = `<b>User_${Math.floor(Math.random()*999)}:</b> ${randomMsg}`;
-                box.appendChild(newDiv);
-                if(box.children.length > 3) box.removeChild(box.firstChild);
-            }, 3000);
+            alert("🦊 Foxo : " + t.title + "\n\n" + t.detail);
         }
     </script>
 </body>
