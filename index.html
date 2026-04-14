@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Application Finale</title>
+    <title>Swivo - Production</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1381945888605291" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,185 +14,208 @@
         :root { 
             --accent: #a855f7; --bg: #0d0d12; --panel: #1a1a24; --text: #ffffff; 
             --subtext: #94a3b8; --border: rgba(255,255,255,0.05);
+            --gradient: linear-gradient(135deg, #f472b6, #a855f7);
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; font-size: 16px; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
         
         #app { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; }
 
-        /* AUTH SCREEN */
+        /* --- AUTH SCREEN --- */
         #auth-screen { position: absolute; inset:0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+        .sw-logo-big { font-family: 'Syne'; font-size: 4rem; margin-bottom: 30px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .sw-input { width: 100%; background: #161620; border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 16px; margin-bottom: 15px; outline: none; }
-        .sw-btn-main { width: 100%; background: linear-gradient(135deg, #a855f7, #6366f1); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
+        .sw-btn-main { width: 100%; background: var(--gradient); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
 
-        /* HEADER */
-        header { padding: 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
-        .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; background: linear-gradient(to right, #fff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-icons span { font-size: 1.5rem; margin-left: 20px; cursor: pointer; }
-
-        /* SCREENS */
+        /* --- UI ELEMENTS --- */
+        header { padding: 20px; display: none; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; }
+        
         .screen { flex: 1; display: none; padding: 0 20px 100px; overflow-y: auto; flex-direction: column; }
         .active { display: flex; }
 
-        /* DESIGN CARTES (FIDÈLE À TA VIDÉO) */
+        /* --- POSTS (STYLE VIDÉO) --- */
         .card { background: var(--panel); border-radius: 24px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
-        .card-header { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; }
+        .conseil-tag { color: var(--accent); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
+        .post-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .badge-60 { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: bold; }
+        .proximity { color: #22c55e; font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; }
 
-        /* PROFILE DYNAMIQUE */
-        .avatar-container { width: 110px; height: 110px; background: #2a2a35; margin: 20px auto; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        /* --- NAV BASSE --- */
+        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(13, 13, 18, 0.95); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: space-around; border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-link { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--subtext); cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
+        .nav-link.active { color: var(--accent); }
+        .nav-plus { width: 60px; height: 60px; background: var(--gradient); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-top: -35px; box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4); }
+
+        /* --- PROFIL --- */
+        .avatar-box { width: 110px; height: 110px; background: #2a2a35; margin: 20px auto; display: flex; align-items: center; justify-content: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .avatar-round { border-radius: 50%; }
         .avatar-square { border-radius: 20px; }
         .avatar-drop { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
-        
-        .shape-selector { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; }
-        .shape-btn { padding: 8px 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; color: white; cursor: pointer; font-size: 0.8rem; }
-
-        /* NAV BASSE */
-        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(13, 13, 18, 0.95); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: space-around; border-top: 1px solid var(--border); z-index: 1000; }
-        .nav-link { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--subtext); cursor: pointer; font-size: 0.7rem; }
-        .nav-link.active { color: var(--accent); }
-        .nav-plus { width: 56px; height: 56px; background: linear-gradient(135deg, #f472b6, #a855f7); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-top: -30px; box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4); }
-
-        /* OVERLAYS (LOUPE & NOTIFS AVEC RETOUR) */
-        .sub-page { position: absolute; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; padding: 25px; }
-        .back-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; cursor: pointer; font-weight: bold; }
+        .shape-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; }
+        .btn-shape { padding: 8px 18px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; color: white; font-size: 0.8rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="app">
     <div id="auth-screen">
-        <div class="logo" style="font-size: 4rem; margin-bottom: 20px;">Swivo</div>
+        <div class="sw-logo-big">Swivo</div>
         <input type="email" id="email" class="sw-input" placeholder="Email">
         <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
-        <button class="sw-btn-main" onclick="handleAuth('login')">Connexion</button>
-        <button class="sw-btn-main" style="background:transparent; margin-top:10px; border:1px solid var(--accent)" onclick="handleAuth('signup')">S'inscrire</button>
+        <button class="sw-btn-main" onclick="auth('login')">Se connecter</button>
+        <button class="sw-btn-main" style="background:transparent; margin-top:10px; border:1px solid var(--accent)" onclick="auth('signup')">Créer un compte</button>
     </div>
 
     <header id="main-header">
         <div class="logo">Swivo</div>
-        <div class="header-icons">
-            <span onclick="openOverlay('search')">🔍</span>
-            <span onclick="openOverlay('notifs')">🔔</span>
+        <div style="display:flex; gap:20px;">
+            <span onclick="alert('Recherche active...')">🔍</span>
+            <span onclick="alert('Notifications')">🔔</span>
         </div>
     </header>
 
     <div id="scr-home" class="screen active">
-        <div class="card">
-            <div class="card-header">Conseil du jour</div>
-            <p>Soutenir les créateurs locaux permet de dynamiser l'économie réelle. 🚀</p>
+        <div style="display:flex; gap:25px; margin-bottom:20px; font-weight:700;">
+            <span style="border-bottom:3px solid var(--accent); padding-bottom:5px;">Pour toi</span>
+            <span style="opacity:0.4">Abonnements</span>
         </div>
-        <div style="margin: 10px 0;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-1381945888605291"
-                 data-ad-slot="8363711327"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+        <div class="card">
+            <div class="conseil-tag">Conseil du jour</div>
+            <h3 style="font-family:'Syne'; margin-bottom:8px;">Soutenir local</h3>
+            <p style="color:var(--subtext); font-size:0.9rem; line-height:1.4;">En achetant local, 70% de l'argent reste dans votre ville contre seulement 14% pour les grandes chaînes.</p>
+        </div>
+
+        <ins class="adsbygoogle"
+             style="display:block; margin-bottom:16px;"
+             data-ad-client="ca-pub-1381945888605291"
+             data-ad-slot="8363711327"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+        <div class="card">
+            <div class="post-meta">
+                <strong>Marie - Maraîchère</strong>
+                <span class="proximity">PROXIMITÉ</span>
+            </div>
+            <p style="color:var(--subtext); margin-bottom:15px;">Récolte du jour : pourquoi les tomates locales ont plus de goût. 🍅</p>
+            <div style="display:flex; gap:15px; font-size:0.8rem; font-weight:bold;">
+                <span onclick="this.style.color='#f472b6'">❤️ 89</span>
+                <span onclick="alert('Ouverture commentaires')">💬 Répondre</span>
+            </div>
         </div>
     </div>
 
     <div id="scr-messages" class="screen">
-        <h2 style="font-family:'Syne'; margin-bottom:20px;">Messagerie</h2>
-        <div class="card" onclick="alert('Chat bientôt disponible')">
-            <strong>Thomas (Boulanger)</strong>
-            <p style="opacity:0.6; font-size:0.8rem;">C'est parti pour le live ?</p>
+        <h2 style="font-family:'Syne'; margin-bottom:20px;">Messages</h2>
+        <div class="card" style="display:flex; align-items:center; gap:15px;">
+            <div style="width:50px; height:50px; background:#22c55e; border-radius:50%;"></div>
+            <div style="flex:1">
+                <strong>Thomas (Local Baker)</strong>
+                <p style="font-size:0.8rem; color:var(--subtext)">Merci pour ton conseil sur la diction !</p>
+            </div>
+            <small style="color:var(--subtext)">12:40</small>
         </div>
     </div>
 
     <div id="scr-profile" class="screen">
-        <div class="avatar-container avatar-round" id="user-avatar">
+        <div class="avatar-box avatar-round" id="my-avatar">
             <div style="font-size:3rem">👤</div>
         </div>
-        <h2 id="display-name" style="text-align:center; font-family:'Syne'; margin-bottom:20px;">User</h2>
-        
-        <div class="shape-selector">
-            <button class="shape-btn" onclick="setShape('round')">Rond</button>
-            <button class="shape-btn" onclick="setShape('square')">Carré</button>
-            <button class="shape-btn" onclick="setShape('drop')">Goutte</button>
+        <h2 id="user-name" style="text-align:center; font-family:'Syne'; margin-bottom:5px;">Chargement...</h2>
+        <p style="text-align:center; color:var(--subtext); font-size:0.8rem; margin-bottom:25px;">Apprenti_Swivo</p>
+
+        <div class="shape-btns">
+            <button class="btn-shape" onclick="changeAvatar('round')">Rond</button>
+            <button class="btn-shape" onclick="changeAvatar('square')">Carré</button>
+            <button class="btn-shape" onclick="changeAvatar('drop')">Goutte</button>
         </div>
 
         <div class="card">
-            <label>Ma Bio</label>
-            <textarea class="sw-input" style="height:80px; margin-top:10px;"></textarea>
+            <p style="font-weight:bold; margin-bottom:10px;">Ma Bio</p>
+            <textarea class="sw-input" style="height:100px;" placeholder="Dis-nous en plus sur toi..."></textarea>
         </div>
-        <button onclick="logout()" style="color:#ff4d8d; background:none; border:none; width:100%; padding:20px;">Déconnexion</button>
+
+        <div class="card" style="background:rgba(244,114,182,0.1); border:1px solid #f472b6;">
+            <p style="font-weight:bold; text-align:center;">Soutenir le projet</p>
+            <button class="sw-btn-main" style="margin-top:10px; background:#f472b6;">Regarder une pub rémunératrice 📺</button>
+        </div>
     </div>
 
     <div id="scr-settings" class="screen">
-        <h2 style="font-family:'Syne'; margin-bottom:20px;">Réglages</h2>
+        <h2 style="font-family:'Syne'; margin-bottom:20px;">Paramètres</h2>
         <div class="card">
-            <p>Qualité Vidéo par défaut</p>
-            <select class="sw-input" style="margin-top:10px;">
-                <option>1080p 60fps</option>
-                <option>720p 30fps</option>
+            <p style="margin-bottom:15px;">Mode Clair / Sombre</p>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-shape" style="flex:1" onclick="alert('Déjà en sombre')">Sombre</button>
+                <button class="btn-shape" style="flex:1; background:white; color:black">Clair</button>
+            </div>
+        </div>
+        <div class="card">
+            <p style="margin-bottom:10px;">Qualité Upload par défaut</p>
+            <select class="sw-input" style="margin-bottom:0">
+                <option>1080p 60fps (Max)</option>
+                <option>720p 30fps (Éco)</option>
             </select>
         </div>
     </div>
 
-    <div id="overlay-search" class="sub-page">
-        <div class="back-bar" onclick="closeOverlay()">⬅️ Retour</div>
-        <input type="text" class="sw-input" placeholder="Rechercher un créateur...">
-    </div>
-
-    <div id="overlay-notifs" class="sub-page">
-        <div class="back-bar" onclick="closeOverlay()">⬅️ Retour</div>
-        <div class="card">Bienvenue sur la nouvelle version de Swivo !</div>
-    </div>
-
-    <nav id="main-nav">
-        <div class="nav-link active" onclick="showScreen('home', this)"><i>🏠</i></div>
-        <div class="nav-link" onclick="showScreen('messages', this)"><i>💬</i></div>
-        <div class="nav-plus" onclick="alert('Studio Upload Activé')">+</div>
-        <div class="nav-link" onclick="showScreen('profile', this)"><i>👤</i></div>
-        <div class="nav-link" onclick="showScreen('settings', this)"><i>⚙️</i></div>
+    <nav id="navbar">
+        <div class="nav-link active" onclick="nav('home', this)"><span>🏠</span>Accueil</div>
+        <div class="nav-link" onclick="nav('messages', this)"><span>💬</span>Messages</div>
+        <div class="nav-plus" onclick="alert('Lancement Studio 1080p...')">+</div>
+        <div class="nav-link" onclick="nav('profile', this)"><span>👤</span>Profil</div>
+        <div class="nav-link" onclick="nav('settings', this)"><span>⚙️</span>Réglages</div>
     </nav>
 </div>
 
 <script>
+    // CONFIG SUPABASE (Basée sur tes photos)
     const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
     const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
     const supabase = window.supabase.createClient(S_URL, S_KEY);
 
-    async function handleAuth(type) {
+    // AUTHENTIFICATION
+    async function auth(type) {
         const email = document.getElementById('email').value;
-        const password = document.getElementById('pass').value;
-        let res = (type === 'login') ? 
-            await supabase.auth.signInWithPassword({ email, password }) : 
-            await supabase.auth.signUp({ email, password });
+        const pass = document.getElementById('pass').value;
+        if(!email || !pass) return alert("Remplis tout !");
 
-        if(res.error) alert(res.error.message);
-        else unlock(res.data.user.email);
+        const { data, error } = (type === 'login') 
+            ? await supabase.auth.signInWithPassword({ email, password: pass })
+            : await supabase.auth.signUp({ email, password: pass });
+
+        if(error) alert(error.message);
+        else setupUI(data.user);
     }
 
-    function unlock(email) {
+    function setupUI(user) {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-header').style.display = 'flex';
-        document.getElementById('main-nav').style.display = 'flex';
-        document.getElementById('display-name').innerText = email.split('@')[0];
+        document.getElementById('navbar').style.display = 'flex';
+        document.getElementById('user-name').innerText = user.email.split('@')[0];
     }
 
-    function showScreen(id, el) {
+    // NAVIGATION
+    function nav(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById('scr-' + id).classList.add('active');
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
         el.classList.add('active');
-        closeOverlay();
     }
 
-    function openOverlay(type) { document.getElementById('overlay-' + type).style.display = 'flex'; }
-    function closeOverlay() { document.querySelectorAll('.sub-page').forEach(p => p.style.display = 'none'); }
-
-    function setShape(shape) {
-        document.getElementById('user-avatar').className = 'avatar-container avatar-' + shape;
+    // INTERACTION PROFIL
+    function changeAvatar(shape) {
+        const av = document.getElementById('my-avatar');
+        av.className = 'avatar-box avatar-' + shape;
     }
 
-    async function logout() { await supabase.auth.signOut(); location.reload(); }
-
+    // AUTO-LOGIN
     window.onload = async () => {
         const { data } = await supabase.auth.getSession();
-        if(data.session) unlock(data.session.user.email);
+        if(data.session) setupUI(data.session.user);
     }
 </script>
 </body>
