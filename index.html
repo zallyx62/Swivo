@@ -3,197 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo – Version Complète</title>
+    <title>Swivo - Stable</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --accent: #6c63ff; --bg: #080810; --panel: #13131e;
-            --text: #f0f0f8; --text-dim: #9090a8; --border: rgba(255,255,255,0.08);
-            --radius: 20px; --pfp-shape: 50%;
-        }
-
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --accent: #6c63ff; --bg: #080810; --panel: #13131e; --text: #f0f0f8; --border: rgba(255,255,255,0.08); --radius: 20px; }
+        * { margin:0; padding:0; box-sizing:border-box; }
         body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-
-        /* AUTH SCREENS */
+        /* AUTH */
         .auth-container { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
-        .logo-anim { font-family: 'Syne'; font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .logo-anim { font-family: 'Syne'; font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .swivo-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 14px; width: 100%; margin: 8px 0; outline: none; }
+        .btn-accent { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; }
         
-        .swivo-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 14px; width: 100%; outline: none; margin: 8px 0; font-size: 1rem; }
-        .btn-accent { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; font-size: 1rem; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: 10px; }
-
-        /* HEADER */
-        .header { padding: 20px 20px 10px; background: var(--bg); z-index: 10; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo-small { font-family: 'Syne'; font-weight: 800; font-size: 1.5rem; color: var(--accent); }
-        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; }
-        .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
-        .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
-
-        /* SCREENS */
-        .screen { flex: 1; display: none; flex-direction: column; padding: 10px 16px 100px; overflow-y: auto; }
-        .screen.active { display: flex; }
-        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
-
-        /* PROFILE SPECIFIC */
-        .profile-header { text-align: center; padding: 20px 0; }
-        .pfp-large { width: 90px; height: 90px; background: linear-gradient(45deg, var(--accent), #ff6584); border-radius: var(--pfp-shape); margin: 0 auto 15px; border: 3px solid var(--bg); outline: 2px solid var(--accent); }
-        .stats-row { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
-        .stat-box { text-align: center; }
-        .stat-num { font-weight: 800; font-size: 1.2rem; display: block; }
-        .stat-label { font-size: 0.75rem; opacity: 0.6; }
-
-        /* NAVIGATION */
-        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: var(--panel); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 100; }
-        .nav-item { color: var(--text-dim); cursor: pointer; text-align: center; font-size: 0.65rem; transition: 0.2s; }
-        .nav-item.active { color: var(--accent); }
-        .btn-plus { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-10px); box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3); }
-
-        .helper-link { font-size: 0.85rem; color: var(--accent); cursor: pointer; margin-top: 15px; display: inline-block; }
+        /* APP INTERFACE */
+        .header { padding: 20px; display: none; }
+        .screen { flex: 1; display: none; padding: 15px; overflow-y: auto; }
+        .screen.active { display: flex; flex-direction: column; }
+        .card { background: var(--panel); border-radius: var(--radius); padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .nav-bar { height: 80px; background: var(--panel); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; }
     </style>
 </head>
 <body>
 
     <div id="app-shell">
-
         <div id="auth-screen" class="auth-container">
-            <div class="auth-card">
-                <h1 class="logo-anim">Swivo</h1>
-                <p style="opacity: 0.6; margin-bottom: 25px;">La nouvelle ère du social</p>
-                
-                <input type="email" id="login-email" class="swivo-input" placeholder="Email">
-                <input type="password" id="login-pass" class="swivo-input" placeholder="Mot de passe">
-                
-                <button class="btn-accent" onclick="handleLogin()">Se connecter</button>
-                <button class="btn-accent btn-outline" onclick="handleSignup()">Créer un compte</button>
-                
-                <p class="helper-link" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
-            </div>
+            <h1 class="logo-anim">Swivo</h1>
+            <p style="opacity: 0.6; margin-bottom: 20px;">Social Media Edition</p>
+            <input type="email" id="email" class="swivo-input" placeholder="Email">
+            <input type="password" id="pass" class="swivo-input" placeholder="Mot de passe">
+            <button class="btn-accent" onclick="connexion()">Se connecter</button>
+            <button class="btn-accent" style="background:transparent; border:1px solid var(--accent);" onclick="inscription()">Créer un compte</button>
+            <p style="margin-top:15px; color:var(--accent); cursor:pointer;" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
         </div>
 
-        <div id="main-header" class="header" style="display: none;">
-            <div class="header-top">
-                <div class="logo-small">Swivo</div>
-                <div style="display:flex; gap:15px;"><span>🔍</span><span>🔔</span></div>
-            </div>
-            <div class="feed-tabs">
-                <span class="tab-item active" onclick="switchTab(this)">Pour toi</span>
-                <span class="tab-item" onclick="switchTab(this)">Abonnements</span>
-            </div>
+        <div id="main-header" class="header">
+            <h2 style="font-family:'Syne'; color:var(--accent);">Swivo</h2>
         </div>
 
         <div id="home-screen" class="screen">
-            <div id="feed-container">
-                </div>
+            <div class="card">
+                <h3>Bienvenue !</h3>
+                <p>Ton compte est connecté. Voici ton flux.</p>
+            </div>
+            <div class="card" style="height: 200px; background: #000; display:flex; align-items:center; justify-content:center;">
+                Vidéo Test
+            </div>
         </div>
 
         <div id="profile-screen" class="screen">
-            <div class="profile-header">
-                <div class="pfp-large"></div>
-                <h2 id="user-display-name" style="font-family: 'Syne';">Utilisateur Swivo</h2>
-                <p style="opacity: 0.6; font-size: 0.9rem;">@nouveau_membre</p>
-                
-                <div class="stats-row">
-                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Abonnés</span></div>
-                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Abonnements</span></div>
-                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Likes</span></div>
-                </div>
-                
-                <button class="btn-accent btn-outline" style="width: auto; padding: 10px 30px;" onclick="location.reload()">Déconnexion</button>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 20px;">
-                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
-                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
-                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
+            <div class="card" style="text-align:center;">
+                <div style="width:80px; height:80px; background:var(--accent); border-radius:50%; margin: 0 auto 10px;"></div>
+                <h2 id="user-name">Profil</h2>
+                <button class="btn-accent" onclick="location.reload()" style="width:auto; padding:10px 20px;">Déconnexion</button>
             </div>
         </div>
 
-        <nav id="main-nav" class="nav-bar">
-            <div class="nav-item active" onclick="showPage('home-screen', this)">🏠<br>Accueil</div>
-            <div class="nav-item" onclick="alert('Chat bientôt disponible !')">💬<br>Messages</div>
-            <div class="btn-plus">+</div>
-            <div class="nav-item" onclick="alert('Découvrir bientôt !')">🧭<br>Explorer</div>
-            <div class="nav-item" onclick="showPage('profile-screen', this)">👤<br>Profil</div>
+        <nav id="nav-bar" class="nav-bar">
+            <div onclick="showPage('home-screen')">🏠</div>
+            <div onclick="showPage('profile-screen')">👤</div>
         </nav>
-
     </div>
 
     <script>
-        // CONFIGURATION SUPABASE
-        const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // CONFIG
+        const URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
+        const KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
+        const supabase = window.supabase.createClient(URL, KEY);
 
-        // --- GESTION AUTHENTIFICATION ---
+        // INSCRIPTION
+        async function inscription() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            if(!email || !pass) return alert("Remplis les cases !");
 
-        async function handleLogin() {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
-            if(!email || !pass) return alert("Remplissez les champs !");
-
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+            const { data, error } = await supabase.auth.signUp({ email: email, password: pass });
             if (error) alert("Erreur : " + error.message);
-            else unlockApp(data.user.email);
+            else alert("Compte créé ! Confirme ton email pour te connecter.");
         }
 
-        async function handleSignup() {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
-            if(!email || !pass) return alert("Remplissez les champs !");
+        // CONNEXION
+        async function connexion() {
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('pass').value;
+            if(!email || !pass) return alert("Remplis les cases !");
 
-            const { data, error } = await supabase.auth.signUp({ email, password: pass });
-            if (error) alert("Erreur : " + error.message);
-            else alert("Compte créé ! Vérifiez vos emails pour confirmer.");
+            const { data, error } = await supabase.auth.signInWithPassword({ email: email, password: pass });
+            if (error) {
+                alert("Erreur : " + error.message);
+            } else {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-header').style.display = 'block';
+                document.getElementById('nav-bar').style.display = 'flex';
+                document.getElementById('home-screen').classList.add('active');
+                document.getElementById('user-name').innerText = email.split('@')[0];
+            }
         }
 
-        function unlockApp(email) {
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-header').style.display = 'block';
-            document.getElementById('main-nav').style.display = 'flex';
-            document.getElementById('home-screen').classList.add('active');
-            document.getElementById('user-display-name').innerText = email.split('@')[0];
-            renderFeed();
-        }
-
-        // --- NAVIGATION INTERNE ---
-
-        function showPage(pageId, element) {
+        // NAVIGATION
+        function showPage(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            if(element) element.classList.add('active');
-        }
-
-        function switchTab(el) {
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        // --- GENERATION DU FLUX ---
-
-        function renderFeed() {
-            const container = document.getElementById('feed-container');
-            container.innerHTML = `
-                <div class="card">
-                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                        <div style="width:40px; height:40px; background:var(--accent); border-radius:50%;"></div>
-                        <b>Admin Swivo ✨</b>
-                    </div>
-                    <p style="font-size:0.95rem; line-height:1.5;">Bienvenue sur ta nouvelle interface Swivo ! Tout est désormais connecté à ta base de données Supabase. Profite bien !</p>
-                    <div style="width:100%; height:250px; background:#000; border-radius:15px; margin-top:15px; display:flex; align-items:center; justify-content:center; color:#333; font-weight:bold;">
-                        CONTENU VIDÉO TEST
-                    </div>
-                </div>
-                <div class="card">
-                    <b>Conseil du jour 💡</b>
-                    <p style="margin-top:10px; opacity:0.8; font-size:0.9rem;">Pense à personnaliser ton profil pour attirer plus d'abonnés.</p>
-                </div>
-            `;
+            document.getElementById(id).classList.add('active');
         }
     </script>
 </body>
