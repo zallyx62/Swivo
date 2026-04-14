@@ -34,4 +34,115 @@
 </head>
 <body>
 
-    <div id="app-shell
+    <div id="app-shell">
+        <div id="auth-overlay">
+            <h1 class="logo-luxe">Swivo</h1>
+            <input type="email" id="email" class="sw-input" placeholder="Email">
+            <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
+            <button class="sw-btn" id="btn-login">Se connecter</button>
+            <button class="sw-btn" id="btn-signup" style="background:transparent; border:1px solid var(--accent);">Créer un profil</button>
+            <p style="color:var(--accent); font-size:0.8rem; margin-top:20px; cursor:pointer;" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
+        </div>
+
+        <div id="app-header" class="header">
+            <div style="font-family:'Syne'; color:var(--accent); font-size:1.5rem;">Swivo</div>
+        </div>
+        
+        <div id="feed" class="screen">
+            <div class="card">
+                <p style="font-weight:800; color:var(--accent);">BIENVENUE ✨</p>
+                <div style="width:100%; height:200px; background:#000; border-radius:15px; margin:15px 0; display:flex; align-items:center; justify-content:center;">VIDÉO TEST</div>
+            </div>
+        </div>
+
+        <div id="profile" class="screen">
+            <div style="text-align:center; margin-bottom:25px;">
+                <div style="width:80px; height:80px; background:linear-gradient(45deg, var(--accent), #ff6584); border-radius:50%; margin:0 auto 10px;"></div>
+                <h2 id="user-tag" style="font-family:'Syne';">Profil</h2>
+            </div>
+            <div class="menu-item" onclick="alert('Messagerie')"><span>💬 Messagerie</span><span>❯</span></div>
+            <div class="menu-item" onclick="alert('Dons')"><span>💎 Mes Dons</span><span>❯</span></div>
+            <div class="menu-item" style="color:#ff6584;" onclick="logout()"><span>🚪 Déconnexion</span></div>
+        </div>
+
+        <nav id="app-nav" class="nav">
+            <div onclick="showPage('feed')" style="cursor:pointer; font-size:1.5rem;">🏠</div>
+            <div style="background:var(--accent); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; cursor:pointer;">+</div>
+            <div onclick="showPage('profile')" style="cursor:pointer; font-size:1.5rem;">👤</div>
+        </nav>
+    </div>
+
+    <script>
+        // --- CONFIGURATION SUPABASE ---
+        const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
+        const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
+        const supabase = window.supabase.createClient(S_URL, S_KEY);
+
+        // --- AU CHARGEMENT : VERIFIER SI DEJA CONNECTÉ ---
+        window.onload = async () => {
+            const { data: { session }, error } = await supabase.auth.getSession();
+            if (session && session.user) {
+                unlockApp(session.user.email);
+            }
+        };
+
+        // --- ACTION : CONNEXION ---
+        document.getElementById('btn-login').onclick = async () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            
+            if(!e || !p) return alert("Remplis tous les champs !");
+            
+            const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
+            
+            if (error) {
+                alert("Erreur : " + error.message);
+            } else {
+                unlockApp(data.user.email);
+            }
+        };
+
+        // --- ACTION : INSCRIPTION ---
+        document.getElementById('btn-signup').onclick = async () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            
+            if(!e || !p) return alert("Remplis tous les champs !");
+            
+            const { data, error } = await supabase.auth.signUp({ email: e, password: p });
+            
+            if (error) {
+                alert("Erreur : " + error.message);
+            } else {
+                alert("Compte créé ! Connecte-toi maintenant (vérifie tes mails si besoin).");
+            }
+        };
+
+        // --- LOGIQUE UI ---
+        function unlockApp(email) {
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('app-header').style.display = 'block';
+            document.getElementById('app-nav').style.display = 'flex';
+            
+            // On affiche le feed par défaut
+            showPage('feed');
+            
+            // On affiche le pseudo
+            document.getElementById('user-tag').innerText = email.split('@')[0];
+        }
+
+        function showPage(id) {
+            // Cacher tous les écrans
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Afficher le bon
+            const target = document.getElementById(id);
+            if(target) target.classList.add('active');
+        }
+
+        async function logout() {
+            await supabase.auth.signOut();
+            location.reload();
+        }
+    </script>
+</body>
+</html>
