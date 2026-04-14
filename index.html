@@ -1,222 +1,1283 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Production</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1381945888605291" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Swivo — Par tous, pour tous</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- GOOGLE ADSENSE -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1381945888605291" crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131e;
+  --surface2: #1c1c2a;
+  --accent: #6c63ff;
+  --accent2: #ff6584;
+  --accent3: #43e97b;
+  --text: #f0f0f8;
+  --muted: #6b6b80;
+  --border: rgba(255,255,255,0.07);
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; background:var(--bg); font-family:'DM Sans',sans-serif; color:var(--text); }
 
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root { 
-            --accent: #a855f7; --bg: #0d0d12; --panel: #1a1a24; --text: #ffffff; 
-            --subtext: #94a3b8; --border: rgba(255,255,255,0.05);
-            --gradient: linear-gradient(135deg, #f472b6, #a855f7);
-        }
-        * { margin:0; padding:0; box-sizing:border-box; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; }
-        
-        #app { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; }
+/* APP SHELL */
+#app { width:100%; max-width:430px; height:100dvh; margin:0 auto; position:relative; overflow:hidden; background:var(--bg); display:flex; flex-direction:column; }
 
-        /* --- AUTH SCREEN --- */
-        #auth-screen { position: absolute; inset:0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
-        .sw-logo-big { font-family: 'Syne'; font-size: 4rem; margin-bottom: 30px; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .sw-input { width: 100%; background: #161620; border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 16px; margin-bottom: 15px; outline: none; }
-        .sw-btn-main { width: 100%; background: var(--gradient); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
+/* PAGES */
+.page { position:absolute; inset:0; display:flex; flex-direction:column; background:var(--bg); transition:transform 0.3s ease, opacity 0.3s ease; transform:translateX(100%); opacity:0; pointer-events:none; z-index:1; }
+.page.active { transform:translateX(0); opacity:1; pointer-events:all; z-index:2; }
+.page.slide-left { transform:translateX(-100%); opacity:0; }
 
-        /* --- UI ELEMENTS --- */
-        header { padding: 20px; display: none; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; }
-        
-        .screen { flex: 1; display: none; padding: 0 20px 100px; overflow-y: auto; flex-direction: column; }
-        .active { display: flex; }
+/* SCROLLABLE CONTENT */
+.scroll { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.scroll::-webkit-scrollbar { display:none; }
 
-        /* --- POSTS (STYLE VIDÉO) --- */
-        .card { background: var(--panel); border-radius: 24px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
-        .conseil-tag { color: var(--accent); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; }
-        .post-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .badge-60 { background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 6px; font-size: 0.65rem; font-weight: bold; }
-        .proximity { color: #22c55e; font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; }
+/* ===================== AUTH PAGES ===================== */
+.auth-page { justify-content:center; align-items:center; padding:32px 24px; gap:0; }
+.auth-logo { font-family:'Syne',sans-serif; font-size:3rem; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:6px; }
+.auth-tagline { font-size:0.78rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-bottom:40px; }
+.auth-form { width:100%; display:flex; flex-direction:column; gap:14px; }
+.input-wrap { position:relative; }
+.input-wrap input {
+  width:100%; padding:16px 18px; background:var(--surface); border:1.5px solid var(--border);
+  border-radius:14px; color:var(--text); font-size:0.95rem; font-family:'DM Sans',sans-serif;
+  outline:none; transition:border-color 0.2s;
+}
+.input-wrap input:focus { border-color:var(--accent); }
+.input-wrap input::placeholder { color:var(--muted); }
+.btn-primary {
+  width:100%; padding:16px; background:linear-gradient(135deg,var(--accent),#8b5cf6);
+  border:none; border-radius:14px; color:#fff; font-size:1rem; font-family:'Syne',sans-serif;
+  font-weight:700; cursor:pointer; transition:all 0.2s; margin-top:4px;
+  box-shadow:0 4px 20px rgba(108,99,255,0.35);
+}
+.btn-primary:active { transform:scale(0.98); }
+.btn-secondary {
+  width:100%; padding:14px; background:transparent; border:1.5px solid var(--border);
+  border-radius:14px; color:var(--text); font-size:0.9rem; font-family:'DM Sans',sans-serif;
+  cursor:pointer; transition:all 0.2s;
+}
+.btn-secondary:active { background:var(--surface); }
+.auth-switch { text-align:center; font-size:0.85rem; color:var(--muted); margin-top:8px; }
+.auth-switch span { color:var(--accent); cursor:pointer; font-weight:600; }
+.auth-mascot { font-size:3rem; margin-bottom:16px; animation:bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.error-msg { color:var(--accent2); font-size:0.8rem; text-align:center; min-height:18px; }
 
-        /* --- NAV BASSE --- */
-        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(13, 13, 18, 0.95); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: space-around; border-top: 1px solid var(--border); z-index: 1000; }
-        .nav-link { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--subtext); cursor: pointer; font-size: 0.7rem; transition: 0.3s; }
-        .nav-link.active { color: var(--accent); }
-        .nav-plus { width: 60px; height: 60px; background: var(--gradient); border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-top: -35px; box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4); }
+/* ===================== TOP BAR ===================== */
+.topbar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px 10px; flex-shrink:0; position:relative;
+}
+.topbar-logo { font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.topbar-tabs { display:flex; gap:0; }
+.topbar-tab { padding:6px 14px; font-size:0.8rem; font-family:'Syne',sans-serif; font-weight:600; color:var(--muted); border-bottom:2px solid transparent; cursor:pointer; transition:all 0.2s; }
+.topbar-tab.active { color:var(--text); border-bottom-color:var(--accent); }
+.topbar-actions { display:flex; gap:10px; align-items:center; }
+.icon-btn { width:36px; height:36px; border-radius:10px; background:var(--surface); border:none; color:var(--text); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; transition:all 0.2s; }
+.icon-btn:active { transform:scale(0.92); }
+.notif-dot { width:8px; height:8px; background:var(--accent2); border-radius:50%; position:absolute; top:2px; right:2px; }
 
-        /* --- PROFIL --- */
-        .avatar-box { width: 110px; height: 110px; background: #2a2a35; margin: 20px auto; display: flex; align-items: center; justify-content: center; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .avatar-round { border-radius: 50%; }
-        .avatar-square { border-radius: 20px; }
-        .avatar-drop { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
-        .shape-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 30px; }
-        .btn-shape { padding: 8px 18px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; color: white; font-size: 0.8rem; cursor: pointer; }
-    </style>
+/* ===================== FEED ===================== */
+.feed-wrap { padding:0 0 80px; }
+
+/* STORIES ROW */
+.stories-row { display:flex; gap:10px; padding:10px 14px; overflow-x:auto; scrollbar-width:none; flex-shrink:0; }
+.stories-row::-webkit-scrollbar { display:none; }
+.story-item { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; }
+.story-ring { width:56px; height:56px; border-radius:50%; padding:2px; background:linear-gradient(135deg,var(--accent),var(--accent2)); }
+.story-avatar { width:100%; height:100%; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.2rem; border:2px solid var(--bg); }
+.story-name { font-size:0.6rem; color:var(--muted); max-width:56px; text-align:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.story-add .story-ring { background:var(--surface2); }
+.story-add .story-avatar { font-size:1.4rem; color:var(--accent); }
+
+/* CARDS */
+.card { background:var(--surface); border-radius:var(--radius); margin:8px 12px; overflow:hidden; border:1px solid var(--border); }
+.card-header { display:flex; align-items:center; gap:10px; padding:12px 14px 8px; }
+.card-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:700; flex-shrink:0; overflow:hidden; }
+.card-avatar img { width:100%; height:100%; object-fit:cover; }
+.card-meta { flex:1; }
+.card-name { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; }
+.card-sub { font-size:0.7rem; color:var(--muted); margin-top:1px; }
+.tag-pill { display:inline-block; padding:2px 8px; border-radius:20px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+.tag-life { background:rgba(67,233,123,0.12); color:var(--accent3); }
+.tag-vote { background:rgba(255,101,132,0.12); color:var(--accent2); }
+.tag-gaming { background:rgba(79,172,254,0.12); color:#4facfe; }
+.tag-budget { background:rgba(247,151,30,0.12); color:#f7971e; }
+.card-body { padding:4px 14px 10px; font-size:0.88rem; line-height:1.55; color:#cccce0; }
+.card-img { width:100%; aspect-ratio:16/9; object-fit:cover; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+.card-actions { display:flex; align-items:center; gap:0; padding:4px 6px 10px; border-top:1px solid var(--border); margin-top:6px; }
+.act-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:5px; padding:8px 4px; background:none; border:none; color:var(--muted); font-size:0.75rem; cursor:pointer; font-family:'DM Sans',sans-serif; border-radius:8px; transition:all 0.15s; }
+.act-btn:active { background:var(--surface2); color:var(--accent); }
+.act-btn svg { width:16px; height:16px; }
+.act-btn.liked { color:var(--accent2); }
+
+/* TIP CARD */
+.tip-box { margin:8px 14px; background:rgba(67,233,123,0.06); border:1px solid rgba(67,233,123,0.18); border-radius:14px; padding:14px; }
+.tip-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; color:var(--accent3); margin-bottom:5px; }
+.tip-text { font-size:0.8rem; line-height:1.5; color:#9090a8; }
+.tip-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.tip-refresh { background:rgba(67,233,123,0.1); border:1px solid rgba(67,233,123,0.2); border-radius:8px; padding:4px 8px; color:var(--accent3); font-size:0.65rem; font-weight:700; cursor:pointer; font-family:'Syne',sans-serif; }
+
+/* VOTE CARD */
+.vote-q { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; margin-bottom:10px; padding:0 14px; }
+.vote-opts { display:flex; gap:8px; padding:0 14px 12px; }
+.vote-opt { flex:1; padding:10px 6px; border-radius:12px; border:1.5px solid var(--border); background:transparent; color:var(--text); font-size:0.78rem; cursor:pointer; text-align:center; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+.vote-opt:active { transform:scale(0.97); }
+.vote-opt.voted-yes { background:rgba(108,99,255,0.2); border-color:var(--accent); color:var(--accent); }
+.vote-opt.voted-no { background:rgba(255,101,132,0.2); border-color:var(--accent2); color:var(--accent2); }
+.vote-result { padding:0 14px 10px; }
+.vote-bar-wrap { background:var(--surface2); border-radius:8px; height:8px; overflow:hidden; margin-bottom:4px; }
+.vote-bar { height:100%; border-radius:8px; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.6s ease; }
+.vote-stats { display:flex; justify-content:space-between; font-size:0.68rem; color:var(--muted); }
+
+/* LIVE BANNER */
+.live-banner { margin:8px 12px; background:linear-gradient(135deg,rgba(255,101,132,0.1),rgba(108,99,255,0.08)); border:1px solid rgba(255,101,132,0.2); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:10px; cursor:pointer; }
+.live-dot { width:8px; height:8px; background:var(--accent2); border-radius:50%; flex-shrink:0; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(1.5)} }
+.live-badge { background:var(--accent2); color:#fff; font-size:0.58rem; font-weight:700; padding:2px 7px; border-radius:5px; letter-spacing:1px; flex-shrink:0; }
+
+/* MASCOT */
+.mascot-card { margin:8px 12px; display:flex; gap:10px; align-items:flex-end; }
+.mascot-svg { width:44px; height:44px; flex-shrink:0; }
+.mascot-bubble { flex:1; background:rgba(108,99,255,0.1); border:1px solid rgba(108,99,255,0.2); border-radius:14px 14px 14px 4px; padding:10px 12px; font-size:0.78rem; color:#cccce0; line-height:1.45; }
+.mascot-name { font-size:0.6rem; color:var(--accent); font-weight:700; font-family:'Syne',sans-serif; letter-spacing:0.5px; margin-bottom:3px; }
+
+/* SUPPORT CARDS */
+.support-card { margin:8px 12px; border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.support-paypal { background:rgba(79,172,254,0.07); border:1px solid rgba(79,172,254,0.18); }
+.support-free { background:rgba(67,233,123,0.06); border:1px solid rgba(67,233,123,0.15); }
+.support-info { flex:1; }
+.support-title { font-family:'Syne',sans-serif; font-weight:700; font-size:0.75rem; margin-bottom:2px; }
+.support-text { font-size:0.68rem; color:var(--muted); line-height:1.4; }
+.support-btn { padding:6px 12px; border-radius:8px; border:none; font-size:0.68rem; font-weight:700; font-family:'Syne',sans-serif; cursor:pointer; flex-shrink:0; }
+.support-paypal .support-btn { background:#0070f0; color:#fff; }
+.support-free .support-btn { background:rgba(67,233,123,0.15); color:var(--accent3); border:1px solid rgba(67,233,123,0.3); }
+
+/* AD SLOT */
+.ad-slot { margin:8px 12px; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px; text-align:center; min-height:80px; display:flex; align-items:center; justify-content:center; }
+.ad-label { font-size:0.6rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+
+/* SERVERS ROW */
+.servers-section { padding:8px 0; }
+.section-title { font-family:'Syne',sans-serif; font-size:0.68rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; padding:0 14px; margin-bottom:8px; }
+.servers-row { display:flex; gap:10px; padding:0 14px; overflow-x:auto; scrollbar-width:none; }
+.servers-row::-webkit-scrollbar { display:none; }
+.server-chip { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; }
+.server-icon { width:50px; height:50px; border-radius:16px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.3rem; border:1.5px solid var(--border); transition:all 0.2s; }
+.server-chip:active .server-icon { border-color:var(--accent); transform:scale(0.95); }
+.server-name { font-size:0.62rem; color:var(--muted); text-align:center; }
+
+/* ===================== BOTTOM NAV ===================== */
+.bottom-nav { display:flex; justify-content:space-around; align-items:center; padding:8px 8px 20px; background:var(--surface); border-top:1px solid var(--border); flex-shrink:0; }
+.nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; color:var(--muted); font-size:0.55rem; font-family:'Syne',sans-serif; font-weight:600; transition:color 0.2s; padding:4px 8px; border-radius:10px; position:relative; }
+.nav-item.active { color:var(--accent); }
+.nav-item svg { width:22px; height:22px; }
+.nav-center { background:linear-gradient(135deg,var(--accent),var(--accent2)); width:46px; height:46px; border-radius:14px; color:#fff; font-size:1.4rem; display:flex; align-items:center; justify-content:center; margin-top:-10px; box-shadow:0 4px 16px rgba(108,99,255,0.4); border:none; cursor:pointer; }
+.nav-badge { position:absolute; top:2px; right:4px; width:8px; height:8px; background:var(--accent2); border-radius:50%; border:1.5px solid var(--surface); }
+
+/* ===================== PROFILE ===================== */
+.profile-header { padding:24px 16px 16px; display:flex; flex-direction:column; align-items:center; gap:10px; }
+.profile-pic { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:2rem; border:3px solid var(--accent); overflow:hidden; }
+.profile-pic img { width:100%; height:100%; object-fit:cover; }
+.profile-name { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:800; }
+.profile-bio { font-size:0.82rem; color:var(--muted); text-align:center; max-width:280px; line-height:1.5; }
+.profile-stats { display:flex; gap:24px; }
+.stat-item { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.stat-num { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; }
+.stat-label { font-size:0.65rem; color:var(--muted); }
+.profile-btn { padding:10px 28px; border-radius:12px; border:1.5px solid var(--accent); background:transparent; color:var(--accent); font-family:'Syne',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; transition:all 0.2s; }
+.profile-btn:active { background:rgba(108,99,255,0.15); }
+.profile-tabs { display:flex; border-bottom:1px solid var(--border); margin-top:8px; }
+.profile-tab { flex:1; text-align:center; padding:10px; font-size:0.75rem; font-family:'Syne',sans-serif; font-weight:600; color:var(--muted); border-bottom:2px solid transparent; cursor:pointer; }
+.profile-tab.active { color:var(--text); border-bottom-color:var(--accent); }
+.grid-posts { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; padding:2px; }
+.grid-post { aspect-ratio:1; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:1.5rem; cursor:pointer; overflow:hidden; }
+
+/* ===================== MESSAGING ===================== */
+.msg-list { padding:8px 0 80px; }
+.msg-item { display:flex; align-items:center; gap:12px; padding:12px 16px; cursor:pointer; transition:background 0.15s; border-bottom:1px solid var(--border); }
+.msg-item:active { background:var(--surface); }
+.msg-avatar { width:46px; height:46px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1rem; flex-shrink:0; overflow:hidden; }
+.msg-avatar img { width:100%; height:100%; object-fit:cover; }
+.msg-info { flex:1; min-width:0; }
+.msg-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.85rem; margin-bottom:2px; }
+.msg-preview { font-size:0.78rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.msg-time { font-size:0.65rem; color:var(--muted); flex-shrink:0; }
+.msg-unread { width:9px; height:9px; background:var(--accent); border-radius:50%; flex-shrink:0; }
+
+/* CONVERSATION */
+.conv-topbar { display:flex; align-items:center; gap:10px; padding:12px 14px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.back-btn { background:none; border:none; color:var(--text); cursor:pointer; padding:4px; }
+.back-btn svg { width:22px; height:22px; }
+.conv-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:0.9rem; font-weight:700; }
+.conv-name { font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem; flex:1; }
+.conv-messages { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:10px; scrollbar-width:none; }
+.conv-messages::-webkit-scrollbar { display:none; }
+.bubble { max-width:75%; padding:10px 14px; border-radius:18px; font-size:0.85rem; line-height:1.45; word-break:break-word; }
+.bubble-in { background:var(--surface2); color:var(--text); border-bottom-left-radius:4px; align-self:flex-start; }
+.bubble-out { background:linear-gradient(135deg,var(--accent),#8b5cf6); color:#fff; border-bottom-right-radius:4px; align-self:flex-end; }
+.bubble-time { font-size:0.6rem; opacity:0.6; margin-top:4px; }
+.conv-input-bar { display:flex; align-items:center; gap:8px; padding:10px 12px 24px; border-top:1px solid var(--border); flex-shrink:0; background:var(--bg); }
+.conv-input { flex:1; background:var(--surface); border:1.5px solid var(--border); border-radius:24px; padding:10px 16px; color:var(--text); font-size:0.88rem; font-family:'DM Sans',sans-serif; outline:none; }
+.conv-input:focus { border-color:var(--accent); }
+.send-btn { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); border:none; color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+.send-btn svg { width:18px; height:18px; }
+
+/* ===================== SETTINGS ===================== */
+.settings-section { padding:16px; }
+.settings-title { font-family:'Syne',sans-serif; font-size:0.7rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; }
+.settings-item { display:flex; align-items:center; gap:12px; padding:14px; background:var(--surface); border-radius:12px; margin-bottom:8px; cursor:pointer; transition:all 0.2s; border:1px solid var(--border); }
+.settings-item:active { background:var(--surface2); }
+.settings-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+.settings-label { font-size:0.88rem; font-weight:500; flex:1; }
+.settings-value { font-size:0.78rem; color:var(--muted); }
+.settings-arrow { color:var(--muted); }
+
+/* THEME PICKER */
+.theme-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:16px; }
+.theme-opt { padding:14px; border-radius:12px; border:1.5px solid var(--border); cursor:pointer; transition:all 0.2s; text-align:center; }
+.theme-opt.selected { border-color:var(--accent); background:rgba(108,99,255,0.1); }
+.theme-opt-preview { width:100%; height:36px; border-radius:8px; margin-bottom:8px; }
+.theme-opt-name { font-family:'Syne',sans-serif; font-size:0.75rem; font-weight:700; }
+
+/* COLOR PICKER */
+.color-grid { display:flex; flex-wrap:wrap; gap:10px; }
+.color-dot { width:34px; height:34px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:all 0.15s; }
+.color-dot.selected { border-color:#fff; box-shadow:0 0 0 2px rgba(255,255,255,0.3); transform:scale(1.1); }
+
+/* NAV POSITION */
+.nav-pos-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.nav-pos-btn { padding:12px; border-radius:12px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:'Syne',sans-serif; font-size:0.75rem; font-weight:700; cursor:pointer; transition:all 0.2s; text-align:center; }
+.nav-pos-btn.selected { border-color:var(--accent); background:rgba(108,99,255,0.1); color:var(--text); }
+
+/* ===================== CREATE POST ===================== */
+.create-page { padding:16px; padding-bottom:80px; }
+.create-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
+.create-title { font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; }
+.post-type-row { display:flex; gap:8px; margin-bottom:16px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; }
+.post-type-btn { flex-shrink:0; padding:8px 16px; border-radius:20px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-size:0.78rem; font-family:'Syne',sans-serif; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.post-type-btn.active { border-color:var(--accent); background:rgba(108,99,255,0.12); color:var(--text); }
+.post-textarea { width:100%; min-height:120px; background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:14px; color:var(--text); font-size:0.9rem; font-family:'DM Sans',sans-serif; outline:none; resize:none; line-height:1.5; }
+.post-textarea:focus { border-color:var(--accent); }
+.post-actions { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+.post-action-btn { display:flex; align-items:center; gap:6px; padding:8px 14px; background:var(--surface); border:1px solid var(--border); border-radius:10px; color:var(--muted); font-size:0.78rem; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+.post-action-btn:active { border-color:var(--accent); color:var(--accent); }
+.post-submit { width:100%; margin-top:16px; }
+
+/* ===================== NOTIFICATIONS ===================== */
+.notif-list { padding:8px 0 80px; }
+.notif-item { display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--border); cursor:pointer; }
+.notif-item.unread { background:rgba(108,99,255,0.04); }
+.notif-icon { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+.notif-text { flex:1; font-size:0.82rem; line-height:1.45; }
+.notif-text strong { color:var(--text); }
+.notif-time { font-size:0.65rem; color:var(--muted); flex-shrink:0; }
+
+/* ===================== SEARCH ===================== */
+.search-bar { padding:10px 14px; display:flex; gap:10px; align-items:center; flex-shrink:0; }
+.search-input-wrap { flex:1; position:relative; }
+.search-input { width:100%; background:var(--surface); border:1.5px solid var(--border); border-radius:14px; padding:11px 16px 11px 40px; color:var(--text); font-size:0.88rem; font-family:'DM Sans',sans-serif; outline:none; }
+.search-input:focus { border-color:var(--accent); }
+.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); }
+.search-icon svg { width:16px; height:16px; }
+.trending-section { padding:8px 14px 80px; }
+.trending-tag { display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:0.78rem; margin:4px; cursor:pointer; transition:all 0.2s; }
+.trending-tag:active { border-color:var(--accent); color:var(--accent); }
+
+/* ===================== TOAST ===================== */
+.toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:#1c1c2a; border:1px solid var(--border); border-radius:12px; padding:10px 20px; font-size:0.82rem; color:var(--text); opacity:0; transition:all 0.3s; pointer-events:none; z-index:999; white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,0.4); }
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ===================== MODAL ===================== */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; display:flex; align-items:flex-end; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal { background:var(--surface); border-radius:24px 24px 0 0; padding:24px; width:100%; max-width:430px; transform:translateY(100%); transition:transform 0.3s ease; max-height:85vh; overflow-y:auto; }
+.modal-overlay.open .modal { transform:translateY(0); }
+.modal-handle { width:36px; height:4px; background:var(--muted); border-radius:2px; margin:0 auto 20px; }
+.modal-title { font-family:'Syne',sans-serif; font-weight:800; font-size:1.1rem; margin-bottom:16px; }
+
+/* ===================== LOADING ===================== */
+.loading { display:flex; align-items:center; justify-content:center; flex:1; }
+.spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* FADE IN */
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.fade-up { animation:fadeUp 0.4s ease both; }
+
+/* LIGHT THEME */
+body.light {
+  --bg: #f5f5fa;
+  --surface: #ffffff;
+  --surface2: #ededf5;
+  --text: #111122;
+  --muted: #8888a0;
+  --border: rgba(0,0,0,0.08);
+}
+body.amoled { --bg:#000; --surface:#0a0a0a; --surface2:#111; --border:rgba(255,255,255,0.05); }
+body.noir { --bg:#000000; --surface:#080808; --surface2:#0f0f0f; --border:rgba(255,255,255,0.04); }
+</style>
 </head>
 <body>
 
 <div id="app">
-    <div id="auth-screen">
-        <div class="sw-logo-big">Swivo</div>
-        <input type="email" id="email" class="sw-input" placeholder="Email">
-        <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
-        <button class="sw-btn-main" onclick="auth('login')">Se connecter</button>
-        <button class="sw-btn-main" style="background:transparent; margin-top:10px; border:1px solid var(--accent)" onclick="auth('signup')">Créer un compte</button>
+
+  <!-- ========== PAGE: SPLASH ========== -->
+  <div class="page active" id="page-splash" style="justify-content:center;align-items:center;gap:16px;">
+    <div style="font-size:4rem;animation:bounce 2s ease-in-out infinite">🦊</div>
+    <div style="font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Swivo</div>
+    <div style="font-size:0.75rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;">Par tous, pour tous</div>
+    <div class="spinner" style="margin-top:40px"></div>
+  </div>
+
+  <!-- ========== PAGE: LOGIN ========== -->
+  <div class="page auth-page" id="page-login">
+    <div class="auth-mascot">🦊</div>
+    <div class="auth-logo">Swivo</div>
+    <div class="auth-tagline">Par tous, pour tous</div>
+    <div class="auth-form">
+      <div class="input-wrap"><input type="email" id="login-email" placeholder="Ton email" autocomplete="email"></div>
+      <div class="input-wrap"><input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password"></div>
+      <div class="error-msg" id="login-error"></div>
+      <button class="btn-primary" onclick="handleLogin()">Se connecter</button>
+      <button class="btn-secondary" onclick="showPage('page-forgot')">Mot de passe oublié ?</button>
+      <div class="auth-switch">Pas de compte ? <span onclick="showPage('page-signup')">Créer un compte</span></div>
     </div>
+  </div>
 
-    <header id="main-header">
-        <div class="logo">Swivo</div>
-        <div style="display:flex; gap:20px;">
-            <span onclick="alert('Recherche active...')">🔍</span>
-            <span onclick="alert('Notifications')">🔔</span>
-        </div>
-    </header>
-
-    <div id="scr-home" class="screen active">
-        <div style="display:flex; gap:25px; margin-bottom:20px; font-weight:700;">
-            <span style="border-bottom:3px solid var(--accent); padding-bottom:5px;">Pour toi</span>
-            <span style="opacity:0.4">Abonnements</span>
-        </div>
-
-        <div class="card">
-            <div class="conseil-tag">Conseil du jour</div>
-            <h3 style="font-family:'Syne'; margin-bottom:8px;">Soutenir local</h3>
-            <p style="color:var(--subtext); font-size:0.9rem; line-height:1.4;">En achetant local, 70% de l'argent reste dans votre ville contre seulement 14% pour les grandes chaînes.</p>
-        </div>
-
-        <ins class="adsbygoogle"
-             style="display:block; margin-bottom:16px;"
-             data-ad-client="ca-pub-1381945888605291"
-             data-ad-slot="8363711327"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-
-        <div class="card">
-            <div class="post-meta">
-                <strong>Marie - Maraîchère</strong>
-                <span class="proximity">PROXIMITÉ</span>
-            </div>
-            <p style="color:var(--subtext); margin-bottom:15px;">Récolte du jour : pourquoi les tomates locales ont plus de goût. 🍅</p>
-            <div style="display:flex; gap:15px; font-size:0.8rem; font-weight:bold;">
-                <span onclick="this.style.color='#f472b6'">❤️ 89</span>
-                <span onclick="alert('Ouverture commentaires')">💬 Répondre</span>
-            </div>
-        </div>
+  <!-- ========== PAGE: SIGNUP ========== -->
+  <div class="page auth-page" id="page-signup">
+    <div class="auth-mascot">🦊</div>
+    <div class="auth-logo">Swivo</div>
+    <div class="auth-tagline">Rejoins la communauté !</div>
+    <div class="auth-form">
+      <div class="input-wrap"><input type="text" id="signup-pseudo" placeholder="Ton pseudo" maxlength="20"></div>
+      <div class="input-wrap"><input type="email" id="signup-email" placeholder="Ton email" autocomplete="email"></div>
+      <div class="input-wrap"><input type="password" id="signup-password" placeholder="Mot de passe (min 6 car.)" autocomplete="new-password"></div>
+      <div class="error-msg" id="signup-error"></div>
+      <button class="btn-primary" onclick="handleSignup()">Créer mon compte 🚀</button>
+      <div class="auth-switch">Déjà un compte ? <span onclick="showPage('page-login')">Se connecter</span></div>
     </div>
+  </div>
 
-    <div id="scr-messages" class="screen">
-        <h2 style="font-family:'Syne'; margin-bottom:20px;">Messages</h2>
-        <div class="card" style="display:flex; align-items:center; gap:15px;">
-            <div style="width:50px; height:50px; background:#22c55e; border-radius:50%;"></div>
-            <div style="flex:1">
-                <strong>Thomas (Local Baker)</strong>
-                <p style="font-size:0.8rem; color:var(--subtext)">Merci pour ton conseil sur la diction !</p>
-            </div>
-            <small style="color:var(--subtext)">12:40</small>
-        </div>
+  <!-- ========== PAGE: FORGOT PASSWORD ========== -->
+  <div class="page auth-page" id="page-forgot">
+    <div class="auth-mascot">🔑</div>
+    <div class="auth-logo" style="font-size:2rem">Mot de passe oublié</div>
+    <div class="auth-tagline" style="margin-bottom:30px">On t'envoie un lien de réinitialisation</div>
+    <div class="auth-form">
+      <div class="input-wrap"><input type="email" id="forgot-email" placeholder="Ton email"></div>
+      <div class="error-msg" id="forgot-error"></div>
+      <button class="btn-primary" onclick="handleForgot()">Envoyer le lien</button>
+      <button class="btn-secondary" onclick="showPage('page-login')">← Retour</button>
     </div>
+  </div>
 
-    <div id="scr-profile" class="screen">
-        <div class="avatar-box avatar-round" id="my-avatar">
-            <div style="font-size:3rem">👤</div>
-        </div>
-        <h2 id="user-name" style="text-align:center; font-family:'Syne'; margin-bottom:5px;">Chargement...</h2>
-        <p style="text-align:center; color:var(--subtext); font-size:0.8rem; margin-bottom:25px;">Apprenti_Swivo</p>
-
-        <div class="shape-btns">
-            <button class="btn-shape" onclick="changeAvatar('round')">Rond</button>
-            <button class="btn-shape" onclick="changeAvatar('square')">Carré</button>
-            <button class="btn-shape" onclick="changeAvatar('drop')">Goutte</button>
-        </div>
-
-        <div class="card">
-            <p style="font-weight:bold; margin-bottom:10px;">Ma Bio</p>
-            <textarea class="sw-input" style="height:100px;" placeholder="Dis-nous en plus sur toi..."></textarea>
-        </div>
-
-        <div class="card" style="background:rgba(244,114,182,0.1); border:1px solid #f472b6;">
-            <p style="font-weight:bold; text-align:center;">Soutenir le projet</p>
-            <button class="sw-btn-main" style="margin-top:10px; background:#f472b6;">Regarder une pub rémunératrice 📺</button>
-        </div>
+  <!-- ========== PAGE: FEED ========== -->
+  <div class="page" id="page-feed">
+    <div class="topbar">
+      <div class="topbar-logo">Swivo</div>
+      <div class="topbar-tabs">
+        <div class="topbar-tab active" onclick="switchFeedTab('for-you',this)">Pour toi</div>
+        <div class="topbar-tab" onclick="switchFeedTab('following',this)">Abonnements</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onclick="showPage('page-notifs')" style="position:relative">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          <div class="notif-dot"></div>
+        </button>
+      </div>
     </div>
+    <div class="scroll feed-wrap" id="feed-scroll">
+      <!-- STORIES -->
+      <div class="stories-row">
+        <div class="story-item story-add" onclick="showPage('page-create')">
+          <div class="story-ring"><div class="story-avatar">＋</div></div>
+          <div class="story-name">Toi</div>
+        </div>
+        <div class="story-item"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
+        <div class="story-item"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
+        <div class="story-item"><div class="story-ring"><div class="story-avatar">👨</div></div><div class="story-name">Théo</div></div>
+        <div class="story-item"><div class="story-ring"><div class="story-avatar">👧</div></div><div class="story-name">Léa</div></div>
+      </div>
 
-    <div id="scr-settings" class="screen">
-        <h2 style="font-family:'Syne'; margin-bottom:20px;">Paramètres</h2>
-        <div class="card">
-            <p style="margin-bottom:15px;">Mode Clair / Sombre</p>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-shape" style="flex:1" onclick="alert('Déjà en sombre')">Sombre</button>
-                <button class="btn-shape" style="flex:1; background:white; color:black">Clair</button>
-            </div>
+      <!-- LIVE BANNER -->
+      <div class="live-banner" onclick="showToast('🎥 Live en cours...')">
+        <div class="live-dot"></div>
+        <div style="flex:1">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem">💬 Live — Comprendre son premier loyer</div>
+          <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">@PaulineAdulte · 1 204 spectateurs</div>
         </div>
-        <div class="card">
-            <p style="margin-bottom:10px;">Qualité Upload par défaut</p>
-            <select class="sw-input" style="margin-bottom:0">
-                <option>1080p 60fps (Max)</option>
-                <option>720p 30fps (Éco)</option>
-            </select>
+        <div class="live-badge">LIVE</div>
+      </div>
+
+      <!-- SERVERS -->
+      <div class="servers-section">
+        <div class="section-title">Tes serveurs</div>
+        <div class="servers-row">
+          <div class="server-chip" onclick="showToast('🗳️ Serveur Politique')"><div class="server-icon">🗳️</div><div class="server-name">Politique</div></div>
+          <div class="server-chip" onclick="showToast('🍳 Serveur Cuisine')"><div class="server-icon">🍳</div><div class="server-name">Cuisine</div></div>
+          <div class="server-chip" onclick="showToast('🎮 Serveur Gaming')"><div class="server-icon">🎮</div><div class="server-name">Gaming</div></div>
+          <div class="server-chip" onclick="showToast('💡 Serveur Vie adulte')"><div class="server-icon">💡</div><div class="server-name">Vie adulte</div></div>
+          <div class="server-chip" onclick="showToast('🎵 Serveur Musique')"><div class="server-icon">🎵</div><div class="server-name">Musique</div></div>
+          <div class="server-chip" onclick="openModal('modal-servers')"><div class="server-icon">➕</div><div class="server-name">Rejoindre</div></div>
         </div>
+      </div>
+
+      <!-- CONSEIL DU JOUR -->
+      <div class="card fade-up">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">💡</div>
+          <div class="card-meta">
+            <div class="card-name">Conseil du jour</div>
+            <div><span class="tag-pill tag-life" id="tip-tag-feed">Vie adulte</span></div>
+          </div>
+          <button class="tip-refresh" onclick="rotateTip()">🔀 Autre</button>
+        </div>
+        <div class="tip-box">
+          <div class="tip-title" id="tip-title-feed">Chargement...</div>
+          <div class="tip-text" id="tip-text-feed"></div>
+        </div>
+        <div class="card-actions">
+          <button class="act-btn" onclick="toggleLike(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <span id="tip-likes-feed">2.4k</span>
+          </button>
+          <button class="act-btn" onclick="showToast('💬 Commentaires bientôt disponibles')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+            184
+          </button>
+          <button class="act-btn" onclick="shareContent()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Partager
+          </button>
+          <button class="act-btn" onclick="showToast('🔖 Sauvegardé !')">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>
+            Sauver
+          </button>
+        </div>
+      </div>
+
+      <!-- VOTE CARD -->
+      <div class="card fade-up" id="vote-card">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#ff6584,#f472b6)">🗳️</div>
+          <div class="card-meta">
+            <div class="card-name">Question du jour</div>
+            <div><span class="tag-pill tag-vote">Vote anonyme</span></div>
+          </div>
+        </div>
+        <div class="vote-q">Faut-il rendre le vote obligatoire en France ?</div>
+        <div style="padding:0 14px 6px;font-size:0.72rem;color:var(--muted)">Ton vote est 100% anonyme. Aucun jugement.</div>
+        <div class="vote-opts" id="vote-opts">
+          <button class="vote-opt" onclick="castVote(this,'yes')">👍 Oui, obligatoire</button>
+          <button class="vote-opt" onclick="castVote(this,'no')">👎 Non, libre</button>
+        </div>
+        <div class="vote-result" id="vote-result" style="display:none">
+          <div class="vote-bar-wrap"><div class="vote-bar" id="vote-bar" style="width:58%"></div></div>
+          <div class="vote-stats"><span id="vote-yes-pct">58% Oui</span><span id="vote-no-pct">42% Non</span></div>
+          <div style="font-size:0.65rem;color:var(--muted);margin-top:4px;text-align:center">14 832 votes</div>
+        </div>
+        <div class="card-actions">
+          <button class="act-btn" onclick="showToast('💬 Débat bientôt disponible')">💬 Débattre</button>
+          <button class="act-btn" onclick="shareContent()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Partager
+          </button>
+        </div>
+      </div>
+
+      <!-- BUDGET TIP -->
+      <div class="card fade-up">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#f7971e,#ffd200)">💰</div>
+          <div class="card-meta">
+            <div class="card-name">Swivo Budget</div>
+            <div><span class="tag-pill tag-budget">Abonnements</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <strong>💡 T'as peut-être des abonnements oubliés !</strong><br><br>
+          Netflix + Spotify + Disney+ + Amazon = facilement 40-50€/mois. Tu les utilises vraiment tous ? Fais le bilan et résilie ce que tu n'utilises plus. C'est de l'argent direct dans ta poche. 💸
+        </div>
+        <div class="card-actions">
+          <button class="act-btn" onclick="toggleLike(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            1.8k
+          </button>
+          <button class="act-btn" onclick="shareContent()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Partager
+          </button>
+        </div>
+      </div>
+
+      <!-- HEALTH CARD -->
+      <div class="card fade-up">
+        <div class="card-header">
+          <div class="card-avatar" style="background:linear-gradient(135deg,#ff6584,#f7971e)">💪</div>
+          <div class="card-meta"><div class="card-name">Swivy te rappelle</div><div><span class="tag-pill" style="background:rgba(255,101,132,0.12);color:#ff6584">Santé</span></div></div>
+        </div>
+        <div class="card-body">
+          <strong>💧 T'as bu de l'eau aujourd'hui ?</strong><br><br>
+          1,5 à 2L par jour c'est la base. Ça améliore ta concentration, ton énergie et ta peau. Et rappelle-toi : ni le sous-poids ni le surpoids ne sont une fatalité. Un corps ça s'entretient avec bienveillance. 🫀
+        </div>
+        <div class="card-actions">
+          <button class="act-btn" onclick="toggleLike(this)">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            3.1k
+          </button>
+          <button class="act-btn" onclick="shareContent()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+            Partager
+          </button>
+        </div>
+      </div>
+
+      <!-- AD SLOT -->
+      <div class="ad-slot">
+        <ins class="adsbygoogle" style="display:block;width:100%;min-height:80px" data-ad-client="ca-pub-1381945888605291" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      </div>
+
+      <!-- MASCOT -->
+      <div class="mascot-card">
+        <svg class="mascot-svg" viewBox="0 0 90 90" fill="none">
+          <g style="animation:bounce 3s ease-in-out infinite;transform-origin:45px 50px">
+            <ellipse cx="28" cy="80" rx="14" ry="8" fill="#ff7b3a" opacity="0.8"/>
+            <rect x="28" y="48" width="34" height="28" rx="10" fill="#ff7b3a"/>
+            <ellipse cx="45" cy="60" rx="10" ry="10" fill="#fff5f0"/>
+            <rect x="16" y="52" width="14" height="8" rx="4" fill="#ff7b3a"/>
+            <rect x="60" y="52" width="14" height="8" rx="4" fill="#ff7b3a"/>
+            <polygon points="24,24 30,8 38,22" fill="#ff7b3a"/>
+            <polygon points="52,22 60,8 66,24" fill="#ff7b3a"/>
+            <rect x="22" y="20" width="46" height="32" rx="14" fill="#ff7b3a"/>
+            <ellipse cx="45" cy="42" rx="12" ry="8" fill="#fff5f0"/>
+            <ellipse cx="45" cy="38" rx="3.5" ry="2.5" fill="#1a1a2e"/>
+            <rect x="32" y="28" width="9" height="8" rx="4.5" fill="#1a1a2e"/>
+            <circle cx="35" cy="30" r="1.5" fill="white" opacity="0.8"/>
+            <rect x="49" y="28" width="9" height="8" rx="4.5" fill="#1a1a2e"/>
+            <circle cx="52" cy="30" r="1.5" fill="white" opacity="0.8"/>
+            <path d="M 40 44 Q 45 49 50 44" stroke="#cc4a00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+        <div class="mascot-bubble">
+          <div class="mascot-name">SWIVY · Mascotte Swivo</div>
+          T'es au top ! Continue comme ça, chaque jour t'apprends quelque chose de nouveau sur Swivo 🦊✨
+        </div>
+      </div>
+
+      <!-- SUPPORT -->
+      <div class="support-card support-paypal">
+        <div style="font-size:1.3rem">💙</div>
+        <div class="support-info">
+          <div class="support-title" style="color:#4facfe">Faire un don</div>
+          <div class="support-text">Swivo est 100% gratuit. Un don nous aide à grandir.</div>
+        </div>
+        <button class="support-btn" onclick="showToast('💙 Merci pour ton soutien !')">PayPal</button>
+      </div>
+      <div class="support-card support-free">
+        <div style="font-size:1.3rem">🆓</div>
+        <div class="support-info">
+          <div class="support-title" style="color:var(--accent3)">Soutien gratuit</div>
+          <div class="support-text">Clique sur une pub pour nous soutenir gratuitement 🙏</div>
+        </div>
+        <button class="support-btn" onclick="showToast('🙏 Merci !')">Une pub →</button>
+      </div>
+      <div style="height:20px"></div>
     </div>
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav" id="main-nav">
+      <div class="nav-item active" onclick="setNav('feed',this)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        Accueil
+      </div>
+      <div class="nav-item" onclick="setNav('search',this)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        Chercher
+      </div>
+      <button class="nav-center" onclick="showPage('page-create')">＋</button>
+      <div class="nav-item" onclick="setNav('messages',this)" style="position:relative">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+        Messages
+        <div class="nav-badge"></div>
+      </div>
+      <div class="nav-item" onclick="setNav('profile',this)">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        Profil
+      </div>
+    </div>
+  </div>
 
-    <nav id="navbar">
-        <div class="nav-link active" onclick="nav('home', this)"><span>🏠</span>Accueil</div>
-        <div class="nav-link" onclick="nav('messages', this)"><span>💬</span>Messages</div>
-        <div class="nav-plus" onclick="alert('Lancement Studio 1080p...')">+</div>
-        <div class="nav-link" onclick="nav('profile', this)"><span>👤</span>Profil</div>
-        <div class="nav-link" onclick="nav('settings', this)"><span>⚙️</span>Réglages</div>
-    </nav>
+  <!-- ========== PAGE: SEARCH ========== -->
+  <div class="page" id="page-search">
+    <div class="topbar"><div class="topbar-logo">Chercher</div></div>
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <div class="search-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div>
+        <input class="search-input" placeholder="Rechercher..." oninput="handleSearch(this.value)">
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="trending-section">
+        <div class="section-title" style="margin-bottom:12px">Tendances 🔥</div>
+        <div>
+          <div class="trending-tag" onclick="showToast('#VieAdulte · 24k posts')">🔥 #VieAdulte</div>
+          <div class="trending-tag" onclick="showToast('#Gaming · 18k posts')">🎮 #Gaming</div>
+          <div class="trending-tag" onclick="showToast('#Budget · 12k posts')">💰 #Budget</div>
+          <div class="trending-tag" onclick="showToast('#Politique · 9k posts')">🗳️ #Politique</div>
+          <div class="trending-tag" onclick="showToast('#Cuisine · 8k posts')">🍳 #Cuisine</div>
+          <div class="trending-tag" onclick="showToast('#Swivo · 5k posts')">🦊 #Swivo</div>
+          <div class="trending-tag" onclick="showToast('#Santé · 4k posts')">💪 #Santé</div>
+          <div class="trending-tag" onclick="showToast('#Logement · 3k posts')">🏠 #Logement</div>
+        </div>
+        <div class="section-title" style="margin-top:20px;margin-bottom:12px">Personnes à suivre</div>
+        <div id="search-results">
+          <div class="msg-item" onclick="showToast('👤 Profil bientôt disponible')">
+            <div class="msg-avatar">👩</div>
+            <div class="msg-info"><div class="msg-name">@PaulineAdulte</div><div class="msg-preview">Conseils vie adulte · 12k abonnés</div></div>
+          </div>
+          <div class="msg-item" onclick="showToast('👤 Profil bientôt disponible')">
+            <div class="msg-avatar">🧑</div>
+            <div class="msg-info"><div class="msg-name">@Kevin_xX</div><div class="msg-preview">Gaming & tech · 8k abonnés</div></div>
+          </div>
+          <div class="msg-item" onclick="showToast('👤 Profil bientôt disponible')">
+            <div class="msg-avatar">👨</div>
+            <div class="msg-info"><div class="msg-name">@ThéoBudget</div><div class="msg-preview">Finance personnelle · 6k abonnés</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="setNav('feed',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Accueil</div>
+      <div class="nav-item active" onclick="setNav('search',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Chercher</div>
+      <button class="nav-center" onclick="showPage('page-create')">＋</button>
+      <div class="nav-item" onclick="setNav('messages',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Messages</div>
+      <div class="nav-item" onclick="setNav('profile',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profil</div>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: MESSAGES ========== -->
+  <div class="page" id="page-messages">
+    <div class="topbar"><div class="topbar-logo">Messages</div><button class="icon-btn" onclick="openConversation('Pauline','👩')">✏️</button></div>
+    <div class="scroll">
+      <div class="msg-list">
+        <div class="msg-item" onclick="openConversation('Pauline','👩')">
+          <div class="msg-avatar">👩</div>
+          <div class="msg-info"><div class="msg-name">Pauline</div><div class="msg-preview">T'as vu le conseil du jour ? 😍</div></div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="msg-time">14:32</div><div class="msg-unread"></div></div>
+        </div>
+        <div class="msg-item" onclick="openConversation('Kevin_xX','🧑')">
+          <div class="msg-avatar">🧑</div>
+          <div class="msg-info"><div class="msg-name">Kevin_xX</div><div class="msg-preview">Duo ce soir ? 🎮</div></div>
+          <div class="msg-time">12:18</div>
+        </div>
+        <div class="msg-item" onclick="openConversation('Théo','👨')">
+          <div class="msg-avatar">👨</div>
+          <div class="msg-info"><div class="msg-name">Théo</div><div class="msg-preview">Merci pour le tuyau sur les APL 🙏</div></div>
+          <div class="msg-time">Hier</div>
+        </div>
+        <div class="msg-item" onclick="openConversation('Léa','👧')">
+          <div class="msg-avatar">👧</div>
+          <div class="msg-info"><div class="msg-name">Léa</div><div class="msg-preview">J'adore cette app !</div></div>
+          <div class="msg-time">Lun.</div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="setNav('feed',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Accueil</div>
+      <div class="nav-item" onclick="setNav('search',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Chercher</div>
+      <button class="nav-center" onclick="showPage('page-create')">＋</button>
+      <div class="nav-item active" onclick="setNav('messages',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Messages</div>
+      <div class="nav-item" onclick="setNav('profile',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profil</div>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: CONVERSATION ========== -->
+  <div class="page" id="page-conversation" style="display:flex;flex-direction:column;">
+    <div class="conv-topbar">
+      <button class="back-btn" onclick="showPage('page-messages')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+      <div class="conv-avatar" id="conv-avatar">👩</div>
+      <div class="conv-name" id="conv-name">Pauline</div>
+      <button class="icon-btn" onclick="showToast('📞 Appel bientôt disponible')">📞</button>
+    </div>
+    <div class="conv-messages" id="conv-messages">
+      <div style="text-align:center;font-size:0.7rem;color:var(--muted);margin-bottom:8px">Aujourd'hui</div>
+      <div class="bubble bubble-in">T'as vu le conseil du jour ? 😍<div class="bubble-time">14:28</div></div>
+      <div class="bubble bubble-out">Ouii trop bien ! Les APL j'savais même pas 😅<div class="bubble-time">14:30</div></div>
+      <div class="bubble bubble-in">Moi j'ai demandé et j'ai eu 180€/mois 🎉<div class="bubble-time">14:31</div></div>
+      <div class="bubble bubble-out">Sérieux ?! Je vais faire pareil<div class="bubble-time">14:32</div></div>
+    </div>
+    <div class="conv-input-bar">
+      <input class="conv-input" id="conv-input" placeholder="Écris un message..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button class="send-btn" onclick="sendMessage()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: PROFILE ========== -->
+  <div class="page" id="page-profile">
+    <div class="topbar">
+      <div class="topbar-logo" id="profile-username">Mon profil</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" onclick="showPage('page-settings')">⚙️</button>
+      </div>
+    </div>
+    <div class="scroll">
+      <div class="profile-header">
+        <div class="profile-pic" id="profile-pic">🦊</div>
+        <div class="profile-name" id="profile-name">Utilisateur</div>
+        <div class="profile-bio" id="profile-bio">Membre de Swivo 🦊 Par tous, pour tous.</div>
+        <div class="profile-stats">
+          <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Posts</div></div>
+          <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Abonnés</div></div>
+          <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Abonnements</div></div>
+        </div>
+        <button class="profile-btn" onclick="openModal('modal-edit-profile')">Modifier le profil</button>
+      </div>
+      <div class="profile-tabs">
+        <div class="profile-tab active">Posts</div>
+        <div class="profile-tab" onclick="showToast('❤️ Likes bientôt disponibles')">Likes</div>
+        <div class="profile-tab" onclick="showToast('🔖 Sauvegardés bientôt disponibles')">Sauvegardés</div>
+      </div>
+      <div class="grid-posts">
+        <div class="grid-post" onclick="showToast('📸 Crée ton premier post !')">➕</div>
+        <div class="grid-post" style="font-size:0.7rem;color:var(--muted);padding:8px;text-align:center">Aucun post</div>
+        <div class="grid-post"></div>
+      </div>
+      <div style="height:80px"></div>
+    </div>
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="setNav('feed',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Accueil</div>
+      <div class="nav-item" onclick="setNav('search',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>Chercher</div>
+      <button class="nav-center" onclick="showPage('page-create')">＋</button>
+      <div class="nav-item" onclick="setNav('messages',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Messages</div>
+      <div class="nav-item active" onclick="setNav('profile',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profil</div>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: CREATE POST ========== -->
+  <div class="page" id="page-create">
+    <div class="topbar">
+      <button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+      <div class="topbar-logo">Créer</div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="scroll create-page">
+      <div class="post-type-row">
+        <button class="post-type-btn active" onclick="setPostType(this)">📝 Post</button>
+        <button class="post-type-btn" onclick="setPostType(this)">📸 Photo</button>
+        <button class="post-type-btn" onclick="setPostType(this)">🎥 Vidéo</button>
+        <button class="post-type-btn" onclick="setPostType(this)">🗳️ Vote</button>
+        <button class="post-type-btn" onclick="setPostType(this)">🔴 Live</button>
+      </div>
+      <textarea class="post-textarea" id="post-content" placeholder="Quoi de neuf ? Partage quelque chose d'utile ou d'intéressant..."></textarea>
+      <div class="post-actions">
+        <button class="post-action-btn" onclick="showToast('📸 Ajouter une image')">📸 Image</button>
+        <button class="post-action-btn" onclick="showToast('📍 Localisation')">📍 Lieu</button>
+        <button class="post-action-btn" onclick="openModal('modal-category')">🏷️ Catégorie</button>
+        <button class="post-action-btn" onclick="showToast('👥 Mentionner')">👥 Mentionner</button>
+      </div>
+      <button class="btn-primary post-submit" onclick="publishPost()">Publier 🚀</button>
+      <div style="height:40px"></div>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: NOTIFICATIONS ========== -->
+  <div class="page" id="page-notifs">
+    <div class="topbar">
+      <button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+      <div class="topbar-logo">Notifications</div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="scroll">
+      <div class="notif-list">
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background:rgba(255,101,132,0.12)">❤️</div>
+          <div class="notif-text"><strong>Pauline</strong> a aimé ton post</div>
+          <div class="notif-time">2 min</div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background:rgba(108,99,255,0.12)">👤</div>
+          <div class="notif-text"><strong>Kevin_xX</strong> te suit maintenant</div>
+          <div class="notif-time">1h</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(67,233,123,0.12)">💡</div>
+          <div class="notif-text">Nouveau <strong>conseil du jour</strong> disponible !</div>
+          <div class="notif-time">Ce matin</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(247,151,30,0.12)">🗳️</div>
+          <div class="notif-text">Nouvelle <strong>question du jour</strong> — Vote maintenant !</div>
+          <div class="notif-time">Hier</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(255,101,132,0.12)">💬</div>
+          <div class="notif-text"><strong>Théo</strong> a commenté ton post</div>
+          <div class="notif-time">Lun.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== PAGE: SETTINGS ========== -->
+  <div class="page" id="page-settings">
+    <div class="topbar">
+      <button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+      <div class="topbar-logo">Paramètres</div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="scroll">
+      <div class="settings-section">
+        <div class="settings-title">Apparence</div>
+        <div class="theme-grid">
+          <div class="theme-opt selected" onclick="setTheme('dark',this)">
+            <div class="theme-opt-preview" style="background:#0a0a0f;border:1px solid #333"></div>
+            <div class="theme-opt-name">🌙 Sombre</div>
+          </div>
+          <div class="theme-opt" onclick="setTheme('light',this)">
+            <div class="theme-opt-preview" style="background:#f5f5fa;border:1px solid #ddd"></div>
+            <div class="theme-opt-name">☀️ Clair</div>
+          </div>
+          <div class="theme-opt" onclick="setTheme('amoled',this)">
+            <div class="theme-opt-preview" style="background:#000;border:1px solid #222"></div>
+            <div class="theme-opt-name">⚡ AMOLED</div>
+          </div>
+          <div class="theme-opt" onclick="setTheme('noir',this)">
+            <div class="theme-opt-preview" style="background:#000000"></div>
+            <div class="theme-opt-name">🖤 Noir total</div>
+          </div>
+        </div>
+
+        <div class="settings-title">Couleur principale</div>
+        <div class="color-grid" style="margin-bottom:16px">
+          <div class="color-dot selected" style="background:#6c63ff" onclick="setAccentColor('#6c63ff',this)"></div>
+          <div class="color-dot" style="background:#ff6584" onclick="setAccentColor('#ff6584',this)"></div>
+          <div class="color-dot" style="background:#43e97b" onclick="setAccentColor('#43e97b',this)"></div>
+          <div class="color-dot" style="background:#4facfe" onclick="setAccentColor('#4facfe',this)"></div>
+          <div class="color-dot" style="background:#f7971e" onclick="setAccentColor('#f7971e',this)"></div>
+          <div class="color-dot" style="background:#f953c6" onclick="setAccentColor('#f953c6',this)"></div>
+          <div class="color-dot" style="background:#00e5ff" onclick="setAccentColor('#00e5ff',this)"></div>
+          <div class="color-dot" style="background:#a8ff78" onclick="setAccentColor('#a8ff78',this)"></div>
+        </div>
+
+        <div class="settings-title">Taille du texte</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <button class="nav-pos-btn" onclick="setFontSize('small',this)" style="flex:1">A<small>petit</small></button>
+          <button class="nav-pos-btn selected" onclick="setFontSize('normal',this)" style="flex:1">A normal</button>
+          <button class="nav-pos-btn" onclick="setFontSize('large',this)" style="flex:1"><big>A</big> grand</button>
+        </div>
+      </div>
+
+      <div class="settings-section" style="padding-top:0">
+        <div class="settings-title">Compte</div>
+        <div class="settings-item" onclick="openModal('modal-edit-profile')">
+          <div class="settings-icon" style="background:rgba(108,99,255,0.1)">👤</div>
+          <div class="settings-label">Modifier le profil</div>
+          <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="showToast('🔒 Changement de mot de passe envoyé par email')">
+          <div class="settings-icon" style="background:rgba(255,101,132,0.1)">🔒</div>
+          <div class="settings-label">Changer le mot de passe</div>
+          <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="showToast('🔔 Notifications configurées')">
+          <div class="settings-icon" style="background:rgba(247,151,30,0.1)">🔔</div>
+          <div class="settings-label">Notifications</div>
+          <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="showToast('🛡️ Confidentialité — Bientôt disponible')">
+          <div class="settings-icon" style="background:rgba(67,233,123,0.1)">🛡️</div>
+          <div class="settings-label">Confidentialité</div>
+          <div class="settings-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="handleLogout()" style="border-color:rgba(255,101,132,0.2)">
+          <div class="settings-icon" style="background:rgba(255,101,132,0.1)">🚪</div>
+          <div class="settings-label" style="color:var(--accent2)">Se déconnecter</div>
+        </div>
+      </div>
+      <div style="height:40px"></div>
+    </div>
+  </div>
+
+  <!-- ========== MODALS ========== -->
+  <!-- Modal Serveurs -->
+  <div class="modal-overlay" id="modal-servers" onclick="closeModalOutside(event,'modal-servers')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Rejoindre un serveur</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="settings-item" onclick="showToast('✅ Serveur #Sport rejoint !');closeModal('modal-servers')"><div class="settings-icon">⚽</div><div class="settings-label">Sport</div><div style="color:var(--accent);font-size:0.75rem">+</div></div>
+        <div class="settings-item" onclick="showToast('✅ Serveur #Voyages rejoint !');closeModal('modal-servers')"><div class="settings-icon">✈️</div><div class="settings-label">Voyages</div><div style="color:var(--accent);font-size:0.75rem">+</div></div>
+        <div class="settings-item" onclick="showToast('✅ Serveur #Cinéma rejoint !');closeModal('modal-servers')"><div class="settings-icon">🎬</div><div class="settings-label">Cinéma</div><div style="color:var(--accent);font-size:0.75rem">+</div></div>
+        <div class="settings-item" onclick="showToast('✅ Serveur #Lecture rejoint !');closeModal('modal-servers')"><div class="settings-icon">📚</div><div class="settings-label">Lecture</div><div style="color:var(--accent);font-size:0.75rem">+</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Edit Profile -->
+  <div class="modal-overlay" id="modal-edit-profile" onclick="closeModalOutside(event,'modal-edit-profile')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Modifier le profil</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <input type="text" id="edit-pseudo" placeholder="Pseudo" class="conv-input" style="border-radius:12px;padding:14px">
+        <input type="text" id="edit-bio" placeholder="Ta bio..." class="conv-input" style="border-radius:12px;padding:14px">
+        <button class="btn-primary" onclick="saveProfile()">Sauvegarder</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Category -->
+  <div class="modal-overlay" id="modal-category" onclick="closeModalOutside(event,'modal-category')">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Choisir une catégorie</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Vie adulte');closeModal('modal-category')">💡 Vie adulte</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Gaming');closeModal('modal-category')">🎮 Gaming</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Politique');closeModal('modal-category')">🗳️ Politique</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Cuisine');closeModal('modal-category')">🍳 Cuisine</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Santé');closeModal('modal-category')">💪 Santé</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Budget');closeModal('modal-category')">💰 Budget</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Musique');closeModal('modal-category')">🎵 Musique</div>
+        <div class="trending-tag" onclick="showToast('🏷️ Catégorie : Sport');closeModal('modal-category')">⚽ Sport</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
 </div>
 
 <script>
-    // CONFIG SUPABASE (Basée sur tes photos)
-    const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
-    const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-    const supabase = window.supabase.createClient(S_URL, S_KEY);
+// =============================================
+// SUPABASE CONFIG
+// =============================================
+const SUPABASE_URL = 'METS_TON_URL_ICI';
+const SUPABASE_KEY = 'METS_TA_CLÉ_ICI';
+let supabase_client = null;
+let currentUser = null;
 
-    // AUTHENTIFICATION
-    async function auth(type) {
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('pass').value;
-        if(!email || !pass) return alert("Remplis tout !");
+try {
+  supabase_client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch(e) {
+  console.log('Supabase non configuré, mode démo actif');
+}
 
-        const { data, error } = (type === 'login') 
-            ? await supabase.auth.signInWithPassword({ email, password: pass })
-            : await supabase.auth.signUp({ email, password: pass });
+// =============================================
+// NAVIGATION
+// =============================================
+let pageHistory = [];
+let currentPage = 'page-splash';
 
-        if(error) alert(error.message);
-        else setupUI(data.user);
-    }
+function showPage(pageId) {
+  const current = document.getElementById(currentPage);
+  const next = document.getElementById(pageId);
+  if (!next || pageId === currentPage) return;
+  if (current) { current.classList.remove('active'); current.classList.add('slide-left'); }
+  next.classList.remove('slide-left');
+  next.classList.add('active');
+  pageHistory.push(currentPage);
+  currentPage = pageId;
+  setTimeout(() => { if(current) current.classList.remove('slide-left'); }, 350);
+}
 
-    function setupUI(user) {
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('main-header').style.display = 'flex';
-        document.getElementById('navbar').style.display = 'flex';
-        document.getElementById('user-name').innerText = user.email.split('@')[0];
-    }
+function goBack() {
+  if (pageHistory.length === 0) return;
+  const prev = pageHistory.pop();
+  const current = document.getElementById(currentPage);
+  const prevEl = document.getElementById(prev);
+  if (current) { current.classList.remove('active'); }
+  if (prevEl) { prevEl.classList.remove('slide-left'); prevEl.classList.add('active'); }
+  currentPage = prev;
+}
 
-    // NAVIGATION
-    function nav(id, el) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById('scr-' + id).classList.add('active');
-        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-        el.classList.add('active');
-    }
+function setNav(tab, el) {
+  const pages = { feed:'page-feed', search:'page-search', messages:'page-messages', profile:'page-profile' };
+  if (pages[tab]) showPage(pages[tab]);
+}
 
-    // INTERACTION PROFIL
-    function changeAvatar(shape) {
-        const av = document.getElementById('my-avatar');
-        av.className = 'avatar-box avatar-' + shape;
-    }
+// =============================================
+// AUTH
+// =============================================
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = '⚠️ Remplis tous les champs'; return; }
 
-    // AUTO-LOGIN
-    window.onload = async () => {
-        const { data } = await supabase.auth.getSession();
-        if(data.session) setupUI(data.session.user);
-    }
+  if (supabase_client && SUPABASE_URL !== 'METS_TON_URL_ICI') {
+    try {
+      const { data, error } = await supabase_client.auth.signInWithPassword({ email, password: pass });
+      if (error) { errEl.textContent = '❌ ' + (error.message === 'Invalid login credentials' ? 'Email ou mot de passe incorrect' : error.message); return; }
+      currentUser = data.user;
+      enterApp();
+    } catch(e) { errEl.textContent = '❌ Erreur de connexion'; }
+  } else {
+    // MODE DÉMO
+    currentUser = { email, id: 'demo', user_metadata: { pseudo: email.split('@')[0] } };
+    enterApp();
+  }
+}
+
+async function handleSignup() {
+  const pseudo = document.getElementById('signup-pseudo').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pass = document.getElementById('signup-password').value;
+  const errEl = document.getElementById('signup-error');
+  errEl.textContent = '';
+  if (!pseudo || !email || !pass) { errEl.textContent = '⚠️ Remplis tous les champs'; return; }
+  if (pass.length < 6) { errEl.textContent = '⚠️ Mot de passe trop court (min 6 caractères)'; return; }
+
+  if (supabase_client && SUPABASE_URL !== 'METS_TON_URL_ICI') {
+    try {
+      const { data, error } = await supabase_client.auth.signUp({ email, password: pass, options: { data: { pseudo } } });
+      if (error) { errEl.textContent = '❌ ' + error.message; return; }
+      currentUser = data.user;
+      showToast('✅ Compte créé ! Bienvenue sur Swivo 🦊');
+      enterApp();
+    } catch(e) { errEl.textContent = '❌ Erreur lors de la création'; }
+  } else {
+    currentUser = { email, id: 'demo', user_metadata: { pseudo } };
+    showToast('✅ Bienvenue sur Swivo 🦊 (mode démo)');
+    enterApp();
+  }
+}
+
+async function handleForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const errEl = document.getElementById('forgot-error');
+  if (!email) { errEl.textContent = '⚠️ Entre ton email'; return; }
+  if (supabase_client && SUPABASE_URL !== 'METS_TON_URL_ICI') {
+    await supabase_client.auth.resetPasswordForEmail(email);
+  }
+  showToast('📧 Email de réinitialisation envoyé !');
+  setTimeout(() => showPage('page-login'), 1500);
+}
+
+async function handleLogout() {
+  if (supabase_client && SUPABASE_URL !== 'METS_TON_URL_ICI') {
+    await supabase_client.auth.signOut();
+  }
+  currentUser = null;
+  pageHistory = [];
+  showPage('page-login');
+  showToast('👋 À bientôt !');
+}
+
+function enterApp() {
+  const pseudo = currentUser?.user_metadata?.pseudo || currentUser?.email?.split('@')[0] || 'Utilisateur';
+  document.getElementById('profile-name').textContent = pseudo;
+  document.getElementById('profile-username').textContent = '@' + pseudo;
+  document.getElementById('edit-pseudo').value = pseudo;
+  showPage('page-feed');
+  initDailyTip();
+  try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+}
+
+// =============================================
+// DAILY TIPS
+// =============================================
+const TIPS = [
+  { tag:'Argent', emoji:'🏦', title:"Les APL — t'as peut-être droit à une aide loyer", text:"Si tu paies un loyer, la CAF peut t'aider chaque mois. Demande en 10 min sur caf.fr, rétroactif sur 3 mois.", likes:'2.4k' },
+  { tag:'Santé', emoji:'🏥', title:"La Sécu rembourse un bilan sanguin par an", text:"Demande à ton médecin généraliste. Utile pour vérifier fer, vitamines, cholestérol. Entièrement remboursé.", likes:'1.8k' },
+  { tag:'Impôts', emoji:'📄', title:"Ta première déclaration d'impôts", text:"Dès que t'as un revenu, tu dois déclarer. C'est gratuit sur impots.gouv.fr et souvent tu ne paies rien en dessous de 15 000€/an.", likes:'3.2k' },
+  { tag:'Logement', emoji:'🔑', title:"Ton proprio ne peut pas garder ta caution sans justificatif", text:"Il a 1 mois pour te la rendre si tout va bien. Sans justificatif dans les délais, il te doit des intérêts.", likes:'2.9k' },
+  { tag:'Budget', emoji:'💰', title:"La règle des 50-30-20", text:"50% besoins (loyer, nourriture), 30% envies, 20% épargne. Simple et efficace pour n'importe quel salaire.", likes:'3.4k' },
+  { tag:'Travail', emoji:'💼', title:"Les heures sup' payées +25%", text:"Toute heure au-delà de 35h/semaine est majorée de 25% minimum. Garde tes fiches de paie.", likes:'2.2k' },
+  { tag:'Santé mentale', emoji:'🧠', title:"MonPsy — 8 séances remboursées", text:"Le dispositif MonPsy permet 8 séances chez un psy remboursées sur ordonnance. Pour le stress, l'anxiété.", likes:'4.1k' },
+  { tag:'Numérique', emoji:'📱', title:"Active la double authentification", text:"Gmail, réseaux, banque... Active le 2FA partout. Si quelqu'un vole ton mot de passe, il ne peut pas entrer sans ton téléphone.", likes:'2.1k' },
+  { tag:'Transport', emoji:'🚆', title:"Le pass Navigo remboursé à 50%", text:"Ton employeur est obligé de rembourser 50% de ton abonnement transports. Demande aux RH !", likes:'2.8k' },
+  { tag:'Alimentation', emoji:'🍎', title:"Manger équilibré pas cher", text:"Lentilles, pois chiches, haricots = protéines, fibres, fer. Moins chers que la viande, très nourrissants. Un paquet = plusieurs repas pour moins d'1€.", likes:'1.9k' },
+];
+
+let currentTipIdx = 0;
+
+function initDailyTip() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+  currentTipIdx = dayOfYear % TIPS.length;
+  renderTip();
+}
+
+function renderTip() {
+  const t = TIPS[currentTipIdx];
+  const el = document.getElementById('tip-title-feed');
+  const txt = document.getElementById('tip-text-feed');
+  const tag = document.getElementById('tip-tag-feed');
+  const likes = document.getElementById('tip-likes-feed');
+  if (el) el.textContent = t.emoji + ' ' + t.title;
+  if (txt) txt.textContent = t.text;
+  if (tag) tag.textContent = t.tag;
+  if (likes) likes.textContent = t.likes;
+}
+
+function rotateTip() {
+  const card = document.querySelector('#page-feed .tip-box');
+  if (card) { card.style.opacity = '0'; card.style.transform = 'translateY(4px)'; }
+  setTimeout(() => {
+    currentTipIdx = (currentTipIdx + 1) % TIPS.length;
+    renderTip();
+    if (card) { card.style.transition = 'all 0.3s'; card.style.opacity = '1'; card.style.transform = 'translateY(0)'; }
+  }, 150);
+}
+
+// =============================================
+// INTERACTIONS
+// =============================================
+function toggleLike(btn) {
+  btn.classList.toggle('liked');
+  const span = btn.querySelector('span');
+  if (!span) return;
+  const num = parseFloat(span.textContent);
+  if (btn.classList.contains('liked')) {
+    span.textContent = (num + 0.001).toFixed(3).replace(/\.?0+$/, '').replace('.', '.') + (num >= 1 ? 'k' : '');
+    showToast('❤️ Liké !');
+  }
+}
+
+function castVote(btn, choice) {
+  document.querySelectorAll('#vote-opts .vote-opt').forEach(b => b.disabled = true);
+  btn.classList.add(choice === 'yes' ? 'voted-yes' : 'voted-no');
+  document.getElementById('vote-result').style.display = 'block';
+  showToast('✅ Vote enregistré anonymement');
+}
+
+function sendMessage() {
+  const input = document.getElementById('conv-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  const container = document.getElementById('conv-messages');
+  const now = new Date();
+  const time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble bubble-out fade-up';
+  bubble.innerHTML = msg + '<div class="bubble-time">' + time + '</div>';
+  container.appendChild(bubble);
+  input.value = '';
+  container.scrollTop = container.scrollHeight;
+  setTimeout(() => {
+    const replies = ['Super !', 'Ah ouais !', '😄', 'Je vois !', 'Trop bien Swivo !', '👍'];
+    const reply = document.createElement('div');
+    reply.className = 'bubble bubble-in fade-up';
+    reply.innerHTML = replies[Math.floor(Math.random()*replies.length)] + '<div class="bubble-time">' + time + '</div>';
+    container.appendChild(reply);
+    container.scrollTop = container.scrollHeight;
+  }, 1000 + Math.random() * 1000);
+}
+
+function openConversation(name, avatar) {
+  document.getElementById('conv-name').textContent = name;
+  document.getElementById('conv-avatar').textContent = avatar;
+  showPage('page-conversation');
+}
+
+function publishPost() {
+  const content = document.getElementById('post-content').value.trim();
+  if (!content) { showToast('⚠️ Écris quelque chose !'); return; }
+  showToast('🚀 Post publié !');
+  document.getElementById('post-content').value = '';
+  setTimeout(() => goBack(), 800);
+}
+
+function shareContent() {
+  if (navigator.share) {
+    navigator.share({ title: 'Swivo', text: 'Découvre Swivo — Par tous, pour tous !', url: window.location.href });
+  } else {
+    showToast('🔗 Lien copié !');
+  }
+}
+
+function setPostType(btn) {
+  document.querySelectorAll('.post-type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function switchFeedTab(tab, el) {
+  document.querySelectorAll('.topbar-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'following') showToast('👥 Abonnements — bientôt disponible');
+}
+
+function saveProfile() {
+  const pseudo = document.getElementById('edit-pseudo').value.trim();
+  const bio = document.getElementById('edit-bio').value.trim();
+  if (pseudo) { document.getElementById('profile-name').textContent = pseudo; document.getElementById('profile-username').textContent = '@' + pseudo; }
+  if (bio) document.getElementById('profile-bio').textContent = bio;
+  closeModal('modal-edit-profile');
+  showToast('✅ Profil mis à jour !');
+}
+
+function handleSearch(val) {
+  if (!val) return;
+}
+
+// =============================================
+// THEME & CUSTOMIZATION
+// =============================================
+function setTheme(theme, el) {
+  document.querySelectorAll('.theme-opt').forEach(t => t.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  document.body.className = theme === 'dark' ? '' : theme;
+  showToast('🎨 Thème appliqué !');
+}
+
+function setAccentColor(color, el) {
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  document.documentElement.style.setProperty('--accent', color);
+  showToast('🎨 Couleur appliquée !');
+}
+
+function setFontSize(size, el) {
+  document.querySelectorAll('.nav-pos-btn').forEach(b => b.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  const sizes = { small:'14px', normal:'16px', large:'18px' };
+  document.documentElement.style.fontSize = sizes[size];
+  showToast('📝 Taille appliquée !');
+}
+
+// =============================================
+// MODALS
+// =============================================
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function closeModalOutside(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+// =============================================
+// TOAST
+// =============================================
+let toastTimeout;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// =============================================
+// INIT
+// =============================================
+async function init() {
+  await new Promise(r => setTimeout(r, 1800));
+  if (supabase_client && SUPABASE_URL !== 'METS_TON_URL_ICI') {
+    const { data: { session } } = await supabase_client.auth.getSession();
+    if (session) { currentUser = session.user; enterApp(); return; }
+  }
+  showPage('page-login');
+}
+
+init();
 </script>
 </body>
 </html>
