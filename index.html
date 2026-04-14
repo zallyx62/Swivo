@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo — La Plateforme Locale</title>
+    <title>Swivo — Version Finale</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,46 +14,44 @@
         .light-mode { --bg: #f5f5fa; --panel: #ffffff; --text: #111111; --text-dim: #666666; --border: rgba(0,0,0,0.08); }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; font-size: calc(16px * var(--font-scale)); transition: 0.3s; }
+        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; font-size: calc(16px * var(--font-scale)); transition: background 0.3s; }
 
-        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); }
+        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-        /* HEADER */
-        .header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; background: var(--bg); z-index: 10; border-bottom: 1px solid var(--border); }
-        .logo { font-family: 'Syne'; font-weight: 800; font-size: 1.6rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        /* HEADER & TABS */
+        .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo { font-family: 'Syne'; font-weight: 800; font-size: 1.6rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; font-size: 0.9rem; }
+        .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
 
         /* SCREENS */
-        .screen { flex: 1; display: none; flex-direction: column; padding: 10px 16px 100px; overflow-y: auto; scrollbar-width: none; }
+        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; scrollbar-width: none; }
         .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* CONSEIL & MASCOTTE */
-        .mascot-area { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .fox-avatar { width: 45px; height: 45px; background: #ff9f43; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 4px 10px rgba(255,159,67,0.3); }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* CARDS */
-        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); cursor: pointer; position: relative; }
-        .badge-local { background: var(--accent); color: white; font-size: 0.6rem; padding: 2px 8px; border-radius: 5px; font-weight: 800; margin-bottom: 5px; display: inline-block; }
-        .video-thumb { width: 100%; height: 200px; background: #000; border-radius: 12px; margin-top: 10px; display: flex; align-items: center; justify-content: center; font-family: 'Syne'; font-weight: 700; color: #222; }
+        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); cursor: pointer; }
+        .mascot-fox { width: 40px; height: 40px; background: #ff9f43; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(255,159,67,0.3); }
 
-        /* MODALS (Chat & Search) */
+        /* MODALS (Chat / Search) */
         .modal { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; padding: 20px; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        
-        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; }
-        .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 0.9rem; }
-        .bubble.them { background: var(--panel); align-self: flex-start; }
-        .bubble.me { background: var(--accent); color: white; align-self: flex-end; }
+
+        /* DESIGN SYSTEM */
+        .swivo-input { background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; margin: 5px 0; }
+        .btn-accent { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
+        .color-grid { display: flex; gap: 10px; margin: 10px 0; }
+        .dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
+        .dot.active { border-color: var(--text); transform: scale(1.1); }
 
         /* NAV BAR */
         .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; }
-        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; transition: 0.2s; }
-        .nav-item.active { color: var(--accent); transform: scale(1.1); }
-        .btn-create { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; box-shadow: 0 4px 15px rgba(108, 99, 255, 0.4); transform: translateY(-8px); cursor: pointer; }
-
-        /* INPUTS */
-        .swivo-input { background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; }
-        .save-btn { background: var(--accent); color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%; }
+        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; }
+        .nav-item.active { color: var(--accent); }
+        .btn-plus { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4); }
     </style>
 </head>
 <body>
@@ -61,94 +59,112 @@
     <div id="app-shell">
         
         <div class="header">
-            <div class="logo" onclick="location.reload()">Swivo</div>
-            <div style="display:flex; gap:18px; cursor: pointer;">
-                <span onclick="openSearch()">🔍</span>
-                <span onclick="alert('Aucune nouvelle notification')">🔔</span>
+            <div class="header-top">
+                <div class="logo">Swivo</div>
+                <div style="display:flex; gap:18px;">
+                    <span onclick="toggleModal('search-modal', true)">🔍</span>
+                    <span onclick="alert('Rien de neuf ici !')">🔔</span>
+                </div>
+            </div>
+            <div class="feed-tabs">
+                <span class="tab-item active" onclick="switchFeed('pour-toi', this)">Pour toi</span>
+                <span class="tab-item" onclick="switchFeed('abonnement', this)">Abonnements</span>
             </div>
         </div>
 
         <div class="screen active" id="home">
-            <div class="mascot-area">
-                <div class="fox-avatar">🦊</div>
-                <div style="font-size: 0.8rem; font-weight: 600;">Foxo : "Content de te voir !"</div>
-            </div>
-
             <div class="card" onclick="openAdviceDetail()" style="border: 2px solid var(--accent);">
-                <span class="badge-local" style="background: #ff9f43;">CONSEIL DU JOUR</span>
-                <h3 id="tip-title" style="font-family: 'Syne'; margin: 5px 0;">...</h3>
-                <p id="tip-summary" style="font-size: 0.85rem; opacity: 0.8; line-height: 1.4;"></p>
-                <div style="margin-top: 10px; font-size: 0.7rem; color: var(--accent); font-weight: 800;">CLIQUE POUR LES EXERCICES PRATIQUES →</div>
+                <div class="mascot-fox">🦊</div>
+                <span style="font-size: 0.65rem; font-weight: 900; color: var(--accent);">CONSEIL DU JOUR</span>
+                <h3 id="tip-title" style="font-family: 'Syne'; margin: 5px 0;">Chargement...</h3>
+                <p id="tip-summary" style="font-size: 0.85rem; opacity: 0.8;"></p>
+                <div style="margin-top: 10px; font-size: 0.7rem; font-weight: 800; color: var(--accent);">LIRE LA SUITE →</div>
             </div>
 
-            <div id="feed-container">
-                </div>
+            <div id="main-feed"></div>
         </div>
 
         <div class="screen" id="messages">
-            <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Messages</h2>
-            <div class="card" onclick="openChat('Hugo Décrypte', 'Salut ! Merci de suivre la chaîne.')">
+            <h2 style="font-family: 'Syne'; margin-bottom: 15px;">Messages</h2>
+            <div class="card" onclick="openChat('Lucas (Graphiste)', 'Salut, tu as fini le logo ?')">
                 <div style="display:flex; gap:12px; align-items:center;">
                     <div style="width:45px; height:45px; background:var(--accent); border-radius:var(--pfp-shape);"></div>
                     <div>
-                        <div style="font-weight: 800;">Hugo Décrypte</div>
-                        <div style="font-size: 0.8rem; opacity: 0.6;">Salut ! Merci de suivre la...</div>
+                        <div style="font-weight: 800;">Lucas (Graphiste)</div>
+                        <div style="font-size: 0.8rem; opacity: 0.6;">Salut, tu as fini le logo ?</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="screen" id="profile">
-            <div style="text-align: center; padding: 20px 0;">
-                <div style="width: 100px; height: 100px; background: var(--accent); border-radius: var(--pfp-shape); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">👤</div>
-                <input type="text" class="swivo-input" style="text-align: center; border:none; background:transparent; font-weight: 800; font-size: 1.3rem;" value="Utilisateur_Swivo">
+            <div style="text-align: center; padding: 10px 0;">
+                <div id="pfp-preview" style="width: 90px; height: 90px; background: var(--accent); border-radius: var(--pfp-shape); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: 0.3s;">👤</div>
+                <input type="text" class="swivo-input" style="text-align:center; border:none; background:transparent; font-weight:800; font-size:1.2rem;" value="Apprenti_Swivo">
             </div>
 
             <div class="card">
-                <h4 style="font-family: 'Syne'; margin-bottom: 10px;">Ma Bio</h4>
-                <textarea id="bio-text" class="swivo-input" style="height: 80px; resize: none;" placeholder="Écris ta bio ici..."></textarea>
-                <button id="save-bio" class="save-btn" onclick="saveBio()">Sauvegarder</button>
+                <h4 style="font-family: 'Syne'; margin-bottom: 5px;">Ma Bio</h4>
+                <textarea id="bio-area" class="swivo-input" style="height:60px; resize:none;" placeholder="Parle-nous de toi..."></textarea>
+                <button class="btn-accent" style="padding:8px; font-size:0.8rem;" onclick="saveBio(this)">Sauvegarder</button>
+                <div style="display:flex; gap:10px; margin-top:15px; justify-content: center;">
+                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('50%')">Rond</button>
+                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('15%')">Carré</button>
+                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('0% 50% 50% 50%')">Goutte</button>
+                </div>
             </div>
 
             <div class="card" style="border-color: #ff6584;">
-                <h4 style="color: #ff6584">Soutenir le projet</h4>
-                <button class="save-btn" style="background: #ff6584;" onclick="alert('Pub lancée...')">Regarder une pub 📺</button>
+                <h4 style="color: #ff6584; margin-bottom: 10px;">Soutenir le projet</h4>
+                <button class="btn-accent" style="background: #ff6584; margin-bottom: 10px;" onclick="alert('Pub lancée...')">Regarder une pub 📺</button>
+                <button class="btn-accent" style="background: #0070ba;" onclick="alert('PayPal : contact@swivo.fr')">Faire un don PayPal 💎</button>
             </div>
         </div>
 
         <div class="screen" id="settings">
-            <h2 style="font-family: 'Syne'; margin-bottom: 20px;">Paramètres</h2>
-            <div class="card" onclick="document.body.classList.toggle('light-mode')">Changer le Mode (Sombre/Clair)</div>
+            <h2 style="font-family: 'Syne'; margin-bottom: 15px;">Personnalisation</h2>
+            <div class="card">
+                <p>Couleur préférée</p>
+                <div class="color-grid">
+                    <div class="dot active" style="background: #6c63ff" onclick="setAccent('#6c63ff', this)"></div>
+                    <div class="dot" style="background: #ff6584" onclick="setAccent('#ff6584', this)"></div>
+                    <div class="dot" style="background: #43e97b" onclick="setAccent('#43e97b', this)"></div>
+                    <div class="dot" style="background: #f7971e" onclick="setAccent('#f7971e', this)"></div>
+                    <div class="dot" style="background: #4facfe" onclick="setAccent('#4facfe', this)"></div>
+                    <div class="dot" style="background: #9b59b6" onclick="setAccent('#9b59b6', this)"></div>
+                </div>
+            </div>
             <div class="card">
                 <p>Taille du texte</p>
                 <input type="range" min="0.8" max="1.2" step="0.05" value="1" style="width:100%; margin-top:10px;" oninput="document.documentElement.style.setProperty('--font-scale', this.value)">
             </div>
-        </div>
-
-        <div id="chat-modal" class="modal">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
-                <span style="font-size: 1.5rem; cursor:pointer;" onclick="closeModal('chat-modal')">←</span>
-                <h2 id="chat-name" style="font-family: 'Syne';">Nom</h2>
-            </div>
-            <div id="chat-content" class="chat-box"></div>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="chat-input" class="swivo-input" placeholder="Votre message...">
-                <button class="save-btn" style="width: auto; margin:0;" onclick="sendMessage()">Envoi</button>
-            </div>
+            <button class="btn-accent" onclick="document.body.classList.toggle('light-mode')">Passer en Mode Clair / Sombre</button>
         </div>
 
         <div id="search-modal" class="modal">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom: 20px;">
-                <span style="font-size: 1.5rem; cursor:pointer;" onclick="closeModal('search-modal')">←</span>
-                <input type="text" id="search-input" class="swivo-input" placeholder="Chercher (ADN, Hugo, Diction...)" oninput="doSearch(this.value)">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                <span style="font-size:1.5rem;" onclick="toggleModal('search-modal', false)">←</span>
+                <input type="text" id="search-in" class="swivo-input" placeholder="Rechercher ADN, Gypso, etc..." oninput="runSearch(this.value)">
             </div>
-            <div id="search-results" style="overflow-y: auto;"></div>
+            <div id="search-results" style="overflow-y:auto;"></div>
+        </div>
+
+        <div id="chat-modal" class="modal">
+            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
+                <span style="font-size:1.5rem;" onclick="toggleModal('chat-modal', false)">←</span>
+                <h3 id="chat-title" style="font-family:'Syne'">Nom</h3>
+            </div>
+            <div id="chat-history" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;"></div>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+                <input type="text" id="chat-in" class="swivo-input" placeholder="Ecrire...">
+                <button class="btn-accent" style="width:auto;" onclick="pushMessage()">Envoyer</button>
+            </div>
         </div>
 
         <div class="nav-bar">
             <div class="nav-item active" onclick="switchTab('home', this)"><span>Flux</span></div>
             <div class="nav-item" onclick="switchTab('messages', this)"><span>Chat</span></div>
-            <div class="btn-create" onclick="alert('Accès Caméra 1080p 60fps...')">+</div>
+            <div class="btn-plus" onclick="alert('Caméra 1080p 60fps...')">+</div>
             <div class="nav-item" onclick="switchTab('profile', this)"><span>Profil</span></div>
             <div class="nav-item" onclick="switchTab('settings', this)"><span>Infos</span></div>
         </div>
@@ -156,102 +172,85 @@
     </div>
 
     <script>
-        const POSTS = [
-            { user: "ADN_Anime", content: "Les pépites à voir ce mois-ci sur ADN ! 🐉 #Anime #ADN", tags: "adn anime manga", local: true },
-            { user: "Hugo Décrypte", content: "L'actu du jour en 5 minutes. On débrief. 🌍", tags: "hugo decrypte actu news", local: false },
-            { user: "Gypso", content: "Pourquoi le sommeil est ton meilleur allié. 😴", tags: "gypso sante bienetre", local: true },
-            { user: "Crunchyroll_FR", content: "Le nouvel épisode est dispo ! 🎌", tags: "crunchyroll anime", local: false },
-            { user: "HIDIVE", content: "Découvrez nos exclusivités. 📺", tags: "hidive anime", local: false }
+        const DATA = [
+            { user: "ADN_Officiel", text: "Le meilleur catalogue d'animés est ici. 🐉 #ADN #Streaming", tags: "adn anime manga", local: true },
+            { user: "Gypso", text: "Apprendre à mieux dormir pour mieux réussir. 😴", tags: "gypso conseils", local: true },
+            { user: "Hugo Décrypte", text: "Résumé de l'actualité en 5 minutes. 🌍", tags: "hugo actu", local: false },
+            { user: "Crunchyroll", text: "Nouvelle saison dispo maintenant ! 🎌", tags: "crunchyroll anime", local: false }
         ];
 
-        const ADVICES = [
-            { title: "Où regarder ses Animés ?", summary: "1. ADN (Priorité locale) / 2. Crunchyroll / 3. HIDIVE", detail: "ADN est la plateforme française historique. Crunchyroll offre le plus gros catalogue mondial. HIDIVE est parfait pour les niches." },
-            { title: "Maitriser sa Diction", summary: "Parlez avec un stylo entre les dents pour muscler votre articulation.", detail: "Exercice : Lisez 5 minutes par jour un texte complexe avec un stylo. Retirez-le ensuite, votre voix sera 2x plus claire." }
+        const TIPS = [
+            { title: "Regarder ses Animés", sum: "ADN est le meilleur choix global. Crunchyroll et HIDIVE suivent.", detail: "ADN propose un catalogue français ultra-complet. Crunchyroll est le géant mondial. HIDIVE est top pour les séries plus rares." },
+            { title: "Parler comme un Pro", sum: "Utilise la technique du stylo pour articuler.", detail: "Mets un stylo entre les dents et lis un texte. Ton articulation sera parfaite après 2 min." }
         ];
-
-        let currentChat = [];
 
         window.onload = () => {
-            const tip = ADVICES[new Date().getDate() % ADVICES.length];
-            document.getElementById('tip-title').innerText = tip.title;
-            document.getElementById('tip-summary').innerText = tip.summary;
-            renderFeed(POSTS, 'feed-container');
+            const t = TIPS[new Date().getDate() % TIPS.length];
+            document.getElementById('tip-title').textContent = t.title;
+            document.getElementById('tip-summary').textContent = t.sum;
+            renderFeed(DATA, 'main-feed');
         };
 
-        function renderFeed(list, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            list.forEach(p => {
-                container.innerHTML += `
-                    <div class="card">
-                        <div style="display:flex; justify-content:space-between;">
-                            <span style="font-weight:800;">@${p.user}</span>
-                            ${p.local ? '<span class="badge-local">RECOMMANDÉ</span>' : ''}
-                        </div>
-                        <p style="margin:10px 0; font-size:0.9rem;">${p.content}</p>
-                        <div class="video-thumb">1080p 60fps PLAY</div>
-                    </div>
-                `;
+        function renderFeed(list, id) {
+            const c = document.getElementById(id); c.innerHTML = "";
+            list.sort((a,b) => b.local - a.local).forEach(p => {
+                c.innerHTML += `<div class="card"><div style="display:flex;justify-content:space-between"><b>@${p.user}</b>${p.local?'<small style="color:var(--accent)">LOCAL</small>':''}</div><p style="font-size:0.9rem;margin:10px 0">${p.text}</p><div style="width:100%;height:180px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#444">1080p 60fps</div></div>`;
             });
         }
 
-        // NAVIGATION
         function switchTab(id, el) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            document.getElementById(id).classList.add('active'); el.classList.add('active');
+        }
+
+        function switchFeed(type, el) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
+            renderFeed(type === 'pour-toi' ? DATA : DATA.filter(d => d.local), 'main-feed');
         }
 
-        // CHAT LOGIC
-        function openChat(name, firstMsg) {
-            document.getElementById('chat-name').innerText = name;
-            document.getElementById('chat-modal').style.display = 'flex';
-            currentChat = [{ type: 'them', text: firstMsg }];
-            renderChat();
+        function saveBio(btn) {
+            btn.textContent = "Sauvé ! ✅"; btn.style.background = "#43e97b";
+            setTimeout(() => { btn.textContent = "Sauvegarder"; btn.style.background = "var(--accent)"; }, 1500);
         }
 
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            if(!input.value) return;
-            currentChat.push({ type: 'me', text: input.value });
-            input.value = "";
-            renderChat();
-            // Réponse auto
-            setTimeout(() => {
-                currentChat.push({ type: 'them', text: "Bien reçu ! Je te réponds dès que possible. 👍" });
-                renderChat();
-            }, 1000);
+        function setAccent(c, el) {
+            document.documentElement.style.setProperty('--accent', c);
+            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active')); el.classList.add('active');
+        }
+
+        function setShape(s) { document.documentElement.style.setProperty('--pfp-shape', s); }
+
+        function toggleModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
+
+        function runSearch(v) {
+            const res = DATA.filter(d => d.tags.includes(v.toLowerCase()) || d.user.toLowerCase().includes(v.toLowerCase()));
+            renderFeed(v ? res : [], 'search-results');
+        }
+
+        let msgs = [];
+        function openChat(n, m) {
+            document.getElementById('chat-title').textContent = n;
+            msgs = [{t:'them', txt:m}]; toggleModal('chat-modal', true); renderChat();
+        }
+
+        function pushMessage() {
+            const i = document.getElementById('chat-in'); if(!i.value) return;
+            msgs.push({t:'me', txt:i.value}); i.value = ""; renderChat();
+            setTimeout(() => { msgs.push({t:'them', txt:'Entendu !'}); renderChat(); }, 800);
         }
 
         function renderChat() {
-            const box = document.getElementById('chat-content');
-            box.innerHTML = currentChat.map(m => `<div class="bubble ${m.type}">${m.text}</div>`).join('');
-            box.scrollTop = box.scrollHeight;
-        }
-
-        // RECHERCHE
-        function openSearch() { document.getElementById('search-modal').style.display = 'flex'; }
-        function doSearch(val) {
-            if(!val) { document.getElementById('search-results').innerHTML = ""; return; }
-            const filtered = POSTS.filter(p => p.tags.includes(val.toLowerCase()) || p.user.toLowerCase().includes(val.toLowerCase()));
-            renderFeed(filtered, 'search-results');
-        }
-
-        // BIO & CONSEIL
-        function saveBio() {
-            const btn = document.getElementById('save-bio');
-            btn.innerText = "Sauvegardé ! ✅";
-            btn.style.background = "#43e97b";
-            setTimeout(() => { btn.innerText = "Sauvegarder"; btn.style.background = "var(--accent)"; }, 2000);
+            const h = document.getElementById('chat-history');
+            h.innerHTML = msgs.map(m => `<div style="padding:10px; border-radius:15px; max-width:80%; font-size:0.9rem; background:${m.t==='me'?'var(--accent)':'var(--panel)'}; align-self:${m.t==='me'?'flex-end':'flex-start'}">${m.txt}</div>`).join('');
+            h.scrollTop = h.scrollHeight;
         }
 
         function openAdviceDetail() {
-            const tip = ADVICES[new Date().getDate() % ADVICES.length];
-            alert(tip.title + "\n\n" + tip.detail);
+            const t = TIPS[new Date().getDate() % TIPS.length];
+            alert(t.title + "\n\n" + t.detail);
         }
-
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
 </html>
