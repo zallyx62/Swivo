@@ -206,39 +206,25 @@
         }
 
         function logout() {
-            location.reload(); // Simple reset pour le prototype
-        }
-
-        /* --- LOGIQUE DE FLUX (BASE) --- */
-        function renderFakeFeed() {
-            const feed = document.getElementById('main-feed');
-            feed.innerHTML = `
-                <div class="card">
-                    <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">Votre compte est désormais sécurisé avec le système Firebase.</p>
-                </div>
-                <div class="card">
-                    <b>@Admin_Swivo</b>
-                    <div style="width:100%; height:200px; background:#000; border-radius:12px; margin: 10px 0; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#333;">VIDÉO TEST 1080p</div>
-                    <p style="font-size:0.85rem;">C'est parti ! L'aventure commence ici.</p>
-                </div>
-            `;
-        }
-// --- CONFIGURATION SUPABASE ---
+           // --- CONFIGURATION SUPABASE ---
 const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Test de connexion automatique
 (async function() {
-    console.log("Tentative de connexion à Supabase...");
-    const { data, error } = await supabase.from('profils').select('*').limit(1);
-    if (error) console.log("Connexion Supabase : OK (en attente de table)");
-    else console.log("Connexion Supabase : Parfaite !");
+    console.log("Tentative de connexion...");
+    try {
+        const { data, error } = await supabase.from('profils').select('*').limit(1);
+        console.log("Supabase répond !");
+    } catch(e) {
+        console.log("Erreur de test :", e);
+    }
 })();
 
 // --- FONCTION POUR S'INSCRIRE ---
 async function inscription(email, password) {
+    console.log("Bouton inscription cliqué !");
     if (!email || !password) {
         alert("Veuillez remplir les deux cases !");
         return;
@@ -250,7 +236,14 @@ async function inscription(email, password) {
     if (error) {
         alert("Erreur : " + error.message);
     } else {
-        alert("Succès ! Compte créé pour : " + data.user.email);
+        alert("Succès ! Un mail de confirmation a été envoyé à " + data.user.email);
     }
 }
-          
+
+// --- INITIALISATION ---
+window.onload = () => {
+    console.log("Application Swivo prête !");
+};
+</script> 
+</body>
+</html>
