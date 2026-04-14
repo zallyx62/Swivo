@@ -1,65 +1,67 @@
-<script>
-    console.log("Script chargé !");
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swivo Fix</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root { --accent: #6c63ff; --bg: #080810; --text: #f0f0f8; }
+        body { background: var(--bg); color: var(--text); font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-card { background: #13131e; padding: 30px; border-radius: 20px; width: 300px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #202030; color: white; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: var(--accent); color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #app-content { display: none; text-align: center; }
+    </style>
+</head>
+<body>
 
-    // --- CONFIGURATION ---
-    // VERIFIE BIEN QU'IL N'Y A PAS DE 'T' AVANT 'sb_publishable'
-    const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
-    const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy'; 
-    
-    let supabase;
+    <div id="auth-section" class="auth-card">
+        <h1 style="color:var(--accent)">Swivo</h1>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="pass" placeholder="Mot de passe">
+        <button id="btn-login">Se connecter</button>
+        <button id="btn-signup" style="background:transparent; border: 1px solid var(--accent)">S'inscrire</button>
+    </div>
 
-    try {
-        supabase = window.supabase.createClient(S_URL, S_KEY);
-        console.log("Supabase initialisé !");
-    } catch (err) {
-        alert("Erreur d'initialisation Supabase : " + err.message);
-    }
+    <div id="app-content">
+        <h1>Bienvenue sur Swivo !</h1>
+        <p id="user-display"></p>
+        <button onclick="location.reload()">Déconnexion</button>
+    </div>
 
-    // --- CONNEXION ---
-    document.getElementById('btn-login').onclick = async () => {
-        console.log("Clic sur Connexion");
-        const e = document.getElementById('email').value;
-        const p = document.getElementById('pass').value;
+    <script>
+        // CONFIGURATION (Vérifiée 3 fois !)
+        const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
+        const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
         
-        if(!e || !p) return alert("Remplis les cases !");
-        
-        const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
-        
-        if (error) {
-            alert("Erreur Supabase : " + error.message);
-        } else {
-            alert("Succès ! Connexion en cours...");
-            unlockApp(data.user.email);
+        const supabase = window.supabase.createClient(S_URL, S_KEY);
+
+        // CONNEXION
+        document.getElementById('btn-login').onclick = async () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
+            
+            if (error) alert("Erreur : " + error.message);
+            else showApp(data.user.email);
+        };
+
+        // INSCRIPTION
+        document.getElementById('btn-signup').onclick = async () => {
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            const { data, error } = await supabase.auth.signUp({ email: e, password: p });
+            
+            if (error) alert("Erreur : " + error.message);
+            else alert("Compte créé ! Connecte-toi.");
+        };
+
+        function showApp(email) {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            document.getElementById('user-display').innerText = "Connecté en tant que : " + email;
         }
-    };
-
-    // --- INSCRIPTION ---
-    document.getElementById('btn-signup').onclick = async () => {
-        console.log("Clic sur Inscription");
-        const e = document.getElementById('email').value;
-        const p = document.getElementById('pass').value;
-        
-        if(!e || !p) return alert("Remplis les cases !");
-        
-        const { data, error } = await supabase.auth.signUp({ email: e, password: p });
-        
-        if (error) {
-            alert("Erreur Inscription : " + error.message);
-        } else {
-            alert("Compte créé ! Vérifie tes mails (ou connecte-toi direct si t'as coupé l'option)");
-        }
-    };
-
-    function unlockApp(email) {
-        document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('app-header').style.display = 'block';
-        document.getElementById('app-nav').style.display = 'flex';
-        document.getElementById('feed').classList.add('active');
-        document.getElementById('user-tag').innerText = email.split('@')[0];
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-    }
-</script>
+    </script>
+</body>
+</html>
