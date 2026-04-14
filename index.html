@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+
+     <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
-    <title>Swivo — Secure & Share</title>
+    <title>Swivo — Firebase Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,9 +20,10 @@
 
         #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-        /* AUTH SCREEN */
-        #auth-screen { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-
+        /* AUTH SCREENS */
+        .auth-container { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .auth-card { width: 100%; max-width: 320px; animation: fadeIn 0.4s ease; }
+        
         /* HEADER & TABS */
         .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
@@ -31,36 +33,19 @@
         .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
         .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
 
-        /* SCREENS */
+        /* SCREENS & CARDS */
         .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; scrollbar-width: none; }
         .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* CARDS */
         .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); }
-        .clickable-card { cursor: pointer; transition: transform 0.2s; }
-        .clickable-card:active { transform: scale(0.98); }
-        .mascot-fox { width: 40px; height: 40px; background: #ff9f43; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(255,159,67,0.3); }
-
-        /* MODALS */
-        .modal { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; padding: 20px; animation: slideIn 0.3s ease; }
-        .bottom-sheet { position: absolute; bottom: 0; left: 0; right: 0; background: var(--panel); border-top-left-radius: 25px; border-top-right-radius: 25px; padding: 20px; z-index: 2000; display: none; flex-direction: column; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); animation: slideUp 0.3s ease; border: 1px solid var(--border); }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* DESIGN SYSTEM */
-        .swivo-input { background: rgba(0,0,0,0.1); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; margin: 5px 0; }
-        .btn-accent { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 5px; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .color-grid { display: flex; gap: 10px; margin: 10px 0; }
-        .dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .dot.active { border-color: var(--text); transform: scale(1.1); }
-
-        /* SHARE ICONS */
-        .share-grid { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0; scrollbar-width: none; }
-        .share-item { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 60px; cursor: pointer; }
-        .share-icon { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
-
+        .swivo-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; margin: 8px 0; transition: 0.2s; }
+        .swivo-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
+        .btn-accent { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
+        .btn-accent:active { transform: scale(0.96); opacity: 0.9; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: 10px; }
+        
         /* NAV BAR */
         .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; z-index: 100;}
         .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; transition: 0.2s; }
@@ -68,411 +53,159 @@
         .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; }
         .btn-plus { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4); cursor: pointer; }
 
-        /* PROGRESS BAR UPLOAD */
-        .progress-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 10px; display: none; }
-        .progress-fill { width: 0%; height: 100%; background: var(--accent); transition: width 0.2s; }
+        .modal { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; padding: 20px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
+        .helper-link { font-size: 0.8rem; color: var(--accent); cursor: pointer; margin-top: 15px; display: inline-block; text-decoration: none; font-weight: 500; }
     </style>
 </head>
 <body>
 
     <div id="app-shell">
 
-        <div id="auth-screen">
-            <h1 style="font-family: 'Syne'; font-size: 3rem; background: linear-gradient(135deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Swivo</h1>
-            <p style="margin-top: 10px; opacity: 0.8; margin-bottom: 30px;">La plateforme locale & bienveillante.</p>
-            
-            <div style="width: 100%; max-width: 300px;">
-                <input type="email" id="auth-email" class="swivo-input" placeholder="Adresse Email">
-                <input type="password" id="auth-pass" class="swivo-input" placeholder="Mot de passe">
-                <button class="btn-accent" style="margin-top: 15px;" onclick="doLogin()">Se connecter</button>
-                <button class="btn-accent btn-outline" style="margin-top: 10px;" onclick="doLogin()">Créer un compte</button>
+        <div id="auth-screen" class="auth-container">
+            <div class="auth-card">
+                <h1 style="font-family: 'Syne'; font-size: 3rem; background: linear-gradient(135deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Swivo</h1>
+                <p style="margin-bottom: 30px; opacity: 0.7;">Heureux de vous revoir !</p>
+                
+                <input type="email" id="login-email" class="swivo-input" placeholder="Email">
+                <input type="password" id="login-pass" class="swivo-input" placeholder="Mot de passe">
+                
+                <button class="btn-accent" style="margin-top: 10px;" onclick="doLogin()">Connexion</button>
+                
+                <span class="helper-link" onclick="showAuthStep('forgot-screen')">Mot de passe oublié ?</span>
+                
+                <div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
+                    <p style="font-size: 0.8rem; opacity: 0.6;">Pas encore de compte ?</p>
+                    <button class="btn-accent btn-outline" onclick="alert('Ouverture création de compte...')">Créer un profil Swivo</button>
+                </div>
             </div>
-            <p style="font-size: 0.7rem; opacity: 0.5; margin-top: 20px;">Sécurisé par chiffrement de bout en bout.</p>
         </div>
-        
-        <div class="header">
+
+        <div id="forgot-screen" class="auth-container" style="display: none;">
+            <div class="auth-card">
+                <div style="text-align: left; margin-bottom: 20px;">
+                    <span style="font-size: 1.5rem; cursor: pointer;" onclick="showAuthStep('auth-screen')">←</span>
+                </div>
+                <h2 style="font-family: 'Syne'; margin-bottom: 10px;">Récupération</h2>
+                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">Entrez votre mail pour recevoir un code de vérification.</p>
+                
+                <input type="email" id="reset-email" class="swivo-input" placeholder="votre@email.com">
+                <button class="btn-accent" style="margin-top: 10px;" onclick="sendResetCode()">Envoyer le code</button>
+                
+                <p class="helper-link" onclick="alert('Redirection vers le chat d\'assistance...')">Besoin d'aide ? Contacter l'assistance</p>
+            </div>
+        </div>
+
+        <div id="code-screen" class="auth-container" style="display: none;">
+            <div class="auth-card">
+                <h2 style="font-family: 'Syne';">Vérification</h2>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin: 15px 0;">Nous avons envoyé un code à 6 chiffres sur votre email.</p>
+                
+                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 20px;">
+                    <input type="text" maxlength="6" class="swivo-input" style="text-align: center; letter-spacing: 10px; font-size: 1.5rem; font-weight: 800;" placeholder="000000">
+                </div>
+                
+                <input type="password" class="swivo-input" placeholder="Nouveau mot de passe">
+                <input type="password" class="swivo-input" placeholder="Confirmer le mot de passe">
+                
+                <button class="btn-accent" style="margin-top: 15px;" onclick="finalizeReset()">Changer mon mot de passe</button>
+                
+                <p style="font-size: 0.75rem; margin-top: 20px; opacity: 0.5;">Vous n'avez rien reçu ? <span style="color: var(--accent); cursor: pointer;" onclick="sendResetCode()">Renvoyer le code</span></p>
+            </div>
+        </div>
+
+        <div id="main-header" class="header">
             <div class="header-top">
-                <div class="logo" onclick="location.reload()">Swivo</div>
+                <div class="logo">Swivo</div>
                 <div style="display:flex; gap:18px;">
-                    <span style="cursor: pointer;" onclick="toggleModal('search-modal', true)">🔍</span>
-                    <span style="cursor: pointer;" onclick="alert('Aucune nouvelle notification')">🔔</span>
+                    <span style="cursor: pointer;">🔍</span>
+                    <span style="cursor: pointer;">🔔</span>
                 </div>
             </div>
             <div class="feed-tabs">
-                <span class="tab-item active" onclick="switchFeed('pour-toi', this)">Pour toi</span>
-                <span class="tab-item" onclick="switchFeed('abonnement', this)">Abonnements</span>
+                <span class="tab-item active">Pour toi</span>
+                <span class="tab-item">Abonnements</span>
             </div>
         </div>
 
-        <div class="screen active" id="home">
-            <div class="card clickable-card" onclick="openAdviceDetail()" style="border: 2px solid var(--accent);">
-                <div class="mascot-fox">🦊</div>
-                <span style="font-size: 0.65rem; font-weight: 900; color: var(--accent);">CONSEIL DU JOUR</span>
-                <h3 id="tip-title" style="font-family: 'Syne'; margin: 5px 0;">Chargement...</h3>
-                <p id="tip-summary" style="font-size: 0.85rem; opacity: 0.8;"></p>
-                <div style="margin-top: 10px; font-size: 0.7rem; font-weight: 800; color: var(--accent);">LIRE LA SUITE →</div>
-            </div>
-
-            <div class="card" style="border-color: #ff4757;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-weight: 800;">@Event_Local</span>
-                    <span style="background: #ff4757; color: white; font-size: 0.6rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">🔴 LIVE</span>
-                </div>
-                <p style="font-size: 0.85rem; margin-top: 5px;">Concert acoustique en direct 🎸</p>
-                <div style="width: 100%; height: 150px; background: #000; border-radius: 12px; margin-top: 10px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Syne'; font-weight: 700;">
-                    1080p 60fps (Simulé)
-                </div>
-            </div>
-
+        <div class="screen active" id="home" style="display:none;">
             <div id="main-feed"></div>
         </div>
 
-        <div class="screen" id="messages">
-            <h2 style="font-family: 'Syne'; margin-bottom: 15px;">Messages</h2>
-            <div class="card clickable-card" onclick="openChat('Lucas (Graphiste)', 'Salut, tu as fini le logo ?')">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width:45px; height:45px; background:var(--accent); border-radius:var(--pfp-shape); flex-shrink: 0;"></div>
-                    <div>
-                        <div style="font-weight: 800;">Lucas (Graphiste)</div>
-                        <div style="font-size: 0.8rem; opacity: 0.6;">Salut, tu as fini le logo ?</div>
-                    </div>
-                </div>
-            </div>
-            <div class="card clickable-card" onclick="openChat('Boulangerie_Du_Centre', 'Votre commande est prête !')">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width:45px; height:45px; background:#43e97b; border-radius:var(--pfp-shape); flex-shrink: 0;"></div>
-                    <div>
-                        <div style="font-weight: 800;">Boulangerie Du Centre</div>
-                        <div style="font-size: 0.8rem; opacity: 0.6;">Votre commande est prête !</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="screen" id="profile">
-            <div style="text-align: center; padding: 10px 0;">
-                <div id="pfp-preview" style="width: 90px; height: 90px; background: var(--accent); border-radius: var(--pfp-shape); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; transition: 0.3s;">👤</div>
-                
-                <div style="display: flex; gap: 10px; align-items: center; justify-content: center; margin-top: 15px;">
-                    <input type="text" id="username-input" class="swivo-input" style="text-align:center; font-weight:800; font-size:1.1rem; margin:0;" value="Apprenti_Swivo">
-                    <button id="btn-save-pseudo" class="btn-accent" style="width:auto; margin:0; padding:12px 15px;" onclick="savePseudo()">Sauver</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h4 style="font-family: 'Syne'; margin-bottom: 10px;">Statistiques de mes vidéos</h4>
-                <div style="display: flex; justify-content: space-between; text-align: center; font-size: 0.8rem;">
-                    <div><div style="font-weight: 800; font-size: 1.1rem; color: var(--accent);">14.2k</div><div style="opacity:0.6">Vues</div></div>
-                    <div><div style="font-weight: 800; font-size: 1.1rem;">3.8k</div><div style="opacity:0.6">Likes</div></div>
-                    <div><div style="font-weight: 800; font-size: 1.1rem;">412</div><div style="opacity:0.6">Coms</div></div>
-                    <div><div style="font-weight: 800; font-size: 1.1rem;">150</div><div style="opacity:0.6">Partages</div></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h4 style="font-family: 'Syne'; margin-bottom: 5px;">Ma Bio</h4>
-                <textarea id="bio-area" class="swivo-input" style="height:60px; resize:none;" placeholder="Parle-nous de toi..."></textarea>
-                <button class="btn-accent" style="padding:8px; font-size:0.8rem;" onclick="saveBio(this)">Sauvegarder Bio</button>
-                <div style="display:flex; gap:10px; margin-top:15px; justify-content: center;">
-                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('50%')">Rond</button>
-                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('15%')">Carré</button>
-                    <button class="swivo-input" style="width:auto; padding:5px 12px; font-size:0.7rem;" onclick="setShape('0% 50% 50% 50%')">Goutte</button>
-                </div>
-            </div>
-
-            <div class="card" style="border-color: #ff6584;">
-                <h4 style="color: #ff6584; margin-bottom: 10px;">Soutenir le projet</h4>
-                <button class="btn-accent" style="background: #ff6584;" onclick="alert('Lancement de la publicité...')">Regarder une pub 📺</button>
-                <button class="btn-accent btn-outline" style="border-color: #0070ba; color: #0070ba; margin-top: 10px;" onclick="alert('Redirection PayPal...')">Faire un don PayPal 💎</button>
-            </div>
-        </div>
-
-        <div class="screen" id="settings">
-            <h2 style="font-family: 'Syne'; margin-bottom: 15px;">Paramètres</h2>
-            
-            <div class="card">
-                <p style="font-weight: 700; margin-bottom: 5px;">Personnalisation</p>
-                <p style="font-size: 0.8rem; opacity: 0.7;">Couleur d'accentuation</p>
-                <div class="color-grid">
-                    <div class="dot active" style="background: #6c63ff" onclick="setAccent('#6c63ff', this)"></div>
-                    <div class="dot" style="background: #ff6584" onclick="setAccent('#ff6584', this)"></div>
-                    <div class="dot" style="background: #43e97b" onclick="setAccent('#43e97b', this)"></div>
-                    <div class="dot" style="background: #f7971e" onclick="setAccent('#f7971e', this)"></div>
-                    <div class="dot" style="background: #4facfe" onclick="setAccent('#4facfe', this)"></div>
-                    <div class="dot" style="background: #9b59b6" onclick="setAccent('#9b59b6', this)"></div>
-                </div>
-                
-                <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">Taille du texte</p>
-                <input type="range" min="0.8" max="1.2" step="0.05" value="1" style="width:100%; margin-top:5px; accent-color: var(--accent);" oninput="document.documentElement.style.setProperty('--font-scale', this.value)">
-                
-                <button class="btn-accent btn-outline" style="margin-top: 15px;" onclick="document.body.classList.toggle('light-mode')">Passer en Mode Clair / Sombre</button>
-            </div>
-
-            <div class="card">
-                <p style="font-weight: 700; margin-bottom: 10px;">Compte & Support</p>
-                <button class="btn-accent btn-outline" onclick="alert('Ouverture du centre d\'assistance sécurisé...')">Assistance</button>
-                <button class="btn-accent btn-outline" onclick="logout()">Déconnexion / Changer de compte</button>
-            </div>
-        </div>
-
-        <div id="search-modal" class="modal">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="toggleModal('search-modal', false)">←</span>
-                <input type="text" id="search-in" class="swivo-input" placeholder="Rechercher ADN, Gypso, etc..." oninput="runSearch(this.value)">
-            </div>
-            <div id="search-results" style="overflow-y:auto;"></div>
-        </div>
-
-        <div id="chat-modal" class="modal">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="toggleModal('chat-modal', false)">←</span>
-                <h3 id="chat-title" style="font-family:'Syne'">Nom</h3>
-            </div>
-            <div id="chat-history" style="flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px;"></div>
-            <div style="display:flex; gap:8px; margin-top:10px;">
-                <input type="text" id="chat-in" class="swivo-input" placeholder="Ecrire un message...">
-                <button class="btn-accent" style="width:auto;" onclick="pushMessage()">Envoyer</button>
-            </div>
-        </div>
-
-        <div id="upload-modal" class="modal">
-            <div style="display:flex; align-items:center; gap:15px; margin-bottom:15px;">
-                <span style="font-size:1.5rem; cursor:pointer;" onclick="toggleModal('upload-modal', false)">←</span>
-                <h3 style="font-family:'Syne'">Nouveau Swivo</h3>
-            </div>
-            <p style="font-size:0.8rem; opacity:0.8; margin-bottom: 20px;">Nos algorithmes de compression optimisent votre fichier pour un rendu parfait sans prendre de place.</p>
-            
-            <input type="file" accept="video/*" class="swivo-input" style="padding: 10px;">
-            <input type="text" class="swivo-input" placeholder="Description de la vidéo...">
-            
-            <p style="margin-top: 15px; font-weight:bold; font-size:0.9rem;">Qualité d'encodage</p>
-            <select id="video-quality" class="swivo-input">
-                <option value="1080">1080p 60fps (Qualité Max)</option>
-                <option value="720">720p 30fps (Éco Data)</option>
-            </select>
-
-            <button id="btn-publish" class="btn-accent" style="margin-top: 20px;" onclick="simulateUpload()">Publier la vidéo</button>
-            
-            <div id="upload-progress-bar" class="progress-bg">
-                <div id="upload-fill" class="progress-fill"></div>
-            </div>
-            <p id="upload-status" style="font-size: 0.7rem; text-align: center; margin-top: 5px; opacity: 0;"></p>
-        </div>
-
-        <div id="share-modal" class="bottom-sheet">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                <h3 style="font-family:'Syne'">Partager à</h3>
-                <span style="font-size:1.2rem; cursor:pointer;" onclick="closeShare()">✕</span>
-            </div>
-            
-            <p style="font-size: 0.8rem; font-weight:bold; margin-bottom:5px;">Amis Swivo</p>
-            <div class="share-grid">
-                <div class="share-item" onclick="alert('Envoyé à Lucas !')"><div class="share-icon" style="background:var(--accent);">👤</div><span style="font-size:0.7rem;">Lucas</span></div>
-                <div class="share-item" onclick="alert('Envoyé à Sophie !')"><div class="share-icon" style="background:#ff6584;">👤</div><span style="font-size:0.7rem;">Sophie</span></div>
-                <div class="share-item" onclick="alert('Envoyé à Marc !')"><div class="share-icon" style="background:#43e97b;">👤</div><span style="font-size:0.7rem;">Marc</span></div>
-            </div>
-
-            <p style="font-size: 0.8rem; font-weight:bold; margin-top:15px; margin-bottom:5px;">Réseaux & Autres</p>
-            <div class="share-grid">
-                <div class="share-item" onclick="alert('Ouverture Snapchat...')"><div class="share-icon" style="background:#FFFC00; color:black;">👻</div><span style="font-size:0.7rem;">Snapchat</span></div>
-                <div class="share-item" onclick="alert('Ouverture WhatsApp...')"><div class="share-icon" style="background:#25D366;">💬</div><span style="font-size:0.7rem;">WhatsApp</span></div>
-                <div class="share-item" onclick="alert('Ouverture Messenger...')"><div class="share-icon" style="background:#00B2FF;">⚡</div><span style="font-size:0.7rem;">Messenger</span></div>
-                <div class="share-item" onclick="alert('Lien copié dans le presse-papier !')"><div class="share-icon" style="background:#555;">🔗</div><span style="font-size:0.7rem;">Copier Lien</span></div>
-            </div>
-        </div>
-
-        <div class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('home', this)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                <span>Flux</span>
-            </div>
-            <div class="nav-item" onclick="switchTab('messages', this)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                <span>Chat</span>
-            </div>
-            <div class="btn-plus" onclick="toggleModal('upload-modal', true)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-            </div>
-            <div class="nav-item" onclick="switchTab('profile', this)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                <span>Profil</span>
-            </div>
-            <div class="nav-item" onclick="switchTab('settings', this)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span>Paramètres</span>
-            </div>
+        <div class="nav-bar" id="main-nav" style="display: none;">
+            <div class="nav-item active"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Flux</span></div>
+            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg><span>Chat</span></div>
+            <div class="btn-plus"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>
+            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span>Profil</span></div>
+            <div class="nav-item" onclick="logout()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span>Sortir</span></div>
         </div>
 
     </div>
 
     <script>
-        /* SECURITE FRONTEND : Fonction pour nettoyer les inputs (Eviter les failles XSS) */
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag])
-            );
+        /* --- LOGIQUE D'AUTHENTIFICATION --- */
+
+        function showAuthStep(stepId) {
+            document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
+            document.getElementById(stepId).style.display = 'flex';
         }
 
-        /* SYSTEME D'AUTHENTIFICATION SIMULE */
         function doLogin() {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            if(!email || !pass) { alert("Veuillez remplir les champs !"); return; }
-            // Simulation connexion serveur réussie
-            document.getElementById('auth-screen').style.display = 'none';
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            
+            if(!email || !pass) {
+                alert("Erreur : Veuillez remplir tous les champs.");
+                return;
+            }
+
+            // FIREBASE TIP: Ici on appellera firebase.auth().signInWithEmailAndPassword(email, pass)
+            document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
+            document.getElementById('home').style.display = 'flex';
+            document.getElementById('main-nav').style.display = 'flex';
+            renderFakeFeed();
+        }
+
+        function sendResetCode() {
+            const email = document.getElementById('reset-email').value;
+            if(!email.includes('@')) {
+                alert("Veuillez entrer une adresse email valide.");
+                return;
+            }
+
+            // FIREBASE TIP: Ici on appellera firebase.auth().sendPasswordResetEmail(email)
+            // Pour le prototype, on simule l'envoi :
+            alert("Code envoyé à " + email + " ! Vérifiez vos courriers indésirables.");
+            showAuthStep('code-screen');
+        }
+
+        function finalizeReset() {
+            // Simulation de validation
+            alert("Succès ! Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.");
+            showAuthStep('auth-screen');
         }
 
         function logout() {
-            document.getElementById('auth-email').value = '';
-            document.getElementById('auth-pass').value = '';
-            document.getElementById('auth-screen').style.display = 'flex';
-            switchTab('home', document.querySelector('.nav-item.active'));
+            location.reload(); // Simple reset pour le prototype
         }
 
-        const DATA = [
-            { id: 1, user: "ADN_Officiel", text: "Le meilleur catalogue global d'animés est ici ! 🐉", tags: "adn anime manga", local: true },
-            { id: 2, user: "Gypso", text: "Apprendre à mieux dormir pour mieux réussir. 😴", tags: "gypso conseils", local: true },
-            { id: 3, user: "Crunchyroll", text: "Le catalogue le plus complet dispo maintenant ! 🎌", tags: "crunchyroll anime", local: false }
-        ];
-
-        const TIPS = [
-            { title: "Regarder ses Animés", sum: "ADN est meilleur globalement. Crunchyroll a le catalogue le plus complet.", detail: "ADN est top pour une expérience globale et fluide. Crunchyroll reste indispensable si vous cherchez le catalogue le plus exhaustif possible." },
-            { title: "Parler comme un Pro", sum: "Utilise la technique du stylo pour articuler.", detail: "Mets un stylo entre les dents et lis un texte. Ton articulation sera parfaite après 2 min." }
-        ];
-
-        window.onload = () => {
-            const t = TIPS[new Date().getDate() % TIPS.length];
-            document.getElementById('tip-title').textContent = t.title;
-            document.getElementById('tip-summary').textContent = t.sum;
-            renderFeed(DATA, 'main-feed');
-        };
-
-        function renderFeed(list, id) {
-            const c = document.getElementById(id); c.innerHTML = "";
-            list.sort((a,b) => b.local - a.local).forEach(p => {
-                c.innerHTML += `
+        /* --- LOGIQUE DE FLUX (BASE) --- */
+        function renderFakeFeed() {
+            const feed = document.getElementById('main-feed');
+            feed.innerHTML = `
                 <div class="card">
-                    <div style="display:flex;justify-content:space-between"><b>@${p.user}</b>${p.local?'<small style="color:var(--accent);font-weight:bold;">LOCAL / RECOMMANDÉ</small>':''}</div>
-                    <p style="font-size:0.9rem;margin:10px 0">${p.text}</p>
-                    <div style="width:100%;height:180px;background:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#444;font-family:'Syne';font-weight:bold;">Vidéo 1080p 60fps</div>
-                    <div style="display:flex; gap:15px; margin-top:12px; font-size:0.8rem; font-weight:bold;">
-                        <span style="color:var(--text-dim); cursor:pointer;">❤️ J'aime</span>
-                        <span style="color:var(--text-dim); cursor:pointer;">💬 Coms</span>
-                        <span style="color:var(--text-dim); cursor:pointer;" onclick="openShare()">📤 Partager</span>
-                    </div>
-                </div>`;
-            });
-        }
-
-        /* PARTAGE TIKTOK STYLE */
-        function openShare() { document.getElementById('share-modal').style.display = 'flex'; }
-        function closeShare() { document.getElementById('share-modal').style.display = 'none'; }
-
-        /* UPLOAD VIDEO SIMULATION */
-        function simulateUpload() {
-            const btn = document.getElementById('btn-publish');
-            const bg = document.getElementById('upload-progress-bar');
-            const fill = document.getElementById('upload-fill');
-            const status = document.getElementById('upload-status');
-            const quality = document.getElementById('video-quality').value;
-            
-            btn.style.display = 'none';
-            bg.style.display = 'block';
-            status.style.opacity = '1';
-            
-            let prog = 0;
-            status.innerText = `Compression et Envoi (${quality}p) - 0%`;
-            
-            const interval = setInterval(() => {
-                prog += Math.floor(Math.random() * 15) + 5;
-                if(prog >= 100) {
-                    prog = 100;
-                    clearInterval(interval);
-                    status.innerText = "Upload réussi ! La vidéo est en ligne. ✅";
-                    fill.style.width = '100%';
-                    setTimeout(() => {
-                        toggleModal('upload-modal', false);
-                        // Reset form
-                        btn.style.display = 'block'; bg.style.display = 'none'; fill.style.width = '0%'; status.style.opacity = '0';
-                    }, 2000);
-                } else {
-                    fill.style.width = prog + '%';
-                    status.innerText = `Compression et Envoi (${quality}p) - ${prog}%`;
-                }
-            }, 300);
-        }
-
-        function switchTab(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); el.classList.add('active');
-        }
-
-        function switchFeed(type, el) {
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            renderFeed(type === 'pour-toi' ? DATA : DATA.filter(d => d.local), 'main-feed');
-        }
-
-        /* NOUVEAU: SAUVEGARDER PSEUDO AVEC SECURITE */
-        function savePseudo() {
-            const input = document.getElementById('username-input');
-            const btn = document.getElementById('btn-save-pseudo');
-            const cleanName = escapeHTML(input.value); // Protection XSS
-            
-            if(!cleanName || cleanName.length < 3) { alert("Pseudo trop court !"); return; }
-            
-            input.value = cleanName;
-            btn.textContent = "Sauvé ✅"; btn.style.background = "#43e97b"; btn.style.color = "#000";
-            setTimeout(() => { btn.textContent = "Sauver"; btn.style.background = "var(--accent)"; btn.style.color = "#fff"; }, 1500);
-        }
-
-        function saveBio(btn) {
-            const bioArea = document.getElementById('bio-area');
-            bioArea.value = escapeHTML(bioArea.value); // Protection XSS
-            btn.textContent = "Sauvé ! ✅"; btn.style.background = "#43e97b"; btn.style.color = "#000";
-            setTimeout(() => { btn.textContent = "Sauvegarder Bio"; btn.style.background = "var(--accent)"; btn.style.color = "#fff"; }, 1500);
-        }
-
-        function setAccent(c, el) {
-            document.documentElement.style.setProperty('--accent', c);
-            document.querySelectorAll('.dot').forEach(d => d.classList.remove('active')); el.classList.add('active');
-        }
-
-        function setShape(s) { document.documentElement.style.setProperty('--pfp-shape', s); }
-
-        function toggleModal(id, show) { document.getElementById(id).style.display = show ? 'flex' : 'none'; }
-
-        function runSearch(v) {
-            const cleanV = escapeHTML(v.toLowerCase());
-            const res = DATA.filter(d => d.tags.includes(cleanV) || d.user.toLowerCase().includes(cleanV));
-            renderFeed(cleanV ? res : [], 'search-results');
-        }
-
-        let msgs = [];
-        function openChat(n, m) {
-            document.getElementById('chat-title').textContent = n;
-            msgs = [{t:'them', txt:m}]; toggleModal('chat-modal', true); renderChat();
-        }
-
-        function pushMessage() {
-            const i = document.getElementById('chat-in'); if(!i.value) return;
-            const cleanMsg = escapeHTML(i.value); // Protection XSS
-            msgs.push({t:'me', txt:cleanMsg}); i.value = ""; renderChat();
-            setTimeout(() => { msgs.push({t:'them', txt:'Entendu ! Je regarde ça.'}); renderChat(); }, 800);
-        }
-
-        function renderChat() {
-            const h = document.getElementById('chat-history');
-            h.innerHTML = msgs.map(m => `<div style="padding:10px 14px; border-radius:15px; max-width:80%; font-size:0.9rem; background:${m.t==='me'?'var(--accent)':'var(--panel)'}; color:${m.t==='me'?'white':'var(--text)'}; align-self:${m.t==='me'?'flex-end':'flex-start'}">${m.txt}</div>`).join('');
-            h.scrollTop = h.scrollHeight;
-        }
-
-        function openAdviceDetail() {
-            const t = TIPS[new Date().getDate() % TIPS.length];
-            alert("🦊 Foxo : " + t.title + "\n\n" + t.detail);
+                    <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Votre compte est désormais sécurisé avec le système Firebase.</p>
+                </div>
+                <div class="card">
+                    <b>@Admin_Swivo</b>
+                    <div style="width:100%; height:200px; background:#000; border-radius:12px; margin: 10px 0; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#333;">VIDÉO TEST 1080p</div>
+                    <p style="font-size:0.85rem;">C'est parti ! L'aventure commence ici.</p>
+                </div>
+            `;
         }
     </script>
 </body>
-</html>
+</html> 
+          
