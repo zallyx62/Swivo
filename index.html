@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Production Version</title>
+    <title>Swivo - Fidèle à la Vidéo</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -20,288 +21,190 @@
         }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            width: 100%; height: 100%; 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'DM Sans', sans-serif; 
-            overflow: hidden; 
-        }
+        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
 
         #app-shell { 
-            width: 100%; max-width: 500px; height: 100%; 
-            margin: 0 auto; position: relative; 
-            display: flex; flex-direction: column; 
-            border-left: 1px solid var(--border); 
-            border-right: 1px solid var(--border); 
-            background: var(--bg);
+            width: 100%; max-width: 500px; height: 100%; margin: 0 auto; 
+            position: relative; display: flex; flex-direction: column; 
+            border-left: 1px solid var(--border); border-right: 1px solid var(--border); 
         }
 
-        /* --- AUTH SCREEN --- */
+        /* --- AUTH OVERLAY --- */
         #auth-overlay { 
-            position: absolute; inset: 0; 
-            background: var(--bg); z-index: 10000; 
-            display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; 
-            padding: 30px; 
+            position: absolute; inset: 0; background: var(--bg); z-index: 10000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; 
         }
+        .logo-luxe { font-family: 'Syne'; font-size: 3.5rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sw-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 16px; margin-top: 12px; outline: none; }
+        .sw-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; margin-top: 15px; }
 
-        .logo-luxe { 
-            font-family: 'Syne'; font-size: 4rem; 
-            background: var(--gradient); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            margin-bottom: 5px; 
-        }
+        /* --- HEADER & TOP NAV --- */
+        .header { padding: 20px; display: none; align-items: center; justify-content: space-between; }
+        .header-title { font-family: 'Syne'; font-size: 1.8rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-icons { display: flex; gap: 20px; font-size: 1.3rem; cursor: pointer; }
 
-        .sw-input { 
-            width: 100%; background: rgba(255,255,255,0.03); 
-            border: 1px solid var(--border); color: #fff; 
-            padding: 20px; border-radius: 18px; 
-            margin-top: 15px; outline: none; font-size: 1rem;
-            transition: 0.3s;
-        }
-        .sw-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.07); }
-
-        .sw-btn { 
-            width: 100%; background: var(--accent); 
-            color: white; border: none; 
-            padding: 20px; border-radius: 18px; 
-            font-weight: 700; cursor: pointer; 
-            margin-top: 20px; font-size: 1rem;
-            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.2);
-        }
-
-        /* --- HEADER --- */
-        .header { 
-            padding: 25px 20px 15px; display: none; 
-            align-items: center; justify-content: space-between;
-        }
-        .header-logo { font-family: 'Syne'; font-size: 2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-actions { display: flex; gap: 20px; font-size: 1.4rem; }
-
-        /* --- TOP TABS --- */
-        .tabs-container { display: none; padding: 0 20px 20px; gap: 25px; }
-        .tab { font-weight: 700; font-size: 1.1rem; opacity: 0.4; cursor: pointer; position: relative; padding-bottom: 5px; }
+        .top-tabs { display: none; padding: 0 20px 15px; gap: 25px; font-weight: 700; font-size: 1.1rem; }
+        .tab { opacity: 0.4; cursor: pointer; position: relative; padding-bottom: 5px; }
         .tab.active { opacity: 1; }
-        .tab.active::after { 
-            content: ''; position: absolute; bottom: 0; left: 0; 
-            width: 100%; height: 3px; background: var(--accent); border-radius: 2px; 
-        }
+        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--accent); border-radius: 2px; }
 
         /* --- SCREENS --- */
         .screen { flex: 1; display: none; flex-direction: column; padding: 0 16px 100px; overflow-y: auto; }
         .screen.active { display: flex; }
 
-        /* --- CONTENT CARDS --- */
-        .card { 
-            background: var(--panel); border-radius: 28px; 
-            padding: 24px; border: 1px solid var(--border); 
-            margin-bottom: 20px; 
-        }
-        .badge { 
-            display: inline-block; padding: 6px 14px; 
-            background: rgba(108, 99, 255, 0.1); 
-            color: var(--accent); border-radius: 10px; 
-            font-weight: 800; font-size: 0.7rem; text-transform: uppercase; margin-bottom: 15px;
-        }
-        .video-box { 
-            width: 100%; height: 240px; background: #000; 
-            border-radius: 20px; margin: 15px 0; 
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
-        }
-        .play-btn { width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        /* --- CARDS & INTERACTION --- */
+        .card { background: var(--panel); border-radius: 24px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .video-box { width: 100%; height: 220px; background: #000; border-radius: 18px; margin: 15px 0; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        
+        /* --- BOTTOM NAVIGATION --- */
+        .nav { position: absolute; bottom: 0; width: 100%; height: 80px; background: rgba(19, 19, 30, 0.9); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: none; align-items: center; justify-content: space-around; }
+        .nav-item { font-size: 1.6rem; cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        .nav-item.active { opacity: 1; color: var(--accent); }
+        .nav-plus { width: 50px; height: 50px; background: var(--gradient); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.8rem; box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3); }
 
-        /* --- BOTTOM NAV --- */
-        .nav-bar { 
-            position: absolute; bottom: 0; width: 100%; 
-            height: 90px; background: rgba(19, 19, 30, 0.8); 
-            backdrop-filter: blur(20px); border-top: 1px solid var(--border); 
-            display: none; align-items: center; justify-content: space-around; padding-bottom: 10px;
-        }
-        .nav-link { font-size: 1.8rem; cursor: pointer; opacity: 0.4; transition: 0.3s; }
-        .nav-link.active { opacity: 1; color: var(--accent); }
-        .btn-add { 
-            width: 55px; height: 55px; background: var(--gradient); 
-            border-radius: 18px; display: flex; align-items: center; 
-            justify-content: center; color: white; font-size: 2rem;
-            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3); transform: translateY(-5px);
-        }
-
-        /* --- PROFILE --- */
-        .profile-hero { text-align: center; padding: 40px 0 30px; }
-        .profile-pic { 
-            width: 110px; height: 110px; border-radius: 40px; 
-            background: var(--gradient); margin: 0 auto 20px; 
-            transform: rotate(-5deg); border: 5px solid var(--panel);
-        }
-        .menu-item { 
-            background: var(--panel); padding: 22px; border-radius: 22px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            margin-bottom: 15px; cursor: pointer; border: 1px solid var(--border);
-        }
-        .menu-item i { font-style: normal; font-size: 1.2rem; }
+        /* --- MESSAGERIE / NOTIFS (Ecrans spécifiques) --- */
+        .page-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-family: 'Syne'; font-size: 1.5rem; }
+        .list-item { background: var(--panel); padding: 15px; border-radius: 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--border); cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="app-shell">
-        
         <div id="auth-overlay">
             <h1 class="logo-luxe">Swivo</h1>
-            <p style="opacity: 0.5; font-size: 0.9rem;">Connectez-vous pour continuer</p>
-            
-            <input type="email" id="email" class="sw-input" placeholder="Adresse email">
+            <input type="email" id="email" class="sw-input" placeholder="Email">
             <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
-            
             <button class="sw-btn" id="btn-login">Se connecter</button>
-            <button class="sw-btn" id="btn-signup" style="background:transparent; border:1px solid var(--accent); color:var(--accent);">Créer un compte</button>
-            
-            <p style="margin-top: 30px; font-size: 0.8rem; color: var(--accent); cursor: pointer;">Mot de passe oublié ?</p>
+            <button class="sw-btn" id="btn-signup" style="background:transparent; border:1px solid var(--accent);">Créer un profil</button>
         </div>
 
         <header id="main-header" class="header">
-            <div class="header-logo">Swivo</div>
-            <div class="header-actions">
-                <span>🔍</span>
-                <span>🔔</span>
+            <div class="header-title">Swivo</div>
+            <div class="header-icons">
+                <span onclick="showPage('search')">🔍</span>
+                <span onclick="showPage('notifications')">🔔</span>
             </div>
         </header>
 
-        <div id="top-tabs" class="tabs-container">
-            <div class="tab active" onclick="changeTab(this)">Pour toi</div>
-            <div class="tab" onclick="changeTab(this)">Abonnements</div>
+        <div id="top-tabs" class="top-tabs">
+            <div class="tab active" onclick="switchTab(this)">Pour toi</div>
+            <div class="tab" onclick="switchTab(this)">Abonnements</div>
         </div>
 
         <main id="screen-feed" class="screen">
             <div class="card">
-                <span class="badge">Conseil du jour</span>
-                <h2 style="margin-bottom: 10px; font-family: 'Syne';">Visualise ton succès</h2>
-                <p style="opacity: 0.6; line-height: 1.6;">L'organisation de ton interface est le reflet de la clarté de tes objectifs. Continue d'avancer.</p>
+                <p style="color:var(--accent); font-weight:800; font-size:0.7rem; text-transform:uppercase;">Conseil du jour</p>
+                <h3 style="margin-top:5px;">Persévérance</h3>
+                <p style="opacity:0.6; font-size:0.9rem; margin-top:5px;">Continue de bâtir ce que tu aimes, le code suivra ton intention.</p>
             </div>
-
             <div class="card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span class="badge" style="background: rgba(255,101,132,0.1); color: #ff6584;">Live</span>
-                    <span style="font-size: 0.8rem; opacity: 0.4;">1,284 en ligne</span>
+                <div class="video-box">LECTEUR VIDÉO</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:700;">Live Session #01</span>
+                    <button style="background:var(--accent); border:none; color:white; padding:8px 15px; border-radius:10px; font-size:0.8rem; font-weight:700;">REJOINDRE</button>
                 </div>
-                <div class="video-box">
-                    <div class="play-btn">▶</div>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 700;">Workshop Design #01</span>
-                    <button style="background: var(--accent); border: none; padding: 10px 20px; border-radius: 14px; color: white; font-weight: 700; font-size: 0.8rem;">Rejoindre</button>
-                </div>
+            </div>
+        </main>
+
+        <main id="screen-search" class="screen">
+            <div class="page-header"><span onclick="showPage('screen-feed')">⬅️</span> Recherche</div>
+            <input type="text" class="sw-input" placeholder="Chercher un créateur, un live..." style="margin-top:0;">
+            <p style="margin-top:20px; opacity:0.5; text-align:center;">Aucune recherche récente</p>
+        </main>
+
+        <main id="screen-notifications" class="screen">
+            <div class="page-header"><span onclick="showPage('screen-feed')">⬅️</span> Notifications</div>
+            <div class="list-item">🔔 <b>Swivo Team</b> a aimé votre profil</div>
+            <div class="list-item">🔥 Nouveau Live de <b>CreatorX</b></div>
+        </main>
+
+        <main id="screen-messages" class="screen">
+            <div class="page-header">Messagerie</div>
+            <div class="list-item">
+                <div style="width:45px; height:45px; background:var(--gradient); border-radius:50%;"></div>
+                <div><b>Thomas</b><br><small style="opacity:0.5;">Salut ! Super ton live d'hier...</small></div>
             </div>
         </main>
 
         <main id="screen-profile" class="screen">
-            <div class="profile-hero">
-                <div class="profile-pic"></div>
-                <h2 id="display-name" style="font-family: 'Syne'; font-size: 2rem;">Username</h2>
-                <p style="opacity: 0.4;">Membre certifié Swivo</p>
+            <div style="text-align:center; padding:30px 0;">
+                <div style="width:100px; height:100px; background:var(--gradient); border-radius:35px; margin:0 auto 15px; transform:rotate(-5deg);"></div>
+                <h2 id="user-display" style="font-family:'Syne';">Username</h2>
             </div>
-
-            <div class="menu-item" onclick="alert('Messagerie')">
-                <span><i>💬</i> Messagerie</span>
-                <span style="opacity: 0.2;">❯</span>
-            </div>
-            <div class="menu-item" onclick="alert('Wallet')">
-                <span><i>💎</i> Mes Récompenses</span>
-                <span style="opacity: 0.2;">❯</span>
-            </div>
-            <div class="menu-item" onclick="alert('Paramètres')">
-                <span><i>⚙️</i> Paramètres</span>
-                <span style="opacity: 0.2;">❯</span>
-            </div>
-            
-            <div class="menu-item" style="border-color: rgba(255,101,132,0.3); margin-top: 20px;" onclick="handleLogout()">
-                <span style="color: #ff6584;"><i>🚪</i> Déconnexion</span>
-            </div>
+            <div class="list-item" onclick="showPage('screen-messages')">💬 Messagerie <span>❯</span></div>
+            <div class="list-item" onclick="alert('Paramètres')">⚙️ Paramètres <span>❯</span></div>
+            <div class="list-item" style="color:#ff6584;" onclick="logout()">🚪 Déconnexion</div>
         </main>
 
-        <nav id="bottom-nav" class="nav-bar">
-            <div class="nav-link active" id="link-feed" onclick="navigateTo('screen-feed')">🏠</div>
-            <div class="btn-add" onclick="alert('Nouveau post')">+</div>
-            <div class="nav-link" id="link-profile" onclick="navigateTo('screen-profile')">👤</div>
+        <nav id="bottom-nav" class="nav">
+            <div class="nav-item active" id="nav-home" onclick="showPage('screen-feed')">🏠</div>
+            <div class="nav-item" onclick="showPage('screen-messages')">💬</div>
+            <div class="nav-plus">+</div>
+            <div class="nav-item" onclick="showPage('screen-notifications')">🔔</div>
+            <div class="nav-item" id="nav-profile" onclick="showPage('screen-profile')">👤</div>
         </nav>
-
     </div>
 
     <script>
-        // CONFIGURATION SUPABASE
         const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
         const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-        let client;
+        let supabaseClient;
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Initialisation sécurisée
-            if (typeof supabase !== 'undefined') {
-                client = supabase.createClient(S_URL, S_KEY);
-                
-                // Vérifier si déjà connecté
-                client.auth.getSession().then(({ data }) => {
-                    if (data.session) setupUI(data.session.user.email);
-                });
-            }
+            supabaseClient = window.supabase.createClient(S_URL, S_KEY);
 
-            // LOGIN
+            // Vérif session
+            supabaseClient.auth.getSession().then(({ data }) => {
+                if (data.session) unlock(data.session.user.email);
+            });
+
+            // Boutons
             document.getElementById('btn-login').onclick = async () => {
-                const e = document.getElementById('email').value;
-                const p = document.getElementById('pass').value;
-                if(!e || !p) return alert("Champs vides !");
-                
-                const { data, error } = await client.auth.signInWithPassword({ email: e, password: p });
-                if (error) alert("Erreur : " + error.message);
-                else setupUI(data.user.email);
+                const { data, error } = await supabaseClient.auth.signInWithPassword({
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('pass').value
+                });
+                if (error) alert(error.message); else unlock(data.user.email);
             };
 
-            // SIGNUP
             document.getElementById('btn-signup').onclick = async () => {
-                const e = document.getElementById('email').value;
-                const p = document.getElementById('pass').value;
-                if(!e || !p) return alert("Champs vides !");
-                
-                const { data, error } = await client.auth.signUp({ email: e, password: p });
-                if (error) alert(error.message);
-                else alert("Compte créé ! Connectez-vous.");
+                const { error } = await supabaseClient.auth.signUp({
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('pass').value
+                });
+                if (error) alert(error.message); else alert("Compte créé !");
             };
         });
 
-        // UI LOGIC
-        function setupUI(email) {
+        function unlock(email) {
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('main-header').style.display = 'flex';
             document.getElementById('bottom-nav').style.display = 'flex';
             document.getElementById('top-tabs').style.display = 'flex';
-            navigateTo('screen-feed');
-            document.getElementById('display-name').innerText = email.split('@')[0];
+            document.getElementById('user-display').innerText = email.split('@')[0];
+            showPage('screen-feed');
         }
 
-        function navigateTo(id) {
-            // Toggle screens
+        function showPage(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            
+            // Gestion visuelle des icônes nav
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(id === 'screen-feed') document.getElementById('nav-home').classList.add('active');
+            if(id === 'screen-profile') document.getElementById('nav-profile').classList.add('active');
 
-            // Toggle nav links
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            if(id === 'screen-feed') {
-                document.getElementById('link-feed').classList.add('active');
-                document.getElementById('top-tabs').style.display = 'flex';
-            } else {
-                document.getElementById('link-profile').classList.add('active');
-                document.getElementById('top-tabs').style.display = 'none';
-            }
+            // Afficher/Cacher les onglets du haut
+            document.getElementById('top-tabs').style.display = (id === 'screen-feed') ? 'flex' : 'none';
         }
 
-        function changeTab(el) {
+        function switchTab(el) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
         }
 
-        async function handleLogout() {
-            await client.auth.signOut();
+        async function logout() {
+            await supabaseClient.auth.signOut();
             location.reload();
         }
     </script>
