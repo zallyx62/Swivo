@@ -1,63 +1,59 @@
-
-     <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:;">
-    <title>Swivo — Firebase Edition</title>
-    
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Swivo – Version Complète</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #6c63ff; --bg: #080810; --panel: #13131e;
             --text: #f0f0f8; --text-dim: #9090a8; --border: rgba(255,255,255,0.08);
-            --radius: 20px; --font-scale: 1; --pfp-shape: 50%;
+            --radius: 20px; --pfp-shape: 50%;
         }
-        .light-mode { --bg: #f5f5fa; --panel: #ffffff; --text: #111111; --text-dim: #666666; --border: rgba(0,0,0,0.08); }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; font-size: calc(16px * var(--font-scale)); transition: background 0.3s; }
+        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
 
         #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
         /* AUTH SCREENS */
         .auth-container { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
-        .auth-card { width: 100%; max-width: 320px; animation: fadeIn 0.4s ease; }
+        .logo-anim { font-family: 'Syne'; font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
         
-        /* HEADER & TABS */
-        .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; }
+        .swivo-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 14px; width: 100%; outline: none; margin: 8px 0; font-size: 1rem; }
+        .btn-accent { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; margin-top: 15px; font-size: 1rem; }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: 10px; }
+
+        /* HEADER */
+        .header { padding: 20px 20px 10px; background: var(--bg); z-index: 10; }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo { font-family: 'Syne'; font-weight: 800; font-size: 1.6rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer;}
-        
-        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; font-size: 0.9rem; }
+        .logo-small { font-family: 'Syne'; font-weight: 800; font-size: 1.5rem; color: var(--accent); }
+        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; }
         .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
         .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
 
-        /* SCREENS & CARDS */
-        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; scrollbar-width: none; }
-        .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        /* SCREENS */
+        .screen { flex: 1; display: none; flex-direction: column; padding: 10px 16px 100px; overflow-y: auto; }
+        .screen.active { display: flex; }
+        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
 
-        /* DESIGN SYSTEM */
-        .swivo-input { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 12px; width: 100%; outline: none; font-family: inherit; margin: 8px 0; transition: 0.2s; }
-        .swivo-input:focus { border-color: var(--accent); background: rgba(255,255,255,0.08); }
-        .btn-accent { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; }
-        .btn-accent:active { transform: scale(0.96); opacity: 0.9; }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); margin-top: 10px; }
-        
-        /* NAV BAR */
-        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; z-index: 100;}
-        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.6rem; transition: 0.2s; }
+        /* PROFILE SPECIFIC */
+        .profile-header { text-align: center; padding: 20px 0; }
+        .pfp-large { width: 90px; height: 90px; background: linear-gradient(45deg, var(--accent), #ff6584); border-radius: var(--pfp-shape); margin: 0 auto 15px; border: 3px solid var(--bg); outline: 2px solid var(--accent); }
+        .stats-row { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+        .stat-box { text-align: center; }
+        .stat-num { font-weight: 800; font-size: 1.2rem; display: block; }
+        .stat-label { font-size: 0.75rem; opacity: 0.6; }
+
+        /* NAVIGATION */
+        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: var(--panel); border-top: 1px solid var(--border); display: none; justify-content: space-around; align-items: center; padding-bottom: 15px; z-index: 100; }
+        .nav-item { color: var(--text-dim); cursor: pointer; text-align: center; font-size: 0.65rem; transition: 0.2s; }
         .nav-item.active { color: var(--accent); }
-        .nav-item svg { width: 24px; height: 24px; margin-bottom: 4px; }
-        .btn-plus { width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-8px); box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4); cursor: pointer; }
+        .btn-plus { width: 50px; height: 50px; background: linear-gradient(135deg, var(--accent), #ff6584); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-10px); box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3); }
 
-        .modal { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: none; flex-direction: column; padding: 20px; animation: slideIn 0.3s ease; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-
-        .helper-link { font-size: 0.8rem; color: var(--accent); cursor: pointer; margin-top: 15px; display: inline-block; text-decoration: none; font-weight: 500; }
+        .helper-link { font-size: 0.85rem; color: var(--accent); cursor: pointer; margin-top: 15px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -66,175 +62,138 @@
 
         <div id="auth-screen" class="auth-container">
             <div class="auth-card">
-                <h1 style="font-family: 'Syne'; font-size: 3rem; background: linear-gradient(135deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Swivo</h1>
-                <p style="margin-bottom: 30px; opacity: 0.7;">Heureux de vous revoir !</p>
+                <h1 class="logo-anim">Swivo</h1>
+                <p style="opacity: 0.6; margin-bottom: 25px;">La nouvelle ère du social</p>
                 
                 <input type="email" id="login-email" class="swivo-input" placeholder="Email">
-<input type="password" id="login-pass" class="swivo-input" placeholder="Mot de passe">
-
-<button class="btn-accent" style="margin-top: 10px;" onclick="doLogin()">Connexion</button>
-
-<span class="helper-link" onclick="showAuthStep('forgot-screen')">Mot de passe oublié ?</span>
-
-<div style="margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px;">
-    <p style="font-size: 0.8rem; opacity: 0.6;">Pas encore de compte ?</p>
-    <button class="btn-accent btn-outline" onclick="inscription(document.getElementById('login-email').value, document.getElementById('login-pass').value)">Créer un profil Swivo</button>
-</div>
-                </div>
+                <input type="password" id="login-pass" class="swivo-input" placeholder="Mot de passe">
+                
+                <button class="btn-accent" onclick="handleLogin()">Se connecter</button>
+                <button class="btn-accent btn-outline" onclick="handleSignup()">Créer un compte</button>
+                
+                <p class="helper-link" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
             </div>
         </div>
 
-        <div id="forgot-screen" class="auth-container" style="display: none;">
-            <div class="auth-card">
-                <div style="text-align: left; margin-bottom: 20px;">
-                    <span style="font-size: 1.5rem; cursor: pointer;" onclick="showAuthStep('auth-screen')">←</span>
-                </div>
-                <h2 style="font-family: 'Syne'; margin-bottom: 10px;">Récupération</h2>
-                <p style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px;">Entrez votre mail pour recevoir un code de vérification.</p>
-                
-                <input type="email" id="reset-email" class="swivo-input" placeholder="votre@email.com">
-                <button class="btn-accent" style="margin-top: 10px;" onclick="sendResetCode()">Envoyer le code</button>
-                
-                <p class="helper-link" onclick="alert('Redirection vers le chat d\'assistance...')">Besoin d'aide ? Contacter l'assistance</p>
-            </div>
-        </div>
-
-        <div id="code-screen" class="auth-container" style="display: none;">
-            <div class="auth-card">
-                <h2 style="font-family: 'Syne';">Vérification</h2>
-                <p style="font-size: 0.85rem; opacity: 0.7; margin: 15px 0;">Nous avons envoyé un code à 6 chiffres sur votre email.</p>
-                
-                <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 20px;">
-                    <input type="text" maxlength="6" class="swivo-input" style="text-align: center; letter-spacing: 10px; font-size: 1.5rem; font-weight: 800;" placeholder="000000">
-                </div>
-                
-                <input type="password" class="swivo-input" placeholder="Nouveau mot de passe">
-                <input type="password" class="swivo-input" placeholder="Confirmer le mot de passe">
-                
-                <button class="btn-accent" style="margin-top: 15px;" onclick="finalizeReset()">Changer mon mot de passe</button>
-                
-                <p style="font-size: 0.75rem; margin-top: 20px; opacity: 0.5;">Vous n'avez rien reçu ? <span style="color: var(--accent); cursor: pointer;" onclick="sendResetCode()">Renvoyer le code</span></p>
-            </div>
-        </div>
-
-        <div id="main-header" class="header">
+        <div id="main-header" class="header" style="display: none;">
             <div class="header-top">
-                <div class="logo">Swivo</div>
-                <div style="display:flex; gap:18px;">
-                    <span style="cursor: pointer;">🔍</span>
-                    <span style="cursor: pointer;">🔔</span>
-                </div>
+                <div class="logo-small">Swivo</div>
+                <div style="display:flex; gap:15px;"><span>🔍</span><span>🔔</span></div>
             </div>
             <div class="feed-tabs">
-                <span class="tab-item active">Pour toi</span>
-                <span class="tab-item">Abonnements</span>
+                <span class="tab-item active" onclick="switchTab(this)">Pour toi</span>
+                <span class="tab-item" onclick="switchTab(this)">Abonnements</span>
             </div>
         </div>
 
-        <div class="screen active" id="home" style="display:none;">
-            <div id="main-feed"></div>
+        <div id="home-screen" class="screen">
+            <div id="feed-container">
+                </div>
         </div>
 
-        <div class="nav-bar" id="main-nav" style="display: none;">
-            <div class="nav-item active"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>Flux</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg><span>Chat</span></div>
-            <div class="btn-plus"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span>Profil</span></div>
-            <div class="nav-item" onclick="logout()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span>Sortir</span></div>
+        <div id="profile-screen" class="screen">
+            <div class="profile-header">
+                <div class="pfp-large"></div>
+                <h2 id="user-display-name" style="font-family: 'Syne';">Utilisateur Swivo</h2>
+                <p style="opacity: 0.6; font-size: 0.9rem;">@nouveau_membre</p>
+                
+                <div class="stats-row">
+                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Abonnés</span></div>
+                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Abonnements</span></div>
+                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Likes</span></div>
+                </div>
+                
+                <button class="btn-accent btn-outline" style="width: auto; padding: 10px 30px;" onclick="location.reload()">Déconnexion</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 20px;">
+                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
+                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
+                <div style="aspect-ratio: 1/1; background: var(--panel); border-radius: 8px;"></div>
+            </div>
         </div>
+
+        <nav id="main-nav" class="nav-bar">
+            <div class="nav-item active" onclick="showPage('home-screen', this)">🏠<br>Accueil</div>
+            <div class="nav-item" onclick="alert('Chat bientôt disponible !')">💬<br>Messages</div>
+            <div class="btn-plus">+</div>
+            <div class="nav-item" onclick="alert('Découvrir bientôt !')">🧭<br>Explorer</div>
+            <div class="nav-item" onclick="showPage('profile-screen', this)">👤<br>Profil</div>
+        </nav>
 
     </div>
 
     <script>
-        /* --- LOGIQUE D'AUTHENTIFICATION --- */
+        // CONFIGURATION SUPABASE
+        const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function showAuthStep(stepId) {
-            document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
-            document.getElementById(stepId).style.display = 'flex';
+        // --- GESTION AUTHENTIFICATION ---
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if(!email || !pass) return alert("Remplissez les champs !");
+
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password: pass });
+            if (error) alert("Erreur : " + error.message);
+            else unlockApp(data.user.email);
         }
 
-       async function doLogin() {
-    const email = document.getElementById('login-email').value;
-    const pass = document.getElementById('login-pass').value;
+        async function handleSignup() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            if(!email || !pass) return alert("Remplissez les champs !");
 
-    if(!email || !pass) {
-        alert("Erreur : Veuillez remplir tous les champs.");
-        return;
-    }
-
-    // On se connecte avec Supabase
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: pass,
-    });
-
-    if (error) {
-        alert("Erreur de connexion : " + error.message);
-    } else {
-        alert("Connexion réussie !");
-        // On cache l'écran d'auth et on montre le flux
-        showAuthStep('home'); 
-        document.getElementById('main-nav').style.display = 'flex';
-    }
-}
-            
-
-            // FIREBASE TIP: Ici on appellera firebase.auth().signInWithEmailAndPassword(email, pass)
-            document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
-            function logout() {
-            location.reload(); // Simple reset pour le prototype
+            const { data, error } = await supabase.auth.signUp({ email, password: pass });
+            if (error) alert("Erreur : " + error.message);
+            else alert("Compte créé ! Vérifiez vos emails pour confirmer.");
         }
 
-        /* --- LOGIQUE DE FLUX (BASE) --- */
-        function renderFakeFeed() {
-            const feed = document.getElementById('main-feed');
-            if (!feed) return;
-            feed.innerHTML = `
+        function unlockApp(email) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-header').style.display = 'block';
+            document.getElementById('main-nav').style.display = 'flex';
+            document.getElementById('home-screen').classList.add('active');
+            document.getElementById('user-display-name').innerText = email.split('@')[0];
+            renderFeed();
+        }
+
+        // --- NAVIGATION INTERNE ---
+
+        function showPage(pageId, element) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(element) element.classList.add('active');
+        }
+
+        function switchTab(el) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        // --- GENERATION DU FLUX ---
+
+        function renderFeed() {
+            const container = document.getElementById('feed-container');
+            container.innerHTML = `
                 <div class="card">
-                    <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
-                    <p style="font-size: 0.9rem; margin-top: 10px;">Votre compte est désormais sécurisé.</p>
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+                        <div style="width:40px; height:40px; background:var(--accent); border-radius:50%;"></div>
+                        <b>Admin Swivo ✨</b>
+                    </div>
+                    <p style="font-size:0.95rem; line-height:1.5;">Bienvenue sur ta nouvelle interface Swivo ! Tout est désormais connecté à ta base de données Supabase. Profite bien !</p>
+                    <div style="width:100%; height:250px; background:#000; border-radius:15px; margin-top:15px; display:flex; align-items:center; justify-content:center; color:#333; font-weight:bold;">
+                        CONTENU VIDÉO TEST
+                    </div>
                 </div>
                 <div class="card">
-                    <b>@Admin_Swivo</b>
-                    <div style="width:100%; height:200px; background:#000; border-radius:12px; margin: 10px 0; display:flex; align-items:center; justify-content:center;">
-                        <p style="font-size:0.85rem;">C'est parti ! L'aventure commence ici.</p>
-                    </div>
-                </div>`;
-        }
-
-        // --- CONFIGURATION SUPABASE ---
-        const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
-        const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // Test de connexion automatique
-        (async function() {
-            console.log("Tentative de connexion à Supabase...");
-            try {
-                const { data, error } = await supabase.from('profils').select('*').limit(1);
-                if (error) console.log("Note: Connexion OK, table 'profils' à créer plus tard.");
-                else console.log("Connexion Supabase : Parfaite !");
-            } catch(e) {
-                console.log("Supabase est prêt.");
-            }
-        })();
-
-        // --- FONCTION POUR S'INSCRIRE ---
-        async function inscription(email, password) {
-            console.log("Clic sur inscription détecté !");
-            if (!email || !password) {
-                alert("Veuillez remplir les deux cases !");
-                return;
-            }
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-            });
-            if (error) {
-                alert("Erreur : " + error.message);
-            } else {
-                alert("Succès ! Compte créé pour : " + (data.user ? data.user.email : email));
-            }
+                    <b>Conseil du jour 💡</b>
+                    <p style="margin-top:10px; opacity:0.8; font-size:0.9rem;">Pense à personnaliser ton profil pour attirer plus d'abonnés.</p>
+                </div>
+            `;
         }
     </script>
 </body>
