@@ -3,95 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo Fix</title>
+    <title>Swivo - Full Version</title>
+    
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --accent: #6c63ff; --bg: #080810; --panel: #13131e; --text: #f0f0f8; --border: rgba(255,255,255,0.08); }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; display: flex; justify-content: center; }
-        #app { width: 100%; max-width: 450px; height: 100%; position: relative; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        :root {
+            --accent: #6c63ff; --bg: #080810; --panel: #13131e;
+            --text: #f0f0f8; --text-dim: #9090a8; --border: rgba(255,255,255,0.08);
+            --radius: 20px;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+
+        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+
+        /* --- AUTH SCREEN --- */
+        #auth-screen { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .logo-main { font-family: 'Syne'; font-size: 3.5rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .swivo-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 14px; margin-top: 10px; font-size: 1rem; outline: none; }
+        .btn-accent { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 1rem; }
+
+        /* --- HEADER & TABS --- */
+        .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; display: none; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .logo-small { font-family: 'Syne'; font-weight: 800; font-size: 1.6rem; color: var(--accent); }
+        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; font-size: 0.9rem; }
+        .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
+
+        /* --- SCREENS --- */
+        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; scrollbar-width: none; }
+        .screen.active { display: flex; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); }
         
-        /* AUTH SCREEN */
-        .auth-container { position: absolute; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
-        .logo { font-family: 'Syne'; font-size: 3.5rem; background: linear-gradient(135deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
-        .sw-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 16px; border-radius: 14px; margin-bottom: 10px; outline: none; }
-        .sw-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        
-        /* APP INTERFACE (Cachée au début) */
-        #main-app { display: none; flex: 1; flex-direction: column; height: 100%; }
-        .header { padding: 20px; font-family: 'Syne'; color: var(--accent); font-size: 1.5rem; border-bottom: 1px solid var(--border); }
-        .feed { flex: 1; padding: 20px; overflow-y: auto; }
-        .card { background: var(--panel); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
-        .nav { height: 75px; background: var(--panel); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--border); }
+        /* --- NAV BAR --- */
+        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: none; align-items: center; justify-content: space-around; z-index: 100; }
+        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 1.2rem; }
+        .nav-item.active { color: var(--accent); }
+
+        /* --- MENU ITEMS (Messagerie, Dons, etc) --- */
+        .menu-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .menu-row { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="app">
-        <div id="auth-ui" class="auth-container">
-            <h1 class="logo">Swivo</h1>
-            <input type="email" id="user-email" class="sw-input" placeholder="Email">
-            <input type="password" id="user-pass" class="sw-input" placeholder="Mot de passe">
-            <button class="sw-btn" onclick="tenterConnexion()">Connexion</button>
-            <button class="sw-btn" style="background:transparent; border:1px solid var(--accent);" onclick="tenterInscription()">Créer un compte</button>
-            <p style="margin-top:20px; color:var(--accent); cursor:pointer;" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
+    <div id="app-shell">
+        
+        <div id="auth-screen">
+            <h1 class="logo-main">Swivo</h1>
+            <p style="opacity: 0.7; margin-bottom: 20px;">L'aventure commence ici.</p>
+            <input type="email" id="log-email" class="swivo-input" placeholder="Email">
+            <input type="password" id="log-pass" class="swivo-input" placeholder="Mot de passe">
+            <button class="btn-accent" onclick="handleAuth('login')">Se connecter</button>
+            <button class="btn-accent" style="background:transparent; border:1px solid var(--accent);" onclick="handleAuth('signup')">Créer un profil</button>
+            <p style="color:var(--accent); font-size:0.8rem; margin-top:20px; cursor:pointer;" onclick="alert('Lien de récupération envoyé !')">Mot de passe oublié ?</p>
         </div>
 
-        <div id="main-app">
-            <div class="header">Swivo</div>
-            <div class="feed">
-                <div class="card">
-                    <h2 style="font-family:'Syne';">Profil de <span id="username">...</span></h2>
-                    <p style="opacity:0.6; margin-top:10px;">Ton flux est prêt.</p>
-                </div>
-                <button class="sw-btn" onclick="location.reload()">Déconnexion</button>
+        <header id="app-header" class="header">
+            <div class="header-top">
+                <div class="logo-small">Swivo</div>
+                <div style="display:flex; gap:15px;">🔍 🔔</div>
             </div>
-            <nav class="nav"><span>🏠</span><span>👤</span></nav>
-        </div>
-    </div>
+            <div class="feed-tabs">
+                <div class="tab-item active">Pour toi</div>
+                <div class="tab-item">Abonnements</div>
+            </div>
+        </header>
 
-    <script>
-        // CONFIGURATION
-        const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
-        const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-        let sb;
-
-        // On initialise avec sécurité
-        window.onload = () => {
-            try {
-                if (typeof supabase === 'undefined') {
-                    alert("Erreur : La librairie Supabase ne s'est pas chargée. Vérifie ta connexion.");
-                } else {
-                    sb = supabase.createClient(S_URL, S_KEY);
-                }
-            } catch (e) { console.error(e); }
-        };
-
-        async function tenterInscription() {
-            const email = document.getElementById('user-email').value;
-            const pass = document.getElementById('user-pass').value;
-            if(!email || !pass) { alert("Remplis les cases !"); return; }
-
-            const { data, error } = await sb.auth.signUp({ email, password: pass });
-            if (error) alert("Erreur : " + error.message);
-            else alert("Compte créé ! Vérifie tes emails.");
-        }
-
-        async function tenterConnexion() {
-            const email = document.getElementById('user-email').value;
-            const pass = document.getElementById('user-pass').value;
-            if(!email || !pass) { alert("Remplis les cases !"); return; }
-
-            const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
-            if (error) {
-                alert("Erreur : " + error.message);
-            } else {
-                document.getElementById('auth-ui').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-                document.getElementById('username').innerText = email.split('@')[0];
-            }
-        }
-    </script>
-</body>
-</html>
+        <main id="screen-home" class="screen">
+            <div class="card">
+                <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
+                <p style="font-size: 0.9rem; margin-top: 10px;">Ton flux est à jour. Découvre les dernières pépites.</p>
+            </div>
+            <div class="card">
+                <div style="display:flex; align
