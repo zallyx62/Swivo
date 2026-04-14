@@ -181,85 +181,61 @@
 
             // FIREBASE TIP: Ici on appellera firebase.auth().signInWithEmailAndPassword(email, pass)
             document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
-            document.getElementById('home').style.display = 'flex';
-            document.getElementById('main-nav').style.display = 'flex';
-            renderFakeFeed();
+            function logout() {
+            location.reload(); // Simple reset pour le prototype
         }
 
-        function sendResetCode() {
-            const email = document.getElementById('reset-email').value;
-            if(!email.includes('@')) {
-                alert("Veuillez entrer une adresse email valide.");
+        /* --- LOGIQUE DE FLUX (BASE) --- */
+        function renderFakeFeed() {
+            const feed = document.getElementById('main-feed');
+            if (!feed) return;
+            feed.innerHTML = `
+                <div class="card">
+                    <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Votre compte est désormais sécurisé.</p>
+                </div>
+                <div class="card">
+                    <b>@Admin_Swivo</b>
+                    <div style="width:100%; height:200px; background:#000; border-radius:12px; margin: 10px 0; display:flex; align-items:center; justify-content:center;">
+                        <p style="font-size:0.85rem;">C'est parti ! L'aventure commence ici.</p>
+                    </div>
+                </div>`;
+        }
+
+        // --- CONFIGURATION SUPABASE ---
+        const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
+        const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Test de connexion automatique
+        (async function() {
+            console.log("Tentative de connexion à Supabase...");
+            try {
+                const { data, error } = await supabase.from('profils').select('*').limit(1);
+                if (error) console.log("Note: Connexion OK, table 'profils' à créer plus tard.");
+                else console.log("Connexion Supabase : Parfaite !");
+            } catch(e) {
+                console.log("Supabase est prêt.");
+            }
+        })();
+
+        // --- FONCTION POUR S'INSCRIRE ---
+        async function inscription(email, password) {
+            console.log("Clic sur inscription détecté !");
+            if (!email || !password) {
+                alert("Veuillez remplir les deux cases !");
                 return;
             }
-
-            // FIREBASE TIP: Ici on appellera firebase.auth().sendPasswordResetEmail(email)
-            // Pour le prototype, on simule l'envoi :
-            alert("Code envoyé à " + email + " ! Vérifiez vos courriers indésirables.");
-            showAuthStep('code-screen');
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+            });
+            if (error) {
+                alert("Erreur : " + error.message);
+            } else {
+                alert("Succès ! Compte créé pour : " + (data.user ? data.user.email : email));
+            }
         }
-
-        function finalizeReset() {
-            // Simulation de validation
-            alert("Succès ! Votre mot de passe a été modifié. Vous pouvez maintenant vous connecter.");
-            showAuthStep('auth-screen');
-        }
-
-        function logout() {
-           // --- CONFIGURATION SUPABASE ---
-const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
-const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-/* --- LOGIQUE DE FLUX (BASE) --- */
-function renderFakeFeed() {
-    const feed = document.getElementById('main-feed');
-    if (!feed) return;
-    feed.innerHTML = `
-        <div class="card">
-            <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
-            <p style="font-size: 0.9rem; margin-top: 10px;">Votre compte est désormais sécurisé.</p>
-        </div>
-        <div class="card">
-            <b>@Admin_Swivo</b>
-            <div style="width:100%; height:200px; background:#000; border-radius:12px; margin: 10px 0; display:flex; align-items:center; justify-content:center;">
-                <p style="font-size:0.85rem;">C'est parti ! L'aventure commence ici.</p>
-            </div>
-        </div>`;
-}
-
-// --- CONFIGURATION SUPABASE ---
-const SUPABASE_URL = 'https://hpmjiqktsriqujiimyda.supabase.co'; 
-const SUPABASE_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// Test de connexion automatique
-(async function() {
-    console.log("Tentative de connexion à Supabase...");
-    try {
-        const { data, error } = await supabase.from('profils').select('*').limit(1);
-        if (error) console.log("Note: Connexion OK, table 'profils' à créer plus tard.");
-        else console.log("Connexion Supabase : Parfaite !");
-    } catch(e) {
-        console.log("Supabase est prêt.");
-    }
-})();
-
-// --- FONCTION POUR S'INSCRIRE ---
-async function inscription(email, password) {
-    console.log("Clic sur inscription détecté !");
-    if (!email || !password) {
-        alert("Veuillez remplir les deux cases !");
-        return;
-    }
-    const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-    });
-    if (error) {
-        alert("Erreur : " + error.message);
-    } else {
-        alert("Succès ! Compte créé pour : " + data.user.email);
-    }
-}
-</script>
+    </script>
 </body>
 </html>
