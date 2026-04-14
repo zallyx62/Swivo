@@ -3,100 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>Swivo - L'app pour tous</title>
-    
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0a0a0a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
+    <title>Swivo App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #a855f7;
-            --bg: #0a0a0a;
-            --card: #16161a;
+            --primary: #6c63ff;
+            --secondary: #ff6584;
+            --bg: #080810;
+            --card: #13131e;
+            --text: #f0f0f8;
+            --accent-green: #43e97b;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'DM Sans', sans-serif;
             background-color: var(--bg);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            /* Empêche le défilement rebondissant sur iOS */
-            overflow: hidden; 
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        header {
+            padding: 20px 16px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(108,99,255,0.1), transparent);
         }
 
         .logo {
-            font-size: 3rem;
+            font-family: 'Syne', sans-serif;
+            font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
         }
 
-        .slogan {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 2rem;
+        /* NAVIGATION TABS */
+        .nav-tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #555570;
+            cursor: pointer;
+        }
+
+        .nav-tab.active {
+            color: white;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        /* FEED CONTENT */
+        .feed { padding: 0 16px 100px; }
+
+        .live-banner {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .live-dot {
+            width: 8px; height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--secondary);
         }
 
         .card {
-            background-color: var(--card);
-            border: 1px solid #2d2d35;
-            padding: 2rem;
-            border-radius: 24px;
-            width: 85%;
-            max-width: 350px;
-            text-align: center;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            background: var(--card);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .card h2 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.4;
+        .card-tag {
+            color: var(--accent-green);
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
         }
 
-        button {
-            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        /* POLL / VOTE */
+        .poll-question { font-weight: 700; margin-bottom: 15px; }
+        .poll-options { display: flex; gap: 10px; }
+        .poll-btn {
+            flex: 1;
+            padding: 12px;
             border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
             font-weight: 600;
-            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.2s;
-            width: 100%;
         }
 
-        button:active {
-            transform: scale(0.95);
+        /* BOTTOM NAV BAR */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(8, 8, 16, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 10px 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-item { color: #555570; font-size: 1.2rem; }
+        .nav-item.active { color: var(--primary); }
+        
+        .add-btn {
+            background: var(--primary);
+            width: 45px; height: 45px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-top: -10px;
+            box-shadow: 0 4px 15px rgba(108,99,255,0.3);
         }
     </style>
 </head>
 <body>
 
-    <div class="logo">Swivo</div>
-    <p class="slogan">L'app pour tous, par tous.</p>
+    <header>
+        <div class="logo">Swivo</div>
+    </header>
 
-    <div class="card">
-        <h2>Prêt à découvrir Swivo ? Appuie sur le bouton ci-dessous !</h2>
-        <button onclick="nextStep()">Suivant</button>
+    <div class="nav-tabs">
+        <div class="nav-tab active">Pour toi</div>
+        <div class="nav-tab">Abonnements</div>
+        <div class="nav-tab">Serveurs</div>
     </div>
 
-    <script>
-        function nextStep() {
-            alert("Bienvenue sur Swivo ! Le reste arrive bientôt.");
-        }
-    </script>
-</body>
-</html>
+    <div class="feed">
+        <div class="live-banner">
+            <div class="live-dot"></div>
+            <div>
+                <div style="font-weight: 700; font-size: 0.8rem;">Live — Comprendre son loyer</div>
+                <div style="font-size: 0.7rem; opacity: 0.6;">@PaulineAd
