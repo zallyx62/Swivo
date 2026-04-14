@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Full Version</title>
+    <title>Swivo – Version Officielle</title>
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     
@@ -21,66 +21,67 @@
 
         #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
 
-        /* --- AUTH SCREEN --- */
-        #auth-screen { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
-        .logo-main { font-family: 'Syne'; font-size: 3.5rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .swivo-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); padding: 16px; border-radius: 14px; margin-top: 10px; font-size: 1rem; outline: none; }
-        .btn-accent { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 1rem; }
+        /* --- AUTH --- */
+        #page-auth { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
+        .logo-luxe { font-family: 'Syne'; font-size: 3.5rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
+        .input-sw { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 16px; border-radius: 14px; margin-top: 10px; outline: none; }
+        .btn-sw { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; }
 
-        /* --- HEADER & TABS --- */
-        .header { padding: 15px 20px 5px; background: var(--bg); z-index: 10; display: none; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo-small { font-family: 'Syne'; font-weight: 800; font-size: 1.6rem; color: var(--accent); }
-        .feed-tabs { display: flex; gap: 20px; font-family: 'Syne'; font-weight: 700; font-size: 0.9rem; }
-        .tab-item { opacity: 0.4; cursor: pointer; padding-bottom: 8px; border-bottom: 3px solid transparent; transition: 0.3s; }
-        .tab-item.active { opacity: 1; border-bottom-color: var(--accent); }
-
-        /* --- SCREENS --- */
-        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; scrollbar-width: none; }
-        .screen.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .card { background: var(--panel); margin-bottom: 16px; border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); }
+        /* --- UI ELEMENTS --- */
+        .header { padding: 15px 20px; display: none; border-bottom: 1px solid var(--border); }
+        .logo-s { font-family: 'Syne'; font-size: 1.5rem; color: var(--accent); }
         
-        /* --- NAV BAR --- */
-        .nav-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: none; align-items: center; justify-content: space-around; z-index: 100; }
-        .nav-item { color: var(--text-dim); cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 1.2rem; }
-        .nav-item.active { color: var(--accent); }
+        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; }
+        .screen.active { display: flex; }
+        
+        .card { background: var(--panel); margin-bottom: 15px; border-radius: var(--radius); padding: 20px; border: 1px solid var(--border); }
+        
+        /* --- NAV --- */
+        .nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: none; align-items: center; justify-content: space-around; }
+        .nav-i { opacity: 0.5; font-size: 1.3rem; cursor: pointer; }
+        .nav-i.active { opacity: 1; color: var(--accent); }
 
-        /* --- MENU ITEMS (Messagerie, Dons, etc) --- */
-        .menu-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-        .menu-row { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        /* --- MENU PROFIL --- */
+        .menu-item { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="app-shell">
         
-        <div id="auth-screen">
-            <h1 class="logo-main">Swivo</h1>
-            <p style="opacity: 0.7; margin-bottom: 20px;">L'aventure commence ici.</p>
-            <input type="email" id="log-email" class="swivo-input" placeholder="Email">
-            <input type="password" id="log-pass" class="swivo-input" placeholder="Mot de passe">
-            <button class="btn-accent" onclick="handleAuth('login')">Se connecter</button>
-            <button class="btn-accent" style="background:transparent; border:1px solid var(--accent);" onclick="handleAuth('signup')">Créer un profil</button>
+        <div id="page-auth">
+            <h1 class="logo-luxe">Swivo</h1>
+            <p style="opacity:0.6; margin-bottom:20px;">Prêt pour l'expérience ?</p>
+            <input type="email" id="email" class="input-sw" placeholder="Email">
+            <input type="password" id="pass" class="input-sw" placeholder="Mot de passe">
+            <button class="btn-sw" onclick="connexion()">Se connecter</button>
+            <button class="btn-sw" style="background:transparent; border:1px solid var(--accent);" onclick="inscription()">Créer un compte</button>
             <p style="color:var(--accent); font-size:0.8rem; margin-top:20px; cursor:pointer;" onclick="alert('Lien de récupération envoyé !')">Mot de passe oublié ?</p>
         </div>
 
-        <header id="app-header" class="header">
-            <div class="header-top">
-                <div class="logo-small">Swivo</div>
-                <div style="display:flex; gap:15px;">🔍 🔔</div>
-            </div>
-            <div class="feed-tabs">
-                <div class="tab-item active">Pour toi</div>
-                <div class="tab-item">Abonnements</div>
-            </div>
-        </header>
+        <div id="main-header" class="header">
+            <div class="logo-s">Swivo</div>
+        </div>
 
-        <main id="screen-home" class="screen">
+        <div id="screen-feed" class="screen">
             <div class="card">
-                <p style="font-weight: 800; color: var(--accent);">BIENVENUE SUR SWIVO 🦊</p>
-                <p style="font-size: 0.9rem; margin-top: 10px;">Ton flux est à jour. Découvre les dernières pépites.</p>
+                <p style="font-weight: 800; color: var(--accent);">POUR TOI ✨</p>
+                <div style="width:100%; height:200px; background:#000; border-radius:15px; margin: 15px 0; display:flex; align-items:center; justify-content:center; color:#444;">VIDÉO TEST</div>
+                <div style="display:flex; gap:15px;">❤️ 💬 🔄</div>
             </div>
             <div class="card">
-                <div style="display:flex; align
+                <b>Conseil du jour 💡</b>
+                <p style="opacity:0.7; font-size:0.9rem; margin-top:5px;">Sois authentique, c'est ce qui marche le mieux sur Swivo.</p>
+            </div>
+        </div>
+
+        <div id="screen-profile" class="screen">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div style="width:80px; height:80px; background:linear-gradient(45deg, var(--accent), #ff6584); border-radius:50%; margin: 0 auto 10px;"></div>
+                <h2 id="user-name" style="font-family:'Syne';">Profil</h2>
+                <p id="user-email-display" style="opacity:0.5; font-size:0.8rem;"></p>
+            </div>
+
+            <div class="menu-item" onclick="alert('Messages')"><span>💬 Messagerie</span><span>❯</span></div>
+            <div class="menu-item" onclick="alert('Dons')"><span>💎 Mes Dons</span><span>❯</span></div>
+            <div class="menu-item" onclick="alert('Paramètres')">
