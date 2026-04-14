@@ -3,252 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Version Finale Intégrale</title>
+    <title>Swivo - Application Finale</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1381945888605291" crossorigin="anonymous"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root { 
-            --accent: #6c63ff; 
-            --gradient: linear-gradient(135deg, #6c63ff, #ff6584);
-            --bg: #080810; --panel: #13131e; --text: #f0f0f8; --border: rgba(255,255,255,0.08);
-            --fs-base: 16px;
+            --accent: #a855f7; --bg: #0d0d12; --panel: #1a1a24; --text: #ffffff; 
+            --subtext: #94a3b8; --border: rgba(255,255,255,0.05);
         }
         * { margin:0; padding:0; box-sizing:border-box; font-family: 'DM Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); font-size: var(--fs-base); overflow: hidden; height: 100vh; }
+        body { background: var(--bg); color: var(--text); overflow: hidden; height: 100vh; font-size: 16px; }
         
-        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; border: 1px solid var(--border); }
+        #app { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; }
 
-        /* AUTH */
-        #auth-overlay { position: absolute; inset:0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; }
-        .sw-input { width: 100%; background: #1a1a2e; border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 15px; margin-bottom: 12px; outline: none; }
-        .sw-btn { width: 100%; background: var(--gradient); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 700; cursor: pointer; }
+        /* AUTH SCREEN */
+        #auth-screen { position: absolute; inset:0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+        .sw-input { width: 100%; background: #161620; border: 1px solid var(--border); color: #fff; padding: 18px; border-radius: 16px; margin-bottom: 15px; outline: none; }
+        .sw-btn-main { width: 100%; background: linear-gradient(135deg, #a855f7, #6366f1); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; }
 
-        /* UI ELEMENTS */
-        header { padding: 25px 20px 10px; display: none; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Syne'; font-size: 2rem; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* HEADER */
+        header { padding: 20px; display: none; justify-content: space-between; align-items: center; z-index: 100; }
+        .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; background: linear-gradient(to right, #fff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-icons span { font-size: 1.5rem; margin-left: 20px; cursor: pointer; }
+
+        /* SCREENS */
+        .screen { flex: 1; display: none; padding: 0 20px 100px; overflow-y: auto; flex-direction: column; }
+        .active { display: flex; }
+
+        /* DESIGN CARTES (FIDÈLE À TA VIDÉO) */
+        .card { background: var(--panel); border-radius: 24px; padding: 20px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .card-header { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px; }
+
+        /* PROFILE DYNAMIQUE */
+        .avatar-container { width: 110px; height: 110px; background: #2a2a35; margin: 20px auto; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .avatar-round { border-radius: 50%; }
+        .avatar-square { border-radius: 20px; }
+        .avatar-drop { border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
         
-        .screen { flex: 1; display: none; padding: 0 16px 100px; overflow-y: auto; flex-direction: column; }
-        .screen.active { display: flex; }
+        .shape-selector { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; }
+        .shape-btn { padding: 8px 15px; background: var(--panel); border: 1px solid var(--border); border-radius: 10px; color: white; cursor: pointer; font-size: 0.8rem; }
 
-        .card { background: var(--panel); border-radius: 25px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; position: relative; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
-        .stat-item { text-align: center; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 18px; border: 1px solid var(--border); }
-        .stat-val { display: block; font-weight: 800; color: var(--accent); font-size: 1.2rem; }
+        /* NAV BASSE */
+        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(13, 13, 18, 0.95); backdrop-filter: blur(20px); display: none; align-items: center; justify-content: space-around; border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-link { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--subtext); cursor: pointer; font-size: 0.7rem; }
+        .nav-link.active { color: var(--accent); }
+        .nav-plus { width: 56px; height: 56px; background: linear-gradient(135deg, #f472b6, #a855f7); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin-top: -30px; box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4); }
 
-        /* NAVIGATION BASSE */
-        nav { position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(19, 19, 30, 0.95); backdrop-filter: blur(15px); display: none; align-items: center; justify-content: space-around; border-top: 1px solid var(--border); z-index: 999; }
-        .nav-item { font-size: 1.7rem; cursor: pointer; opacity: 0.4; transition: 0.3s; }
-        .nav-item.active { opacity: 1; color: var(--accent); }
-        .nav-plus { width: 55px; height: 55px; background: var(--gradient); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3); transform: translateY(-5px); }
-
-        /* MESSAGERIE INTERACTIVE */
-        .chat-list-item { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--panel); border-radius: 20px; margin-bottom: 12px; cursor: pointer; border: 1px solid var(--border); }
-        #chat-window { position: absolute; inset:0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; padding: 20px; }
-        .chat-bubble { padding: 12px 16px; border-radius: 18px; margin-bottom: 10px; max-width: 80%; line-height: 1.4; }
-        .chat-bubble.me { background: var(--accent); align-self: flex-end; color: white; }
-        .chat-bubble.them { background: var(--panel); align-self: flex-start; border: 1px solid var(--border); }
-
-        /* TITRES DE PAGES */
-        .page-title { font-family: 'Syne'; font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .back-btn { cursor: pointer; font-size: 1.2rem; opacity: 0.6; }
+        /* OVERLAYS (LOUPE & NOTIFS AVEC RETOUR) */
+        .sub-page { position: absolute; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; padding: 25px; }
+        .back-bar { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="app-shell">
-    <div id="auth-overlay">
-        <h1 class="logo" style="font-size: 4rem; margin-bottom: 10px;">Swivo</h1>
-        <p style="opacity: 0.5; margin-bottom: 30px;">Prêt pour l'expérience ?</p>
+<div id="app">
+    <div id="auth-screen">
+        <div class="logo" style="font-size: 4rem; margin-bottom: 20px;">Swivo</div>
         <input type="email" id="email" class="sw-input" placeholder="Email">
         <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
-        <button class="sw-btn" id="btn-login">Se connecter</button>
-        <button class="sw-btn" id="btn-signup" style="background:transparent; margin-top:10px; border:1px solid var(--accent); color:var(--accent);">Créer un profil</button>
+        <button class="sw-btn-main" onclick="handleAuth('login')">Connexion</button>
+        <button class="sw-btn-main" style="background:transparent; margin-top:10px; border:1px solid var(--accent)" onclick="handleAuth('signup')">S'inscrire</button>
     </div>
 
-    <header id="app-header">
+    <header id="main-header">
         <div class="logo">Swivo</div>
-        <div style="display:flex; gap:22px; font-size:1.4rem;">
-            <span onclick="go('screen-search')" style="cursor:pointer">🔍</span>
-            <span onclick="go('screen-notifs')" style="cursor:pointer">🔔</span>
+        <div class="header-icons">
+            <span onclick="openOverlay('search')">🔍</span>
+            <span onclick="openOverlay('notifs')">🔔</span>
         </div>
     </header>
 
-    <div id="screen-feed" class="screen">
-        <div style="display:flex; gap:25px; margin-bottom:20px; font-weight:700; font-size:1.1rem; padding: 0 5px;">
-            <span style="border-bottom:3px solid var(--accent); padding-bottom:5px;">Pour toi</span>
-            <span style="opacity:0.4">Abonnements</span>
-        </div>
+    <div id="scr-home" class="screen active">
         <div class="card">
-            <span style="font-size:0.7rem; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:1px;">Conseil du jour</span>
-            <p id="quote-box" style="margin-top:10px; font-weight:500;">...</p>
+            <div class="card-header">Conseil du jour</div>
+            <p>Soutenir les créateurs locaux permet de dynamiser l'économie réelle. 🚀</p>
         </div>
-        <div class="card">
-            <div style="width:100%; height:260px; background:#000; border-radius:20px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-                <span style="position:absolute; top:15px; right:15px; background:rgba(0,0,0,0.7); padding:4px 10px; border-radius:6px; font-size:0.7rem; font-weight:bold;">1080p 60FPS</span>
-                <div style="width:60px; height:60px; background:rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(5px); font-size:1.5rem;">▶</div>
-            </div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                <h4 style="font-family:'Syne';">Live Coaching Session</h4>
-                <button style="background:var(--accent); border:none; color:white; padding:8px 16px; border-radius:12px; font-weight:bold; font-size:0.8rem;">REJOINDRE</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="screen-search" class="screen">
-        <div class="page-title"><span class="back-btn" onclick="go('screen-feed')">⬅</span> Recherche</div>
-        <input type="text" class="sw-input" placeholder="Rechercher un membre, un tag...">
-        <div style="margin-top:30px; text-align:center; opacity:0.3;">Saisissez votre recherche...</div>
-    </div>
-
-    <div id="screen-notifs" class="screen">
-        <div class="page-title"><span class="back-btn" onclick="go('screen-feed')">⬅</span> Notifications</div>
-        <div class="card"><b>Mila</b> a aimé votre vidéo de coaching. <br><small style="opacity:0.4;">Il y a 2 min</small></div>
-        <div class="card"><b>Thomas</b> vous a envoyé un message privé. <br><small style="opacity:0.4;">Il y a 1 heure</small></div>
-    </div>
-
-    <div id="screen-chat" class="screen">
-        <div class="page-title">Messagerie</div>
-        <div class="chat-list-item" onclick="openChat('Thomas')">
-            <div style="width:55px; height:55px; background:var(--gradient); border-radius:18px;"></div>
-            <div style="flex:1;">
-                <div style="display:flex; justify-content:space-between;"><strong>Thomas</strong> <small style="opacity:0.3;">14:02</small></div>
-                <p style="font-size:0.85rem; opacity:0.6; margin-top:3px;">Dispo pour le live ce soir ?</p>
-            </div>
+        <div style="margin: 10px 0;">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-1381945888605291"
+                 data-ad-slot="8363711327"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
         </div>
     </div>
 
-    <div id="screen-profile" class="screen">
-        <div style="text-align:center; padding:30px 0;">
-            <div style="width:110px; height:110px; background:var(--gradient); border-radius:40px; margin:0 auto; transform:rotate(-6deg); border:5px solid var(--panel); box-shadow:0 10px 30px rgba(108, 99, 255, 0.2);"></div>
-            <h2 id="u-display" style="font-family:'Syne'; margin-top:20px; font-size:2rem;">User</h2>
-            <p style="opacity:0.4; font-size:0.9rem;">Coach Certifié Swivo</p>
+    <div id="scr-messages" class="screen">
+        <h2 style="font-family:'Syne'; margin-bottom:20px;">Messagerie</h2>
+        <div class="card" onclick="alert('Chat bientôt disponible')">
+            <strong>Thomas (Boulanger)</strong>
+            <p style="opacity:0.6; font-size:0.8rem;">C'est parti pour le live ?</p>
         </div>
+    </div>
 
-        <div class="stats-grid">
-            <div class="stat-item"><span class="stat-val">2.8k</span><small>Abonnés</small></div>
-            <div class="stat-item"><span class="stat-val">15.2k</span><small>Vues</small></div>
-            <div class="stat-item"><span class="stat-val">942</span><small>Likes</small></div>
+    <div id="scr-profile" class="screen">
+        <div class="avatar-container avatar-round" id="user-avatar">
+            <div style="font-size:3rem">👤</div>
+        </div>
+        <h2 id="display-name" style="text-align:center; font-family:'Syne'; margin-bottom:20px;">User</h2>
+        
+        <div class="shape-selector">
+            <button class="shape-btn" onclick="setShape('round')">Rond</button>
+            <button class="shape-btn" onclick="setShape('square')">Carré</button>
+            <button class="shape-btn" onclick="setShape('drop')">Goutte</button>
         </div>
 
         <div class="card">
-            <h3 style="font-family:'Syne'; margin-bottom:20px;">Personnalisation App</h3>
-            <div style="margin-bottom:20px;">
-                <label style="font-size:0.8rem; opacity:0.6; display:block; margin-bottom:8px;">Couleur thématique</label>
-                <input type="color" id="themeColor" value="#6c63ff" style="width:100%; height:45px; border:none; background:none; cursor:pointer;">
-            </div>
-            <div>
-                <label style="font-size:0.8rem; opacity:0.6; display:block; margin-bottom:8px;">Taille du texte</label>
-                <input type="range" id="textSize" min="14" max="22" value="16" style="width:100%; accent-color:var(--accent);">
-            </div>
+            <label>Ma Bio</label>
+            <textarea class="sw-input" style="height:80px; margin-top:10px;"></textarea>
         </div>
-        <button onclick="logout()" style="color:#ff6584; background:none; border:none; padding:20px; width:100%; font-weight:800; font-size:1rem; cursor:pointer;">SE DÉCONNECTER</button>
+        <button onclick="logout()" style="color:#ff4d8d; background:none; border:none; width:100%; padding:20px;">Déconnexion</button>
     </div>
 
-    <div id="chat-window">
-        <div style="display:flex; align-items:center; gap:15px; margin-bottom:30px;">
-            <span onclick="closeChat()" style="font-size:1.8rem; cursor:pointer;">⬅</span>
-            <strong id="target-name" style="font-size:1.3rem; font-family:'Syne';">Nom</strong>
-        </div>
-        <div id="chat-content" style="flex:1; display:flex; flex-direction:column; overflow-y:auto; padding-bottom:20px;">
-            <div class="chat-bubble them">Salut ! Tu as pu tester la nouvelle interface Swivo ?</div>
-            <div class="chat-bubble me">Carrément, c'est super fluide ! 🚀</div>
-        </div>
-        <div style="display:flex; gap:12px;">
-            <input type="text" id="msg-input" class="sw-input" style="margin:0; flex:1;" placeholder="Votre message...">
-            <button onclick="sendMsg()" class="sw-btn" style="width:65px;">🚀</button>
+    <div id="scr-settings" class="screen">
+        <h2 style="font-family:'Syne'; margin-bottom:20px;">Réglages</h2>
+        <div class="card">
+            <p>Qualité Vidéo par défaut</p>
+            <select class="sw-input" style="margin-top:10px;">
+                <option>1080p 60fps</option>
+                <option>720p 30fps</option>
+            </select>
         </div>
     </div>
 
-    <nav id="app-nav">
-        <div class="nav-item active" id="nav-feed" onclick="go('screen-feed')">🏠</div>
-        <div class="nav-item" id="nav-chat" onclick="go('screen-chat')">💬</div>
-        <div class="nav-plus" onclick="alert('Lancement Studio Swivo\nQualité : 1080p 60FPS')">+</div>
-        <div class="nav-item" id="nav-notifs" onclick="go('screen-notifs')">🔔</div>
-        <div class="nav-item" id="nav-profile" onclick="go('screen-profile')">👤</div>
+    <div id="overlay-search" class="sub-page">
+        <div class="back-bar" onclick="closeOverlay()">⬅️ Retour</div>
+        <input type="text" class="sw-input" placeholder="Rechercher un créateur...">
+    </div>
+
+    <div id="overlay-notifs" class="sub-page">
+        <div class="back-bar" onclick="closeOverlay()">⬅️ Retour</div>
+        <div class="card">Bienvenue sur la nouvelle version de Swivo !</div>
+    </div>
+
+    <nav id="main-nav">
+        <div class="nav-link active" onclick="showScreen('home', this)"><i>🏠</i></div>
+        <div class="nav-link" onclick="showScreen('messages', this)"><i>💬</i></div>
+        <div class="nav-plus" onclick="alert('Studio Upload Activé')">+</div>
+        <div class="nav-link" onclick="showScreen('profile', this)"><i>👤</i></div>
+        <div class="nav-link" onclick="showScreen('settings', this)"><i>⚙️</i></div>
     </nav>
 </div>
 
 <script>
     const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
     const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-    let sub;
+    const supabase = window.supabase.createClient(S_URL, S_KEY);
 
-    const quotes = [
-        "Ta seule limite est celle que tu t'imposes.",
-        "Le succès n'est pas final, l'échec n'est pas fatal.",
-        "Fais de ton code une œuvre d'art.",
-        "Chaque bug corrigé est une victoire."
-    ];
+    async function handleAuth(type) {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('pass').value;
+        let res = (type === 'login') ? 
+            await supabase.auth.signInWithPassword({ email, password }) : 
+            await supabase.auth.signUp({ email, password });
 
-    window.addEventListener('DOMContentLoaded', () => {
-        sub = supabase.createClient(S_URL, S_KEY);
-        document.getElementById('quote-box').innerText = quotes[Math.floor(Math.random()*quotes.length)];
-
-        // Personnalisation Live
-        document.getElementById('themeColor').oninput = (e) => {
-            document.documentElement.style.setProperty('--accent', e.target.value);
-        };
-        document.getElementById('textSize').oninput = (e) => {
-            document.documentElement.style.setProperty('--fs-base', e.target.value + 'px');
-        };
-
-        // Auth Logique
-        document.getElementById('btn-login').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            const { data, error } = await sub.auth.signInWithPassword({ email: e, password: p });
-            if(error) alert(error.message); else unlock(data.user.email);
-        };
-
-        document.getElementById('btn-signup').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            const { error } = await sub.auth.signUp({ email: e, password: p });
-            if(error) alert(error.message); else alert("Compte créé avec succès !");
-        };
-    });
+        if(res.error) alert(res.error.message);
+        else unlock(res.data.user.email);
+    }
 
     function unlock(email) {
-        document.getElementById('auth-overlay').style.display = 'none';
-        document.getElementById('app-header').style.display = 'flex';
-        document.getElementById('app-nav').style.display = 'flex';
-        document.getElementById('u-display').innerText = email.split('@')[0];
-        go('screen-feed');
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-header').style.display = 'flex';
+        document.getElementById('main-nav').style.display = 'flex';
+        document.getElementById('display-name').innerText = email.split('@')[0];
     }
 
-    function go(id) {
-        // Switch Ecrans
+    function showScreen(id, el) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        
-        // Switch Nav Icons
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        const navId = id.replace('screen-', 'nav-');
-        const activeNav = document.getElementById(navId);
-        if(activeNav) activeNav.classList.add('active');
+        document.getElementById('scr-' + id).classList.add('active');
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        el.classList.add('active');
+        closeOverlay();
     }
 
-    function openChat(name) {
-        document.getElementById('target-name').innerText = name;
-        document.getElementById('chat-window').style.display = 'flex';
-    }
-    function closeChat() { document.getElementById('chat-window').style.display = 'none'; }
-    
-    function sendMsg() {
-        const inp = document.getElementById('msg-input');
-        if(!inp.value) return;
-        const div = document.createElement('div');
-        div.className = "chat-bubble me";
-        div.innerText = inp.value;
-        document.getElementById('chat-content').appendChild(div);
-        inp.value = "";
-        const box = document.getElementById('chat-content');
-        box.scrollTop = box.scrollHeight;
+    function openOverlay(type) { document.getElementById('overlay-' + type).style.display = 'flex'; }
+    function closeOverlay() { document.querySelectorAll('.sub-page').forEach(p => p.style.display = 'none'); }
+
+    function setShape(shape) {
+        document.getElementById('user-avatar').className = 'avatar-container avatar-' + shape;
     }
 
-    async function logout() { await sub.auth.signOut(); location.reload(); }
+    async function logout() { await supabase.auth.signOut(); location.reload(); }
+
+    window.onload = async () => {
+        const { data } = await supabase.auth.getSession();
+        if(data.session) unlock(data.session.user.email);
+    }
 </script>
 </body>
 </html>
