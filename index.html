@@ -1,148 +1,65 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo - Version Stable</title>
+<script>
+    console.log("Script chargé !");
+
+    // --- CONFIGURATION ---
+    // VERIFIE BIEN QU'IL N'Y A PAS DE 'T' AVANT 'sb_publishable'
+    const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
+    const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy'; 
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root { --accent: #6c63ff; --bg: #080810; --panel: #13131e; --text: #f0f0f8; --border: rgba(255,255,255,0.08); }
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow: hidden; }
+    let supabase;
+
+    try {
+        supabase = window.supabase.createClient(S_URL, S_KEY);
+        console.log("Supabase initialisé !");
+    } catch (err) {
+        alert("Erreur d'initialisation Supabase : " + err.message);
+    }
+
+    // --- CONNEXION ---
+    document.getElementById('btn-login').onclick = async () => {
+        console.log("Clic sur Connexion");
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
         
-        #app-shell { width: 100%; max-width: 500px; height: 100%; margin: 0 auto; position: relative; display: flex; flex-direction: column; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-
-        /* AUTH INTERFACE */
-        #auth-overlay { position: absolute; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 25px; text-align: center; }
-        .logo-luxe { font-family: 'Syne'; font-size: 3.5rem; background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        .sw-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: #fff; padding: 16px; border-radius: 14px; margin-top: 10px; outline: none; }
-        .sw-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; cursor: pointer; margin-top: 15px; }
-
-        /* APP UI */
-        .header { padding: 15px 20px; display: none; border-bottom: 1px solid var(--border); }
-        .screen { flex: 1; display: none; flex-direction: column; padding: 15px 16px 100px; overflow-y: auto; }
-        .screen.active { display: flex; }
-        .card { background: var(--panel); margin-bottom: 15px; border-radius: 20px; padding: 20px; border: 1px solid var(--border); }
+        if(!e || !p) return alert("Remplis les cases !");
         
-        .nav { position: absolute; bottom: 0; width: 100%; height: 75px; background: var(--panel); border-top: 1px solid var(--border); display: none; align-items: center; justify-content: space-around; }
-        .menu-item { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <div id="app-shell">
-        <div id="auth-overlay">
-            <h1 class="logo-luxe">Swivo</h1>
-            <input type="email" id="email" class="sw-input" placeholder="Email">
-            <input type="password" id="pass" class="sw-input" placeholder="Mot de passe">
-            <button class="sw-btn" id="btn-login">Se connecter</button>
-            <button class="sw-btn" id="btn-signup" style="background:transparent; border:1px solid var(--accent);">Créer un profil</button>
-            <p style="color:var(--accent); font-size:0.8rem; margin-top:20px; cursor:pointer;" onclick="alert('Lien envoyé !')">Mot de passe oublié ?</p>
-        </div>
-
-        <div id="app-header" class="header">
-            <div style="font-family:'Syne'; color:var(--accent); font-size:1.5rem;">Swivo</div>
-        </div>
+        const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
         
-        <div id="feed" class="screen">
-            <div class="card">
-                <p style="font-weight:800; color:var(--accent);">BIENVENUE ✨</p>
-                <div style="width:100%; height:200px; background:#000; border-radius:15px; margin:15px 0; display:flex; align-items:center; justify-content:center;">VIDÉO TEST</div>
-            </div>
-        </div>
-
-        <div id="profile" class="screen">
-            <div style="text-align:center; margin-bottom:25px;">
-                <div style="width:80px; height:80px; background:linear-gradient(45deg, var(--accent), #ff6584); border-radius:50%; margin:0 auto 10px;"></div>
-                <h2 id="user-tag" style="font-family:'Syne';">Profil</h2>
-            </div>
-            <div class="menu-item" onclick="alert('Messagerie')"><span>💬 Messagerie</span><span>❯</span></div>
-            <div class="menu-item" onclick="alert('Dons')"><span>💎 Mes Dons</span><span>❯</span></div>
-            <div class="menu-item" style="color:#ff6584;" onclick="logout()"><span>🚪 Déconnexion</span></div>
-        </div>
-
-        <nav id="app-nav" class="nav">
-            <div onclick="showPage('feed')" style="cursor:pointer; font-size:1.5rem;">🏠</div>
-            <div style="background:var(--accent); width:45px; height:45px; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; cursor:pointer;">+</div>
-            <div onclick="showPage('profile')" style="cursor:pointer; font-size:1.5rem;">👤</div>
-        </nav>
-    </div>
-
-    <script>
-        // --- CONFIGURATION SUPABASE ---
-        const S_URL = 'https://hpmjiqktsriqujiimyda.supabase.co';
-        const S_KEY = 'sb_publishable_eVAhiO5Y2QPUqZB-mTuZ6g_TcWoSfJy';
-        const supabase = window.supabase.createClient(S_URL, S_KEY);
-
-        // --- AU CHARGEMENT : VERIFIER SI DEJA CONNECTÉ ---
-        window.onload = async () => {
-            const { data: { session }, error } = await supabase.auth.getSession();
-            if (session && session.user) {
-                unlockApp(session.user.email);
-            }
-        };
-
-        // --- ACTION : CONNEXION ---
-        document.getElementById('btn-login').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            
-            if(!e || !p) return alert("Remplis tous les champs !");
-            
-            const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
-            
-            if (error) {
-                alert("Erreur : " + error.message);
-            } else {
-                unlockApp(data.user.email);
-            }
-        };
-
-        // --- ACTION : INSCRIPTION ---
-        document.getElementById('btn-signup').onclick = async () => {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            
-            if(!e || !p) return alert("Remplis tous les champs !");
-            
-            const { data, error } = await supabase.auth.signUp({ email: e, password: p });
-            
-            if (error) {
-                alert("Erreur : " + error.message);
-            } else {
-                alert("Compte créé ! Connecte-toi maintenant (vérifie tes mails si besoin).");
-            }
-        };
-
-        // --- LOGIQUE UI ---
-        function unlockApp(email) {
-            document.getElementById('auth-overlay').style.display = 'none';
-            document.getElementById('app-header').style.display = 'block';
-            document.getElementById('app-nav').style.display = 'flex';
-            
-            // On affiche le feed par défaut
-            showPage('feed');
-            
-            // On affiche le pseudo
-            document.getElementById('user-tag').innerText = email.split('@')[0];
+        if (error) {
+            alert("Erreur Supabase : " + error.message);
+        } else {
+            alert("Succès ! Connexion en cours...");
+            unlockApp(data.user.email);
         }
+    };
 
-        function showPage(id) {
-            // Cacher tous les écrans
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // Afficher le bon
-            const target = document.getElementById(id);
-            if(target) target.classList.add('active');
+    // --- INSCRIPTION ---
+    document.getElementById('btn-signup').onclick = async () => {
+        console.log("Clic sur Inscription");
+        const e = document.getElementById('email').value;
+        const p = document.getElementById('pass').value;
+        
+        if(!e || !p) return alert("Remplis les cases !");
+        
+        const { data, error } = await supabase.auth.signUp({ email: e, password: p });
+        
+        if (error) {
+            alert("Erreur Inscription : " + error.message);
+        } else {
+            alert("Compte créé ! Vérifie tes mails (ou connecte-toi direct si t'as coupé l'option)");
         }
+    };
 
-        async function logout() {
-            await supabase.auth.signOut();
-            location.reload();
-        }
-    </script>
-</body>
-</html>
+    function unlockApp(email) {
+        document.getElementById('auth-overlay').style.display = 'none';
+        document.getElementById('app-header').style.display = 'block';
+        document.getElementById('app-nav').style.display = 'flex';
+        document.getElementById('feed').classList.add('active');
+        document.getElementById('user-tag').innerText = email.split('@')[0];
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+</script>
