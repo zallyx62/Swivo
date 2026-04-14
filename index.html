@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo App - Officiel</title>
+    <title>Swivo App — Expérience Totale</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,141 +13,247 @@
             --card: #13131e;
             --text: #f0f0f8;
             --accent: #43e97b;
-            --font-size: 0.9rem;
+            --gradient: linear-gradient(135deg, #6c63ff 0%, #ff6584 100%);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: #000; color: var(--text); display: flex; height: 100vh; overflow: hidden; }
-
-        /* --- PANNEAU DE PERSONNALISATION (GAUCHE) --- */
-        #config-panel {
-            width: 300px; background: #111; border-right: 1px solid #222; padding: 20px;
-            display: flex; flex-direction: column; gap: 20px; overflow-y: auto;
-        }
-        .config-title { font-family: 'Syne', sans-serif; color: var(--primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .color-grid { display: flex; gap: 10px; }
-        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; }
-        .color-dot.active { border-color: white; }
-        .btn-group { display: flex; gap: 5px; }
-        .btn-opt { flex:1; padding: 8px; background: #222; border: 1px solid #333; color: white; border-radius: 8px; cursor: pointer; font-size: 0.7rem; }
-        .btn-opt.active { background: var(--primary); border-color: var(--primary); }
-
-        /* --- SIMULATEUR MOBILE --- */
-        #mobile-viewport { flex: 1; display: flex; justify-content: center; align-items: center; background: var(--bg); position: relative; }
-        #phone {
-            width: 360px; height: 740px; background: var(--bg); border: 8px solid #1a1a1a; border-radius: 40px;
-            position: relative; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
-
-        /* HEADER */
-        header { padding: 40px 20px 10px; text-align: center; }
-        .logo { font-family: 'Syne', sans-serif; font-size: 1.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .tabs { display: flex; justify-content: space-around; margin-top: 10px; }
-        .tab { padding: 10px; font-size: 0.8rem; font-weight: 600; opacity: 0.4; cursor: pointer; transition: 0.3s; }
-        .tab.active { opacity: 1; color: var(--primary); border-bottom: 2px solid var(--primary); }
-
-        /* CONTENT AREA */
-        #app-content { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; scroll-behavior: smooth; }
-        #app-content::-webkit-scrollbar { display: none; }
-
-        .card { background: var(--card); border-radius: 18px; padding: 18px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .tag { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .card h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; margin-bottom: 8px; }
-        .card p { font-size: var(--font-size); opacity: 0.7; line-height: 1.4; }
-
-        /* NAVIGATION BAR */
-        #main-nav {
-            position: absolute; bottom: 0; width: 100%; background: rgba(13,13,25,0.95);
-            display: flex; justify-content: space-around; align-items: center; padding: 15px 10px 25px;
-            border-top: 1px solid rgba(255,255,255,0.05); z-index: 10;
+        body { 
+            font-family: 'DM Sans', sans-serif; 
+            background: #000; 
+            color: var(--text); 
+            display: flex; 
+            height: 100vh; 
+            width: 100vw;
+            overflow: hidden; 
         }
-        .nav-item { font-size: 1.4rem; opacity: 0.3; cursor: pointer; transition: 0.2s; }
-        .nav-item.active { opacity: 1; color: var(--primary); }
-        .plus-btn { background: var(--primary); width: 42px; height: 42px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-top: -10px; }
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            #config-panel { display: none; }
+        /* --- CONFIGURATION (CACHÉ SUR MOBILE) --- */
+        #config-side {
+            width: 300px; background: #0f0f1a; border-right: 1px solid #222;
+            padding: 25px; display: flex; flex-direction: column; gap: 20px;
+            z-index: 200;
+        }
+
+        .cfg-label { font-family: 'Syne'; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 10px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-ui { background: #1a1a2e; border: 1px solid #333; color: white; padding: 10px; border-radius: 12px; cursor: pointer; font-size: 0.75rem; transition: 0.3s; }
+        .btn-ui.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(108,99,255,0.3); }
+
+        /* --- VIEWPORT PRINCIPAL --- */
+        #main-view { flex: 1; display: flex; justify-content: center; align-items: center; background: var(--bg); position: relative; }
+
+        /* LE TÉLÉPHONE */
+        #phone {
+            width: 375px; height: 780px; background: var(--bg);
+            border: 10px solid #1a1a1a; border-radius: 45px;
+            position: relative; display: flex; flex-direction: column;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+
+        /* BARRE DE STATUT (Design iPhone) */
+        .status-bar { height: 40px; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; font-size: 0.75rem; font-weight: bold; }
+
+        /* HEADER & TABS */
+        header { padding: 10px 0; text-align: center; }
+        .logo { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .tabs { display: flex; justify-content: center; gap: 25px; margin-top: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .tab { padding-bottom: 10px; font-size: 0.85rem; font-weight: 700; opacity: 0.4; cursor: pointer; position: relative; }
+        .tab.active { opacity: 1; color: #fff; }
+        .tab.active::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 10px; }
+
+        /* ZONE DE CONTENU DYNAMIQUE */
+        #app-scroller {
+            flex: 1; overflow-y: auto; padding: 20px;
+            display: flex; flex-direction: column; gap: 18px;
+            padding-bottom: 100px;
+            scrollbar-width: none;
+        }
+        #app-scroller::-webkit-scrollbar { display: none; }
+
+        /* CARTES STYLE VIDEO */
+        .card { 
+            background: var(--card); border-radius: 24px; padding: 20px; 
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: slideUp 0.4s ease-out;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .chip { padding: 4px 10px; border-radius: 8px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; background: rgba(67,233,123,0.1); color: var(--accent); }
+        
+        .card h3 { font-family: 'Syne'; font-size: 1.25rem; margin-bottom: 10px; line-height: 1.2; }
+        .card p { font-size: 0.9rem; opacity: 0.7; line-height: 1.5; margin-bottom: 15px; }
+
+        .btn-action { background: var(--gradient); border: none; padding: 12px; border-radius: 15px; color: white; font-weight: 700; width: 100%; cursor: pointer; }
+
+        /* NAVIGATION BASSE */
+        #navbar {
+            position: absolute; bottom: 0; width: 100%; height: 85px;
+            background: rgba(13,13,25,0.9); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-icon { font-size: 1.5rem; opacity: 0.3; cursor: pointer; transition: 0.3s; }
+        .nav-icon.active { opacity: 1; color: var(--primary); transform: scale(1.1); }
+        .nav-center { background: var(--gradient); width: 50px; height: 50px; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: white; margin-top: -25px; box-shadow: 0 8px 20px rgba(108,99,255,0.4); }
+
+        /* RESPONSIVE MOBILE */
+        @media (max-width: 800px) {
+            #config-side { display: none; }
             #phone { width: 100vw; height: 100vh; border: none; border-radius: 0; }
+            .status-bar { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div id="config-panel">
-        <h2 style="font-family:'Syne';">Swivo Custom</h2>
+    <div id="config-side">
+        <h2 style="font-family:'Syne'; margin-bottom:10px;">Swivo Custom</h2>
         
-        <div>
-            <p class="config-title">Couleur Principale</p>
-            <div class="color-grid">
-                <div class="color-dot active" style="background:#6c63ff" onclick="changeColor('#6c63ff', this)"></div>
-                <div class="color-dot" style="background:#ff6584" onclick="changeColor('#ff6584', this)"></div>
-                <div class="color-dot" style="background:#43e97b" onclick="changeColor('#43e97b', this)"></div>
-                <div class="color-dot" style="background:#f7971e" onclick="changeColor('#f7971e', this)"></div>
+        <div class="cfg-section">
+            <p class="cfg-label">Couleurs du thème</p>
+            <div class="btn-grid">
+                <button class="btn-ui active" onclick="setTheme('#6c63ff', '#ff6584', this)">Swivo Original</button>
+                <button class="btn-ui" onclick="setTheme('#00d2ff', '#3a7bd5', this)">Océan Bleu</button>
+                <button class="btn-ui" onclick="setTheme('#f9d423', '#ff4e50', this)">Sunset</button>
+                <button class="btn-ui" onclick="setTheme('#43e97b', '#38f9d7', this)">Émeraude</button>
             </div>
         </div>
 
-        <div>
-            <p class="config-title">Menu Navigation</p>
-            <div class="btn-group">
-                <button class="btn-opt active" onclick="changeNav('bottom', this)">Bas</button>
-                <button class="btn-opt" onclick="changeNav('top', this)">Haut</button>
+        <div class="cfg-section">
+            <p class="cfg-label">Position du Menu</p>
+            <div class="btn-grid">
+                <button class="btn-ui active" onclick="setNavPos('bottom', this)">En Bas</button>
+                <button class="btn-ui" onclick="setNavPos('top', this)">En Haut</button>
             </div>
         </div>
-
-        <div>
-            <p class="config-title">Taille Texte</p>
-            <div class="btn-group">
-                <button class="btn-opt" onclick="changeFont('0.8rem', this)">Petit</button>
-                <button class="btn-opt active" onclick="changeFont('0.9rem', this)">Moyen</button>
-            </div>
-        </div>
-
-        <button onclick="refreshContent()" style="padding:10px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">Actualiser le flux</button>
     </div>
 
-    <div id="mobile-viewport">
+    <div id="main-view">
         <div id="phone">
+            <div class="status-bar">
+                <span>9:41</span>
+                <span>📶 🔋</span>
+            </div>
+
             <header id="app-header">
                 <div class="logo">Swivo</div>
                 <div class="tabs">
-                    <div class="tab active" onclick="loadTab('pourtoi', this)">Pour toi</div>
-                    <div class="tab" onclick="loadTab('suivis', this)">Suivis</div>
-                    <div class="tab" onclick="loadTab('live', this)">Live</div>
+                    <div class="tab active" onclick="changeTab('pourtoi', this)">Pour toi</div>
+                    <div class="tab" onclick="changeTab('suivis', this)">Suivis</div>
+                    <div class="tab" onclick="changeTab('live', this)">Live</div>
                 </div>
             </header>
 
-            <div id="app-content">
+            <div id="app-scroller">
                 </div>
 
-            <nav id="main-nav">
-                <div class="nav-item active" onclick="navigate('home', this)">🏠</div>
-                <div class="nav-item" onclick="navigate('search', this)">🔍</div>
-                <div class="plus-btn" onclick="navigate('add', this)">+</div>
-                <div class="nav-item" onclick="navigate('chat', this)">💬</div>
-                <div class="nav-item" onclick="navigate('profile', this)">👤</div>
+            <nav id="navbar">
+                <div class="nav-icon active" onclick="navTo('home', this)">🏠</div>
+                <div class="nav-icon" onclick="navTo('search', this)">🔍</div>
+                <div class="nav-center" onclick="navTo('add', this)">+</div>
+                <div class="nav-icon" onclick="navTo('chat', this)">💬</div>
+                <div class="nav-icon" onclick="navTo('profile', this)">👤</div>
             </nav>
         </div>
     </div>
 
     <script>
-        // DONNÉES ALÉATOIRES
-        const CONTENT = {
+        const DATA = {
             pourtoi: [
-                { tag: "Finance", title: "Règle du 50/30/20", desc: "50% besoins, 30% envies, 20% épargne. La base pour ne plus être à découvert." },
-                { tag: "Cuisine", title: "Pasta Express", desc: "Moins de 5€, moins de 10 min. Idéal pour les fins de mois." },
-                { tag: "Droit", title: "Loyer trop cher ?", desc: "Vérifie l'encadrement des loyers dans ta ville. Tu pourrais économiser 100€/mois." }
+                { tag: "Finance", title: "Règle du 50/30/20", desc: "La clé pour ne plus jamais finir à découvert. 50% Besoins, 30% Envies, 20% Épargne." },
+                { tag: "Numérique", title: "Mots de passe sécurisés", desc: "Utilise 'Bitwarden' pour ne plus jamais oublier tes accès tout en restant protégé." },
+                { tag: "Santé", title: "Mieux dormir", desc: "Éteins les écrans 30min avant de dormir. Ton cerveau te remerciera demain." },
+                { tag: "Cuisine", title: "Pasta 2 minutes", desc: "Rapide, sain et économique. Le guide ultime du repas étudiant." }
             ],
             live: [
-                { tag: "Direct", title: "On parle d'orientation", desc: "Pose tes questions en direct à @LucasCoach." },
-                { tag: "Gaming", title: "Tournoi Swivo", desc: "On s'affronte sur le serveur n°4 !" }
+                { tag: "Direct", title: "Parlons d'Orientation", desc: "Pose toutes tes questions sur Parcoursup en direct avec @CoachSwivo." },
+                { tag: "Gaming", title: "Tournoi FIFA 24", desc: "Inscriptions ouvertes pour le tournoi de ce soir. 50€ à gagner !" }
+            ],
+            search: [
+                { tag: "Recherche", title: "Trouver un serveur", desc: "Tape le nom d'une ville ou d'une passion pour rejoindre ta communauté." }
+            ],
+            chat: [
+                { tag: "Messages", title: "Lucas", desc: "Hé ! Tu as vu le dernier conseil sur le budget ?" },
+                { tag: "Messages", title: "Support Swivo", desc: "Bienvenue ! Comment peut-on t'aider aujourd'hui ?" }
+            ],
+            profile: [
+                { tag: "Niveau 1", title: "Ton Profil", desc: "Inscrit depuis aujourd'hui. Participe pour gagner des badges !" }
             ]
         };
 
-        // FONCTIONS DE L'INTERFACE
-        function loadTab(type, el) {
+        // --- MOTEUR DE NAVIGATION ---
+        function render(type) {
+            const container = document.getElementById('app-scroller');
+            container.innerHTML = ''; // On vide
+            
+            const items = DATA[type] || DATA.pourtoi;
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header"><span class="chip">${item.tag}</span></div>
+                    <h3>${item.title}</h3>
+                    <p>${item.desc}</p>
+                    <button class="btn-action" onclick="alert('Action enregistrée !')">En savoir plus</button>
+                `;
+                container.appendChild(card);
+            });
+            container.scrollTop = 0;
+        }
+
+        function changeTab(tabName, el) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
+            render(tabName);
+        }
+
+        function navTo(page, el) {
+            document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
+            if(el.classList.contains('nav-icon')) el.classList.add('active');
+            render(page);
+        }
+
+        // --- MOTEUR DE PERSONNALISATION ---
+        function setTheme(c1, c2, el) {
+            document.documentElement.style.setProperty('--primary', c1);
+            document.documentElement.style.setProperty('--secondary', c2);
+            document.documentElement.style.setProperty('--gradient', `linear-gradient(135deg, ${c1} 0%, ${c2} 100%)`);
+            
+            document.querySelectorAll('#config-side .btn-ui').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function setNavPos(pos, el) {
+            const nav = document.getElementById('navbar');
+            const phone = document.getElementById('phone');
+            const header = document.getElementById('app-header');
+
+            document.querySelectorAll('.cfg-section:last-child .btn-ui').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+
+            if(pos === 'top') {
+                phone.insertBefore(nav, header);
+                nav.style.position = "relative";
+                nav.style.bottom = "auto";
+                nav.style.borderTop = "none";
+                nav.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+            } else {
+                phone.appendChild(nav);
+                nav.style.position = "absolute";
+                nav.style.bottom = "0";
+                nav.style.borderBottom = "none";
+                nav.style.borderTop = "1px solid rgba(255,255,255,0.05)";
+            }
+        }
+
+        // Lancement initial
+        window.onload = () => render('pourtoi');
+
+    </script>
+</body>
+</html>
