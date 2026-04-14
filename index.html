@@ -2,82 +2,147 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Swivo App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swivo App — L'expérience Complète</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6c63ff; --secondary: #ff6584; --bg: #080810;
-            --card: #13131e; --text: #f0f0f8; --accent: #43e97b;
-            --gradient: linear-gradient(135deg, #6c63ff, #ff6584);
+            --accent: #6c63ff;
+            --bg: #080810;
+            --panel: #13131e;
+            --text: #f0f0f8;
+            --text-dim: #9090a8;
+            --border: rgba(255,255,255,0.08);
+            --radius: 24px;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'DM Sans', sans-serif; background: #000; color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
 
-        /* --- CONFIGURATEUR --- */
-        #config-drawer {
-            position: fixed; top: 0; left: 0; width: 280px; height: 100%; background: #0f0f1a;
-            z-index: 5000; transform: translateX(-100%); transition: 0.3s ease;
-            padding: 30px; border-right: 1px solid var(--primary);
-        }
-        #config-drawer.open { transform: translateX(0); }
-        .cfg-label { font-family: 'Syne'; font-size: 0.7rem; color: var(--primary); text-transform: uppercase; margin: 15px 0 8px; display: block; }
-        .btn-ui { background: #1a1a2e; border: 1px solid #333; color: white; padding: 10px; border-radius: 12px; width: 100%; margin-bottom: 8px; cursor: pointer; }
-
-        /* --- STRUCTURE --- */
-        #phone {
-            flex: 1; width: 100%; max-width: 450px; margin: 0 auto;
-            position: relative; display: flex; flex-direction: column; background: var(--bg);
+        /* PHONE CONTAINER */
+        .phone {
+            width: 375px;
+            height: 812px;
+            background: var(--bg);
+            border: 8px solid #1a1a1a;
+            border-radius: 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
         }
 
-        header { padding: 50px 20px 10px; text-align: center; }
-        .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .tabs { display: flex; justify-content: center; gap: 20px; margin-top: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .tab { padding-bottom: 10px; font-size: 0.85rem; font-weight: 700; opacity: 0.4; cursor: pointer; }
-        .tab.active { opacity: 1; border-bottom: 3px solid var(--primary); }
+        /* NOTCH */
+        .notch {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 150px; height: 28px;
+            background: #000;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 100;
+        }
 
-        /* CONTENU */
-        #main-content { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-        .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .tag { color: var(--accent); font-size: 0.65rem; font-weight: 800; text-transform: uppercase; }
-        
-        /* MASCOTTE */
-        .mascot-box { background: rgba(108,99,255,0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        /* STATUS BAR */
+        .status-bar {
+            padding: 12px 24px 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 99;
+        }
 
-        /* NAVIGATION */
-        nav { position: absolute; bottom: 0; width: 100%; height: 80px; background: rgba(8,8,16,0.98); display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .nav-icon { font-size: 1.5rem; opacity: 0.3; cursor: pointer; }
-        .nav-icon.active { opacity: 1; color: var(--primary); }
+        /* SCREENS */
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            padding-bottom: 90px;
+            scrollbar-width: none;
+        }
+        .screen::-webkit-scrollbar { display: none; }
+        .screen.active { display: flex; }
 
-        /* BOUTONS */
-        #cfg-btn { position: fixed; right: 20px; bottom: 100px; width: 50px; height: 50px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 4000; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        
-        /* MODAL */
-        #modal { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 6000; padding: 60px 25px; }
-    </style>
-</head>
-<body>
+        /* HEADER */
+        .header {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            z-index: 10;
+        }
+        .header h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; }
+        .header .accent-text { background: linear-gradient(135deg, var(--accent), #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-    <div id="cfg-btn" onclick="toggleCfg()">⚙️</div>
+        /* BOTTOM NAV */
+        .nav-bar {
+            position: absolute;
+            bottom: 0; width: 100%;
+            height: 80px;
+            background: rgba(19, 19, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 15px;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: var(--text-dim); font-size: 0.65rem; cursor: pointer; transition: 0.3s;
+        }
+        .nav-item.active { color: var(--accent); }
+        .nav-item svg { width: 24px; height: 24px; }
+        .plus-btn {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--accent), #ff6584);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.5rem; font-weight: bold;
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+            margin-top: -20px;
+        }
 
-    <div id="config-drawer">
-        <h2 style="font-family:'Syne'; color:white;">Réglages</h2>
-        <span class="cfg-label">Position Nav</span>
-        <button class="btn-ui" onclick="setNav('top')">Haut</button>
-        <button class="btn-ui" onclick="setNav('bottom')">Bas</button>
-        <span class="cfg-label">Couleurs</span>
-        <button class="btn-ui" onclick="setTheme('#6c63ff','#ff6584')">Original</button>
-        <button class="btn-ui" onclick="setTheme('#43e97b','#38f9d7')">Menthe</button>
-        <button class="btn-ui" onclick="toggleCfg()" style="margin-top:20px; background:var(--secondary);">Fermer</button>
-    </div>
+        /* CARDS & CONTENT */
+        .card {
+            background: var(--panel);
+            margin: 10px 16px;
+            border-radius: var(--radius);
+            padding: 16px;
+            border: 1px solid var(--border);
+        }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .post-user { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; }
+        .post-handle { color: var(--text-dim); font-size: 0.75rem; }
+        .post-content { font-size: 0.9rem; line-height: 1.5; color: var(--text-dim); margin-bottom: 12px; }
+        .post-tag { display: inline-block; padding: 4px 10px; border-radius: 10px; background: rgba(108,99,255,0.1); color: var(--accent); font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; }
 
-    <div id="phone">
-        <header id="app-header">
-            <div class="logo">Swivo</div>
-            <div class="tabs">
-                <div class="tab active" onclick="showSection('pourtoi')">Pour toi</div>
-                <div class="tab" onclick="showSection('live')">Live</div>
-            </div>
-        </
+        /* PARAMETERS PANEL */
+        .settings-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin: 20px 20px 10px; }
+        .option-group { display: flex; flex-direction: column; gap: 8px; padding: 0 16px; }
+        .opt-btn {
+            padding: 14px; background: var(--panel); border: 1px solid var(--border);
+            border-radius: 15px; color: var(--text); text-align: left; cursor: pointer;
+            font-family: 'Syne', sans-serif; font-size: 0.85rem; transition: 0.2s;
+        }
+        .opt-btn.active { border-color: var(--accent); background: rgba(108,99,255,0.1); }
+        .color-grid { display: flex; gap: 10px; padding: 10px 20px; flex-wrap: wrap; }
+        .swatch { width: 35px; height: 35px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; }
+        .swatch.active { border-color: white; transform: scale(1.1); }
+
+        /* MASCOT */
+        .swivy-box { display: flex; gap: 12px; margin: 15px 16px; align-items: flex-end; }
+        .swivy-face { width: 45px; height: 45px; background: linear-gradient(135deg, #6c63ff, #ff6584); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 5px 15px rgba(108,99,255,0.4); }
+        .swivy-msg { background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.2); padding: 12px; border-radius: 18px 18px 18px 4px; font-size: 0.8rem; line-height: 1.4; }
+
+        /* LIVE */
+        .live-banner { background: rgba(255,101,132,0
