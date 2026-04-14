@@ -152,14 +152,31 @@
             document.getElementById(stepId).style.display = 'flex';
         }
 
-        function doLogin() {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-pass').value;
+       async function doLogin() {
+    const email = document.getElementById('login-email').value;
+    const pass = document.getElementById('login-pass').value;
+
+    if(!email || !pass) {
+        alert("Erreur : Veuillez remplir tous les champs.");
+        return;
+    }
+
+    // On se connecte avec Supabase
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: pass,
+    });
+
+    if (error) {
+        alert("Erreur de connexion : " + error.message);
+    } else {
+        alert("Connexion réussie !");
+        // On cache l'écran d'auth et on montre le flux
+        showAuthStep('home'); 
+        document.getElementById('main-nav').style.display = 'flex';
+    }
+}
             
-            if(!email || !pass) {
-                alert("Erreur : Veuillez remplir tous les champs.");
-                return;
-            }
 
             // FIREBASE TIP: Ici on appellera firebase.auth().signInWithEmailAndPassword(email, pass)
             document.querySelectorAll('.auth-container').forEach(c => c.style.display = 'none');
