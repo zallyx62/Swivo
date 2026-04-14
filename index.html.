@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Swivo</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6c63ff">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    /* On récupère tout ton CSS ici */
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #080810;
+      color: #f0f0f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 12px 80px;
+      overflow-x: hidden;
+    }
+    /* ... (Le reste de ton style original) ... */
+    .brand h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6c63ff, #ff6584);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card {
+      background: #12121e;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .action-btn {
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: #aaa;
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Ajout pour look "App" */
+    body::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="brand">
+    <h1>Swivo</h1>
+    <p>L'app pour tous, par tous.</p>
+  </div>
+
+  <div class="card" id="card1">
+    <div id="tip-content" style="font-size: 1.1rem; line-height: 1.5; margin-bottom: 20px;">
+      Prêt à découvrir Swivo ? Appuie sur le bouton ci-dessous !
+    </div>
+    <div style="display: flex; justify-content: space-between;">
+        <button class="action-btn" onclick="newTip()">Suivant</button>
+    </div>
+  </div>
+
+  <script>
+    // Enregistrement du Service Worker pour le mode application
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log("Service Worker Enregistré !"))
+        .catch(err => console.log("Erreur SW :", err));
+    }
+
+    // Tes fonctions JS ici
+    function newTip() {
+       const tips = ["Partagez vos idées", "Apprenez chaque jour", "Grandissez ensemble"];
+       document.getElementById('tip-content').innerText = tips[Math.floor(Math.random() * tips.length)];
+    }
+  </script>
+</body>
+</html>
