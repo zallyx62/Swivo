@@ -10,16 +10,16 @@
             --primary: #6c63ff; --secondary: #ff6584; --bg: #080810;
             --card: #13131e; --text: #f0f0f8; --accent: #43e97b;
             --gradient: linear-gradient(135deg, #6c63ff, #ff6584);
-            --font-size: 0.9rem;
+            --font-size: 0.92rem;
         }
 
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'DM Sans', sans-serif; background: #000; color: var(--text); height: 100vh; display: flex; overflow: hidden; }
 
-        /* --- PANNEAU DE PERSONNALISATION (STYLE VIDÉO) --- */
+        /* --- PANNEAU DE PERSONNALISATION --- */
         #config-panel {
             width: 320px; background: #0f0f1a; border-right: 1px solid #222; padding: 25px;
-            display: flex; flex-direction: column; gap: 20px; z-index: 1000; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 20px; z-index: 3000; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .cfg-label { font-family: 'Syne'; font-size: 0.7rem; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; }
         .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -34,191 +34,20 @@
             display: flex; flex-direction: column; overflow: hidden;
         }
 
-        /* HEADER & TABS */
-        header { padding: 45px 20px 10px; text-align: center; }
+        header { padding: 45px 20px 10px; text-align: center; z-index: 10; background: var(--bg); }
         .logo { font-family: 'Syne'; font-size: 2.2rem; font-weight: 800; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .tabs { display: flex; justify-content: center; gap: 25px; margin-top: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .tab { padding-bottom: 8px; font-size: 0.85rem; font-weight: 700; opacity: 0.4; cursor: pointer; }
         .tab.active { opacity: 1; border-bottom: 3px solid var(--primary); }
 
-        /* CONTENT AREA */
-        #main-feed { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; scroll-behavior: smooth; }
+        #main-feed { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
         #main-feed::-webkit-scrollbar { display: none; }
 
-        /* CARTE STYLE SWIVO-CUSTOM-2 */
-        .card { 
-            background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.06); animation: fadeInUp 0.4s ease;
-        }
-        @keyframes fadeInUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        /* CARTES */
+        .card { background: var(--card); border-radius: 24px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.06); }
         .tag { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; color: var(--accent); background: rgba(67,233,123,0.1); padding: 4px 10px; border-radius: 8px; }
         .card h3 { font-family: 'Syne'; font-size: 1.3rem; line-height: 1.2; margin-bottom: 10px; }
-        .card p { font-size: var(--font-size); opacity: 0.7; line-height: 1.5; margin-bottom: 20px; }
-
-        /* ACTIONS CARTES */
-        .card-actions { display: flex; gap: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; }
-        .action-btn { background: none; border: none; color: #888; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: pointer; }
+        .card p { font-size: var(--font-size); opacity: 0.7; line-height: 1.5; }
 
         /* MASCOTTE */
-        .mascot-box { background: rgba(108,99,255,0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-        .mascot-fox { font-size: 2.2rem; }
-
-        /* NAVIGATION BASSE */
-        #navbar {
-            position: absolute; bottom: 0; width: 100%; height: 85px; background: rgba(8,8,16,0.95);
-            display: flex; justify-content: space-around; align-items: center; padding-bottom: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .nav-icon { font-size: 1.5rem; opacity: 0.3; cursor: pointer; transition: 0.3s; }
-        .nav-icon.active { opacity: 1; color: var(--primary); }
-
-        /* DETAIL MODAL */
-        #detail-view { display: none; position: absolute; top:0; left:0; width:100%; height:100%; background: var(--bg); z-index: 2000; padding: 50px 25px; }
-
-        /* RESPONSIVE */
-        @media (max-width: 850px) {
-            #config-panel { position: fixed; bottom: 0; left: 0; width: 100%; height: 40%; border-radius: 30px 30px 0 0; border-right: none; border-top: 2px solid var(--primary); }
-            #phone { width: 100vw; height: 100vh; max-height: none; border: none; border-radius: 0; }
-        }
-    </style>
-</head>
-<body>
-
-    <div id="config-panel">
-        <h2 style="font-family:'Syne'; margin-bottom:10px;">Swivo Studio</h2>
-        
-        <p class="cfg-label">Position du Menu</p>
-        <div class="btn-grid">
-            <button class="btn-ui active" onclick="updateNav('bottom', this)">Bas</button>
-            <button class="btn-ui" onclick="updateNav('top', this)">Haut</button>
-        </div>
-
-        <p class="cfg-label">Thème Couleur</p>
-        <div class="btn-grid">
-            <button class="btn-ui active" onclick="updateColor('#6c63ff', '#ff6584', this)">Original</button>
-            <button class="btn-ui" onclick="updateColor('#43e97b', '#38f9d7', this)">Menthe</button>
-            <button class="btn-ui" onclick="updateColor('#f7971e', '#ffd200', this)">Ambre</button>
-            <button class="btn-ui" onclick="updateColor('#00d2ff', '#3a7bd5', this)">Azur</button>
-        </div>
-
-        <p class="cfg-label">Taille du texte</p>
-        <div class="btn-grid">
-            <button class="btn-ui" onclick="updateFont('0.8rem', this)">Petit</button>
-            <button class="btn-ui active" onclick="updateFont('0.92rem', this)">Normal</button>
-        </div>
-    </div>
-
-    <div id="app-container">
-        <div id="phone">
-            <header id="app-header">
-                <div class="logo">Swivo</div>
-                <div class="tabs">
-                    <div class="tab active" onclick="setFeed('pourtoi', this)">Pour toi</div>
-                    <div class="tab" onclick="setFeed('live', this)">Live</div>
-                    <div class="tab" onclick="setFeed('suivis', this)">Suivis</div>
-                </div>
-            </header>
-
-            <div id="main-feed">
-                </div>
-
-            <nav id="navbar">
-                <div class="nav-icon active" onclick="navTo('home', this)">🏠</div>
-                <div class="nav-icon" onclick="navTo('search', this)">🔍</div>
-                <div style="background:var(--primary); width:45px; height:45px; border-radius:15px; color:white; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.5rem;" onclick="navTo('add', this)">+</div>
-                <div class="nav-icon" onclick="navTo('chat', this)">💬</div>
-                <div class="nav-icon" onclick="navTo('profile', this)">👤</div>
-            </nav>
-
-            <div id="detail-view">
-                <button onclick="closeDetail()" style="background:none; border:none; color:white; font-size:1.2rem; margin-bottom:30px; cursor:pointer;">✕ Retour</button>
-                <div id="detail-content"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const TIPS = [
-            { tag: "Finance", title: "Règle du 50/30/20", desc: "La base pour gérer ton argent sans stress.", detail: "Alloue 50% de tes revenus aux besoins (loyer, courses), 30% aux loisirs, et 20% à l'épargne. Configure un virement automatique le jour de ton salaire pour ne pas y réfléchir !", mascot: "Garde tes pépètes au chaud !" },
-            { tag: "Santé", title: "Écrans et Sommeil", desc: "Comment s'endormir plus vite ?", detail: "La lumière bleue bloque la mélatonine. Active le mode nuit à 20h et pose ton téléphone 30 minutes avant de fermer les yeux pour un sommeil vraiment réparateur.", mascot: "Repose tes petits yeux de renard." },
-            { tag: "Cuisine", title: "Batch Cooking Express", desc: "Mange bien pour moins de 3€ par repas.", detail: "Cuisiner en gros le dimanche permet d'économiser du temps et de l'argent. Mise sur les féculents, les légumes de saison et les épices pour varier les plaisirs.", mascot: "Miam, on va se régaler !" }
-        ];
-
-        function renderFeed(type) {
-            const feed = document.getElementById('main-feed');
-            const dayIndex = new Date().getDay() % TIPS.length;
-            const daily = TIPS[dayIndex];
-
-            if(type === 'pourtoi') {
-                feed.innerHTML = `
-                    <div class="mascot-box">
-                        <div class="mascot-fox">🦊</div>
-                        <div><p style="font-weight:700; font-size:0.85rem;">Swivy dit :</p><p style="font-size:0.75rem; opacity:0.8;">${daily.mascot}</p></div>
-                    </div>
-                    <div class="card" onclick="openDetail('${daily.title}', '${daily.detail}')">
-                        <div class="card-top"><span class="tag">${daily.tag}</span><span style="font-size:0.7rem; opacity:0.4;">Conseil du jour</span></div>
-                        <h3>${daily.title}</h3>
-                        <p>${daily.desc}</p>
-                        <div class="card-actions">
-                            <span class="action-btn">❤️ 1.2k</span>
-                            <span class="action-btn">💬 48</span>
-                            <span class="action-btn">🔖 Sauver</span>
-                        </div>
-                    </div>
-                `;
-            } else if(type === 'chat') {
-                feed.innerHTML = `<h3>Messagerie</h3><div class="card"><h4>Lucas</h4><p>Hé ! Tu as vu le conseil sur le budget ?</p></div>`;
-            } else if(type === 'profile') {
-                feed.innerHTML = `<h3>Mon Profil</h3><div class="card"><p><b>Pseudo :</b> SwivoUser_42</p><p><b>Niveau :</b> 1 (Novice)</p></div><div class="btn-ui" style="text-align:center;">Éditer le profil</div>`;
-            } else {
-                feed.innerHTML = `<div class="card"><h3>Bientôt...</h3><p>La section ${type} arrive très vite !</p></div>`;
-            }
-        }
-
-        // --- INTERACTIONS ---
-        function openDetail(title, text) {
-            document.getElementById('detail-view').style.display = 'block';
-            document.getElementById('detail-content').innerHTML = `<h2 style="font-family:'Syne'; font-size:1.8rem; margin-bottom:20px;">${title}</h2><p style="line-height:1.6; opacity:0.8;">${text}</p>`;
-        }
-        function closeDetail() { document.getElementById('detail-view').style.display = 'none'; }
-
-        function setFeed(type, el) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-            renderFeed('pourtoi');
-        }
-
-        function navTo(page, el) {
-            document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
-            if(el.classList.contains('nav-icon')) el.classList.add('active');
-            renderFeed(page);
-        }
-
-        // --- PERSONNALISATION ---
-        function updateColor(c1, c2, el) {
-            document.documentElement.style.setProperty('--primary', c1);
-            document.documentElement.style.setProperty('--gradient', `linear-gradient(135deg, ${c1}, ${c2})`);
-            document.querySelectorAll('#config-panel .btn-ui').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function updateNav(pos, el) {
-            const nav = document.getElementById('navbar');
-            const phone = document.getElementById('phone');
-            if(pos === 'top') { phone.prepend(nav); nav.style.position='relative'; nav.style.borderBottom='1px solid rgba(255,255,255,0.05)'; nav.style.borderTop='none'; }
-            else { phone.append(nav); nav.style.position='absolute'; nav.style.borderTop='1px solid rgba(255,255,255,0.05)'; nav.style.borderBottom='none'; }
-            document.querySelectorAll('.btn-ui').forEach(b => b.classList.remove('active')); el.classList.add('active');
-        }
-
-        function updateFont(size, el) {
-            document.documentElement.style.setProperty('--font-size', size);
-            el.parentNode.querySelectorAll('.btn-ui').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        window.onload = () => renderFeed('pourtoi');
-    </script>
-</body>
-</html>
+        .mascot-box { background: rgba(108,99,255,0.1); border: 1px solid var(--primary); border-radius: 20px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom:
