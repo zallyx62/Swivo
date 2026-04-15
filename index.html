@@ -290,6 +290,58 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .support-text{font-size:.68rem;color:var(--muted);line-height:1.4}
 .support-btn{padding:6px 12px;border-radius:8px;border:none;font-size:.68rem;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;flex-shrink:0}
 .ad-slot{margin:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;min-height:70px;display:flex;align-items:center;justify-content:center}
+
+/* COMMENTS SECTION */
+.comments-section{padding:0 14px 10px;display:none}
+.comments-section.open{display:block}
+.comment-input-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.comment-input{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:20px;padding:8px 14px;color:var(--text);font-size:.82rem;font-family:'DM Sans',sans-serif;outline:none}
+.comment-input:focus{border-color:var(--accent)}
+.comment-send{width:32px;height:32px;border-radius:50%;background:var(--accent);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:.9rem}
+.comment-item{display:flex;gap:8px;margin-bottom:8px;animation:fadeUp .25s ease both}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+.comment-bubble{background:var(--surface2);border-radius:0 12px 12px 12px;padding:7px 11px;font-size:.8rem;line-height:1.4;flex:1}
+.comment-author{font-family:'Syne',sans-serif;font-weight:700;font-size:.7rem;color:var(--accent);margin-bottom:2px}
+.comment-time{font-size:.6rem;color:var(--muted);margin-top:3px}
+.comment-count{font-size:.72rem;color:var(--muted);padding:0 14px 6px}
+
+/* MEDIA UPLOAD */
+.media-preview{width:100%;border-radius:12px;overflow:hidden;background:var(--surface2);margin-bottom:10px;display:none;position:relative}
+.media-preview img,.media-preview video{width:100%;display:block;max-height:300px;object-fit:cover}
+.media-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+
+/* FAVORITES REMINDER */
+.fav-reminder{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:14px;padding:12px 16px;font-size:.82rem;max-width:340px;width:90%;z-index:998;box-shadow:0 4px 24px rgba(108,99,255,.4);opacity:0;pointer-events:none;transition:all .4s;text-align:center;line-height:1.4}
+.fav-reminder.show{opacity:1;pointer-events:all}
+.fav-reminder-close{display:inline-block;margin-top:6px;font-size:.72rem;opacity:.8;cursor:pointer}
+
+/* STORY VIEWER */
+.story-viewer{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.story-progress{position:absolute;top:0;left:0;right:0;padding:12px 14px;display:flex;gap:4px;z-index:201}
+.story-bar{flex:1;height:3px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden}
+.story-bar-fill{height:100%;background:#fff;border-radius:2px;transition:width linear}
+.story-content{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem}
+.story-close{position:absolute;top:16px;right:14px;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;z-index:202}
+.story-user{position:absolute;top:28px;left:14px;display:flex;align-items:center;gap:8px;z-index:202}
+.story-user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;background:var(--surface2)}
+.story-user-name{color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+
+/* LIVE ROOM */
+.live-room{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column}
+.live-video{flex:1;background:#111;display:flex;align-items:center;justify-content:center;position:relative}
+.live-overlay{position:absolute;top:0;left:0;right:0;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.live-chat{height:200px;overflow-y:auto;padding:8px 14px;scrollbar-width:none}
+.live-chat::-webkit-scrollbar{display:none}
+.live-msg{font-size:.78rem;margin-bottom:4px;color:rgba(255,255,255,.85)}
+.live-msg strong{color:#fff}
+.live-input-row{display:flex;gap:8px;padding:8px 12px 24px}
+.live-input{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 14px;color:#fff;font-size:.82rem;outline:none;font-family:'DM Sans',sans-serif}
+.live-input::placeholder{color:rgba(255,255,255,.4)}
+
+/* SECURITY */
+.security-lock{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;display:none}
+.security-lock.show{display:flex}
+
 </style>
 </head>
 <body>
@@ -419,14 +471,14 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
     <!-- STORIES -->
     <div class="stories-row">
-      <div class="story-item" onclick="showPage('page-create')"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
-      <div class="story-item"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
-      <div class="story-item"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
+      <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
+      <div class="story-item" onclick="openStory(0)"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
+      <div class="story-item" onclick="openStory(1)"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
       <div class="story-item"><div class="story-ring"><div class="story-avatar">👨</div></div><div class="story-name">Théo</div></div>
       <div class="story-item"><div class="story-ring"><div class="story-avatar">👧</div></div><div class="story-name">Léa</div></div>
     </div>
     <!-- LIVE -->
-    <div class="live-banner" onclick="showToast('🎥 Live en cours...')">
+    <div class="live-banner" onclick="openLive()">
       <div class="live-dot"></div>
       <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem">💬 Live — Comprendre son premier loyer</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px">@PaulineAdulte · 1 204 spectateurs</div></div>
       <div class="live-badge">LIVE</div>
@@ -450,9 +502,18 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <div class="tip-box"><div class="tip-title" id="tip-title">Chargement...</div><div class="tip-text" id="tip-text"></div></div>
       <div class="card-actions">
         <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="tip-likes">2.4k</span></button>
-        <button class="act-btn" onclick="showToast('💬 Commentaires bientôt')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>184</button>
+        <button class="act-btn" onclick="toggleComments('comments-tip')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id='cmt-tip'>0</span></button>
         <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
-        <button class="act-btn" onclick="showToast('🔖 Sauvegardé !')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Sauver</button>
+        <button class="act-btn" onclick="saveFavorite('conseil',document.getElementById('tip-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
+      </div>
+      <div class="comments-section" id="comments-tip">
+        <div class="comment-count" id="cmt-count-tip">0 commentaire</div>
+        <div class="comment-input-row">
+          <div class="comment-avatar" id="my-comment-avatar">🦊</div>
+          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')addComment('tip',this)">
+          <button class="comment-send" onclick="addComment('tip',this.previousElementSibling)">➤</button>
+        </div>
+        <div id="comments-tip-list"></div>
       </div>
     </div>
     <!-- VOTE -->
@@ -477,7 +538,15 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <div class="card fade-up">
       <div class="card-header"><div class="card-avatar" style="background:linear-gradient(135deg,#f7971e,#ffd200)">💰</div><div class="card-meta"><div class="card-name">Swivo Budget</div><div><span class="tag-pill" style="background:rgba(247,151,30,.12);color:#f7971e">Abonnements</span></div></div><button class="act-btn" style="flex:0;font-size:.65rem" onclick="openModal('modal-report')">⚑</button></div>
       <div class="card-body"><strong>💡 Abonnements oubliés ?</strong><br><br>Netflix + Spotify + Disney+ = facilement 40-50€/mois. Fais le bilan et résilie ce que tu n'utilises plus. Argent direct dans ta poche. 💸</div>
-      <div class="card-actions"><button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>1.8k</button><button class="act-btn" onclick="shareContent()">📤</button></div>
+      <div class="card-actions"><button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>1.8k</button><button class="act-btn" onclick="toggleComments('comments-budget')">💬 <span id="cmt-budget">0</span></button><button class="act-btn" onclick="saveFavorite('conseil_budget','💰 Abonnements oubliés')">🔖</button><button class="act-btn" onclick="shareContent()">📤</button></div>
+      <div class="comments-section" id="comments-budget">
+        <div class="comment-input-row">
+          <div class="comment-avatar">🦊</div>
+          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')addComment('budget',this)">
+          <button class="comment-send" onclick="addComment('budget',this.previousElementSibling)">➤</button>
+        </div>
+        <div id="comments-budget-list"></div>
+      </div>
     </div>
     <!-- SWIVY MASCOT -->
     <div style="margin:8px 12px;display:flex;gap:10px;align-items:flex-end">
@@ -581,15 +650,12 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <div class="bubble-wrap out"><div class="bubble bubble-out">Sérieux ?! Je vais faire pareil<div class="bubble-time">14:32</div></div><div class="bubble-seen">✓✓ Lu</div></div>
   </div>
   <div class="sticker-panel" id="sticker-panel">
-    <!-- Stickers Fox -->
     <div class="sticker" onclick="sendSticker('🦊😊','Swivy content')" title="Content"><svg viewBox="0 0 90 90" fill="none"><polygon points="22,24 30,6 40,22" fill="#ff7b3a"/><polygon points="50,22 60,6 68,24" fill="#ff7b3a"/><rect x="20" y="20" width="50" height="34" rx="14" fill="#ff7b3a"/><ellipse cx="45" cy="44" rx="13" ry="9" fill="#fff5f0"/><ellipse cx="45" cy="39" rx="4" ry="3" fill="#1a1a2e"/><path d="M 31 30 Q 36 26 41 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><path d="M 49 30 Q 54 26 59 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><rect x="49" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 38 46 Q 45 53 52 46" stroke="#cc4a00" stroke-width="2" fill="none" stroke-linecap="round"/><text x="58" y="20" font-size="14">⭐</text></svg></div>
     <div class="sticker" onclick="sendSticker('🦊😂','Swivy mort de rire')" title="Rire"><svg viewBox="0 0 90 90" fill="none"><polygon points="22,24 30,6 40,22" fill="#ff7b3a"/><polygon points="50,22 60,6 68,24" fill="#ff7b3a"/><rect x="20" y="20" width="50" height="34" rx="14" fill="#ff7b3a"/><ellipse cx="45" cy="44" rx="13" ry="9" fill="#fff5f0"/><ellipse cx="45" cy="39" rx="4" ry="3" fill="#1a1a2e"/><path d="M 31 29 Q 36 25 41 29" stroke="#1a1a2e" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M 49 29 Q 54 25 59 29" stroke="#1a1a2e" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M 37 47 Q 45 56 53 47" stroke="#cc4a00" stroke-width="2" fill="#fde68a" stroke-linecap="round"/><text x="4" y="22" font-size="10">😂</text><text x="68" y="22" font-size="10">😂</text></svg></div>
     <div class="sticker" onclick="sendSticker('🦊❤️','Swivy amour')" title="Amour"><svg viewBox="0 0 90 90" fill="none"><polygon points="22,24 30,6 40,22" fill="#ff7b3a"/><polygon points="50,22 60,6 68,24" fill="#ff7b3a"/><rect x="20" y="20" width="50" height="34" rx="14" fill="#ff7b3a"/><ellipse cx="45" cy="44" rx="13" ry="9" fill="#fff5f0"/><ellipse cx="45" cy="39" rx="4" ry="3" fill="#1a1a2e"/><path d="M 31 30 Q 36 26 41 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="30" width="10" height="6" rx="3" fill="#1a1a2e"/><path d="M 49 30 Q 54 26 59 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="49" y="30" width="10" height="6" rx="3" fill="#1a1a2e"/><text x="32" y="53" font-size="12" fill="#ff6584">♥</text><text x="52" y="20" font-size="14" fill="#ff6584">♥</text><text x="14" y="18" font-size="10" fill="#ff6584">♥</text></svg></div>
     <div class="sticker" onclick="sendSticker('🦊😢','Swivy triste')" title="Triste"><svg viewBox="0 0 90 90" fill="none"><polygon points="22,24 30,6 40,22" fill="#ff7b3a"/><polygon points="50,22 60,6 68,24" fill="#ff7b3a"/><rect x="20" y="20" width="50" height="34" rx="14" fill="#ff7b3a"/><ellipse cx="45" cy="44" rx="13" ry="9" fill="#fff5f0"/><ellipse cx="45" cy="39" rx="4" ry="3" fill="#1a1a2e"/><path d="M 33 34 Q 36 30 39 34" stroke="#1a1a2e" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 51 34 Q 54 30 57 34" stroke="#1a1a2e" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M 38 49 Q 45 44 52 49" stroke="#cc4a00" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="36" y1="36" x2="34" y2="44" stroke="#4facfe" stroke-width="1.5" opacity=".7"/><line x1="54" y1="36" x2="56" y2="44" stroke="#4facfe" stroke-width="1.5" opacity=".7"/></svg></div>
-    <!-- Cat stickers -->
     <div class="sticker" onclick="sendSticker('🐱😊','Katia content')" title="Chat content"><svg viewBox="0 0 90 90" fill="none"><polygon points="20,28 24,6 36,24" fill="#a78bfa"/><polygon points="54,24 66,6 70,28" fill="#a78bfa"/><rect x="18" y="22" width="54" height="36" rx="16" fill="#a78bfa"/><ellipse cx="45" cy="46" rx="14" ry="10" fill="#ede9fe"/><ellipse cx="45" cy="40" rx="4" ry="3" fill="#1a1a2e"/><path d="M 31 33 Q 36 29 41 33" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="33" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 49 33 Q 54 29 59 33" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="49" y="33" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 38 49 Q 45 55 52 49" stroke="#7c3aed" stroke-width="2" fill="none" stroke-linecap="round"/><text x="58" y="20" font-size="14">✨</text></svg></div>
     <div class="sticker" onclick="sendSticker('🐱❤️','Katia amour')" title="Chat amour"><svg viewBox="0 0 90 90" fill="none"><polygon points="20,28 24,6 36,24" fill="#a78bfa"/><polygon points="54,24 66,6 70,28" fill="#a78bfa"/><rect x="18" y="22" width="54" height="36" rx="16" fill="#a78bfa"/><ellipse cx="45" cy="46" rx="14" ry="10" fill="#ede9fe"/><ellipse cx="45" cy="40" rx="4" ry="3" fill="#1a1a2e"/><path d="M 31 33 Q 36 29 41 33" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="33" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 49 33 Q 54 29 59 33" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="49" y="33" width="10" height="7" rx="4" fill="#1a1a2e"/><text x="30" y="56" font-size="14" fill="#ff6584">♥</text><text x="52" y="18" font-size="14" fill="#ff6584">♥</text></svg></div>
-    <!-- Dog stickers -->
     <div class="sticker" onclick="sendSticker('🐶😊','Waf content')" title="Chien content"><svg viewBox="0 0 90 90" fill="none"><ellipse cx="18" cy="30" rx="10" ry="14" fill="#f59e0b" transform="rotate(15,18,30)"/><ellipse cx="72" cy="30" rx="10" ry="14" fill="#f59e0b" transform="rotate(-15,72,30)"/><rect x="18" y="18" width="54" height="38" rx="18" fill="#f59e0b"/><ellipse cx="45" cy="46" rx="16" ry="11" fill="#fde68a"/><ellipse cx="45" cy="40" rx="5" ry="4" fill="#1a1a2e"/><path d="M 31 30 Q 36 26 41 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 49 30 Q 54 26 59 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="49" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><ellipse cx="45" cy="51" rx="6" ry="4" fill="#f97316"/><path d="M 40 53 Q 45 59 50 53" stroke="#c2410c" stroke-width="1.5" fill="none" stroke-linecap="round"/><text x="58" y="20" font-size="14">🌟</text></svg></div>
     <div class="sticker" onclick="sendSticker('🐶❤️','Waf amour')" title="Chien amour"><svg viewBox="0 0 90 90" fill="none"><ellipse cx="18" cy="30" rx="10" ry="14" fill="#f59e0b" transform="rotate(15,18,30)"/><ellipse cx="72" cy="30" rx="10" ry="14" fill="#f59e0b" transform="rotate(-15,72,30)"/><rect x="18" y="18" width="54" height="38" rx="18" fill="#f59e0b"/><ellipse cx="45" cy="46" rx="16" ry="11" fill="#fde68a"/><ellipse cx="45" cy="40" rx="5" ry="4" fill="#1a1a2e"/><path d="M 31 30 Q 36 26 41 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="31" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><path d="M 49 30 Q 54 26 59 30" stroke="#1a1a2e" stroke-width="2" fill="none"/><rect x="49" y="30" width="10" height="7" rx="4" fill="#1a1a2e"/><text x="30" y="56" font-size="14" fill="#ff6584">♥</text><text x="52" y="18" font-size="14" fill="#ff6584">♥</text></svg></div>
   </div>
@@ -621,7 +687,6 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
         <span id="team-badge" style="font-size:.7rem;background:rgba(255,123,58,.15);color:#ff7b3a;padding:2px 8px;border-radius:10px;font-weight:700">🦊 Team Renard</span>
       </div>
       <div class="profile-bio" id="profile-bio">Membre de Swivo 🦊 Par tous, pour tous.</div>
-      <!-- MODE SELECTOR -->
       <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
         <button style="padding:5px 10px;border-radius:20px;border:1.5px solid #43e97b;background:rgba(67,233,123,.1);color:#43e97b;font-size:.68rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer" onclick="setMode('active',this)">🟢 Actif</button>
         <button style="padding:5px 10px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.68rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer" onclick="setMode('inactive',this)">⚫ Inactif</button>
@@ -669,14 +734,14 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <button style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer" onclick="setPostType(this)">🗳️ Vote</button>
       <button style="flex-shrink:0;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer" onclick="setPostType(this)">🔴 Live</button>
     </div>
-    <!-- IA BADGE -->
     <div style="display:flex;gap:8px;margin-bottom:12px">
       <button id="ai-no" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--accent);background:rgba(108,99,255,.1);color:var(--text);font-size:.8rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer" onclick="setAI(false)">✍️ Fait par moi</button>
       <button id="ai-yes" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.8rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer" onclick="setAI(true)">🤖 Fait avec IA</button>
     </div>
+    <div class="media-preview" id="post-media-preview"><div id="post-media-inner"></div><button class="media-remove" onclick="removeMedia()">✕</button></div>
     <textarea id="post-content" style="width:100%;min-height:110px;background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px;color:var(--text);font-size:.9rem;font-family:'DM Sans',sans-serif;outline:none;resize:none;line-height:1.5" placeholder="Quoi de neuf ? Partage quelque chose d'utile..."></textarea>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      <button style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="showToast('📸 Image')">📸 Image</button>
+      <button style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="uploadMedia('image')">📸 Image</button>
       <button style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="openModal('modal-category')">🏷️ Catégorie</button>
       <button style="display:flex;align-items:center;gap:5px;padding:7px 12px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.75rem;cursor:pointer;font-family:'DM Sans',sans-serif" onclick="showToast('👥 @mention')">👥 Mentionner</button>
     </div>
@@ -686,7 +751,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 
 <!-- NOTEPAD -->
 <div class="page" id="page-notepad">
-  <div class="topbar"><button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Notes 📝 <span style="font-size:.65rem;color:var(--accent3);font-weight:400">Privé & chiffré</span></div><button class="icon-btn" onclick="newNote()">＋</button></div>
+  <div class="topbar"><button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Notes 📝 <span style="font-size:.65rem;color:var(--accent3);font-weight:400">Privé &amp; chiffré</span></div><button class="icon-btn" onclick="newNote()">＋</button></div>
   <div class="scroll" style="padding:12px;padding-bottom:40px">
     <div id="notes-list"></div>
     <div id="no-notes" style="text-align:center;padding:40px 20px;color:var(--muted);font-size:.85rem">📝 Aucune note<br><small>Appuie sur + pour créer</small></div>
@@ -891,6 +956,42 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+<!-- FAV REMINDER -->
+<div class="fav-reminder" id="fav-reminder">
+  <div class="fav-reminder-text">💡 Rappel de ton favori !</div>
+  <div class="fav-reminder-close" onclick="document.getElementById('fav-reminder').classList.remove('show')">✕ Fermer</div>
+</div>
+
+<!-- STORY VIEWER -->
+<div id="story-viewer" style="display:none;position:fixed;inset:0;background:#000;z-index:200;flex-direction:column;align-items:center;justify-content:center">
+  <div class="story-progress"><div class="story-bar"><div class="story-bar-fill" id="story-bar-fill" style="width:0%"></div></div></div>
+  <div class="story-user">
+    <div class="story-user-avatar" id="story-user-avatar">👩</div>
+    <div class="story-user-name" id="story-user-name">@Pauline</div>
+  </div>
+  <button class="story-close" onclick="closeStory()">✕</button>
+  <div id="story-content-display" style="font-size:5rem">☀️</div>
+  <div style="color:rgba(255,255,255,.7);font-size:.85rem;margin-top:12px" id="story-text-display"></div>
+  <div style="position:absolute;left:0;top:0;width:35%;height:100%;cursor:pointer" onclick="currentStory--;if(currentStory<0)currentStory=0;renderStory()"></div>
+  <div style="position:absolute;right:0;top:0;width:35%;height:100%;cursor:pointer" onclick="nextStory()"></div>
+</div>
+
+<!-- LIVE ROOM -->
+<div id="live-room" style="display:none;position:fixed;inset:0;background:#000;z-index:200;flex-direction:column">
+  <div style="position:absolute;top:0;left:0;right:0;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;z-index:201;background:linear-gradient(180deg,rgba(0,0,0,.7),transparent)">
+    <div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:#ff6584;border-radius:50%;animation:pulse 1.5s infinite"></div><span style="color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem">LIVE</span><span style="color:rgba(255,255,255,.7);font-size:.75rem">· 1.2k spectateurs</span></div>
+    <button onclick="closeLive()" style="background:rgba(255,255,255,.15);border:none;color:#fff;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.8rem">✕ Quitter</button>
+  </div>
+  <div style="flex:1;background:linear-gradient(135deg,#1a1a2e,#0d0d1a);display:flex;align-items:center;justify-content:center;font-size:4rem">🎥</div>
+  <div style="background:rgba(0,0,0,.8);padding-bottom:env(safe-area-inset-bottom)">
+    <div id="live-chat-messages" style="height:160px;overflow-y:auto;padding:8px 14px;scrollbar-width:none"></div>
+    <div style="display:flex;gap:8px;padding:8px 12px 20px">
+      <input id="live-input" class="live-input" placeholder="Envoie un message..." onkeydown="if(event.key==='Enter')sendLiveMessage()">
+      <button onclick="sendLiveMessage()" style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;cursor:pointer;flex-shrink:0;font-size:1rem">➤</button>
+      <button onclick="showToast('❤️')" style="width:38px;height:38px;border-radius:50%;background:rgba(255,101,132,.2);border:none;color:#ff6584;cursor:pointer;flex-shrink:0;font-size:1.1rem">❤️</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -898,7 +999,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 // CONFIG SUPABASE
 // =============================================
 const SUPABASE_URL = 'METS_TON_URL_ICI';
-const SUPABASE_KEY = 'METS_TA_CLÉ_ICI';
+const SUPABASE_KEY = 'METS_TA_CLE_ICI';
 let sb = null;
 try { if(SUPABASE_URL !== 'METS_TON_URL_ICI') sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } catch(e){}
 
@@ -965,25 +1066,18 @@ function applyTeam(team) {
   userTeam = team;
   localStorage.setItem('swivo_team', team);
   const info = TEAM_INFO[team];
-  // Mascot in feed
   const fm = document.getElementById('feed-mascot-svg');
   if(fm) fm.innerHTML = MASCOTS[team];
-  // Mascot name
   const mn = document.getElementById('mascot-name');
   if(mn) mn.textContent = info.mascotName + ' · Mascotte Swivo';
-  // Profile pic
   const pp = document.getElementById('profile-mascot-svg');
   if(pp) pp.innerHTML = MASCOTS[team];
-  // Team badge
   const tb = document.getElementById('team-badge');
   if(tb){ tb.textContent = info.name; tb.style.color = info.color; tb.style.background = info.color+'22'; }
-  // Login mascot
   const lm = document.getElementById('login-mascot');
   if(lm) lm.textContent = info.emoji;
-  // Logo gradient
   const feedLogo = document.getElementById('feed-logo');
   if(feedLogo) feedLogo.style.background = `linear-gradient(135deg,${info.color},#ff6584)`;
-  // Settings
   const cs = document.getElementById('current-team-settings');
   if(cs) cs.textContent = info.name;
 }
@@ -1138,7 +1232,6 @@ function initDailyTip() {
     localStorage.setItem('swivo_tip_date', today);
   }
   renderTip();
-  // Date display
   const d = new Date();
   const el = document.getElementById('tip-date');
   if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
@@ -1194,25 +1287,36 @@ function setWeatherFallback(){
 // =============================================
 // BATTERY
 // =============================================
+let batteryObj = null;
 async function initBattery() {
   try {
     if(!navigator.getBattery){setBatteryFallback();return;}
-    const bat = await navigator.getBattery();
+    batteryObj = await navigator.getBattery();
     function updateBat(){
-      const pct = Math.round(bat.level*100);
+      const pct = Math.round(batteryObj.level*100);
       const fill = document.getElementById('battery-fill');
       const pctEl = document.getElementById('battery-pct');
-      if(fill) fill.style.width = pct+'%';
-      if(fill) fill.style.background = pct>20?'#43e97b':'#ff6584';
-      if(pctEl) pctEl.textContent = pct+'%';
+      if(fill){fill.style.width=pct+'%';fill.style.background=pct>20?'#43e97b':'#ff6584';}
+      if(pctEl){
+        const charging = batteryObj.charging ? '⚡' : '';
+        pctEl.textContent = charging + pct + '%';
+      }
     }
     updateBat();
-    bat.addEventListener('levelchange',updateBat);
+    batteryObj.addEventListener('levelchange', updateBat);
+    batteryObj.addEventListener('chargingchange', updateBat);
+    setInterval(updateBat, 30000);
   } catch(e){setBatteryFallback();}
 }
 function setBatteryFallback(){
   const el=document.getElementById('battery-pct');
   if(el)el.textContent='--';
+  setInterval(()=>{
+    if(navigator.battery){
+      const pct=Math.round(navigator.battery.level*100);
+      if(el)el.textContent=pct+'%';
+    }
+  },30000);
 }
 
 // =============================================
@@ -1404,7 +1508,7 @@ function submitReport(){
 }
 
 // =============================================
-// NOTEPAD (chiffré localement)
+// NOTEPAD
 // =============================================
 function renderNotes(){
   const list=document.getElementById('notes-list');
@@ -1515,6 +1619,251 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2500);
 }
+
+// =============================================
+// COMMENTS SYSTEM
+// =============================================
+const commentsData = {};
+
+function toggleComments(id) {
+  const section = document.getElementById(id);
+  if(!section) return;
+  section.classList.toggle('open');
+  if(section.classList.contains('open')) {
+    section.querySelector('.comment-input')?.focus();
+  }
+}
+
+function addComment(postId, inputEl) {
+  const text = inputEl.value.trim();
+  if(!text) return;
+  const pseudo = currentUser?.user_metadata?.pseudo || currentUser?.email?.split('@')[0] || 'Toi';
+  const team = TEAM_INFO[userTeam];
+  const emoji = team ? team.emoji : '🦊';
+  if(!commentsData[postId]) commentsData[postId] = [];
+  commentsData[postId].push({pseudo, emoji, text, time: new Date()});
+  inputEl.value = '';
+  renderComments(postId);
+  const cnt = document.getElementById('cmt-'+postId);
+  if(cnt) cnt.textContent = commentsData[postId].length;
+  const cntFull = document.getElementById('cmt-count-'+postId);
+  const n = commentsData[postId].length;
+  if(cntFull) cntFull.textContent = n + ' commentaire' + (n>1?'s':'');
+  showToast('💬 Commentaire publié !');
+}
+
+function renderComments(postId) {
+  const list = document.getElementById('comments-'+postId+'-list');
+  if(!list) return;
+  const comments = commentsData[postId] || [];
+  list.innerHTML = comments.slice(-10).map(c => {
+    const time = c.time.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+    return `<div class="comment-item">
+      <div class="comment-avatar">${c.emoji}</div>
+      <div class="comment-bubble">
+        <div class="comment-author">@${c.pseudo}</div>
+        ${c.text}
+        <div class="comment-time">${time}</div>
+      </div>
+    </div>`;
+  }).join('');
+  list.scrollTop = list.scrollHeight;
+}
+
+// =============================================
+// FAVORITES WITH SMART REMINDERS
+// =============================================
+let favorites = JSON.parse(localStorage.getItem('swivo_favorites') || '[]');
+
+function saveFavorite(type, title) {
+  const fav = {type, title, date: Date.now(), reminded: false};
+  favorites.push(fav);
+  localStorage.setItem('swivo_favorites', JSON.stringify(favorites));
+  showToast('🔖 Ajouté aux favoris !');
+  const delay = 30000 + Math.random() * 60000;
+  setTimeout(() => showFavoriteReminder(fav), delay);
+}
+
+function showFavoriteReminder(fav) {
+  const reminder = document.getElementById('fav-reminder');
+  if(!reminder) return;
+  const msgs = {
+    conseil: `💡 Tu te souviens ? Tu as mis en favoris :\n"${fav.title.substring(0,60)}..."\nL\'as-tu appliqué ?`,
+    conseil_budget: `💰 Rappel favori :\n"${fav.title}"\nN\'oublie pas de vérifier tes abonnements !`,
+    recette: `🍳 Tu as mis en favoris une recette !\n"${fav.title}" — Tu la cuisines ce soir ?`,
+    default: `🔖 Rappel : "${fav.title.substring(0,50)}..."`
+  };
+  const msg = msgs[fav.type] || msgs.default;
+  reminder.querySelector('.fav-reminder-text').textContent = msg;
+  reminder.classList.add('show');
+  setTimeout(() => reminder.classList.remove('show'), 6000);
+}
+
+// =============================================
+// STORIES SYSTEM
+// =============================================
+const storiesData = [
+  {user:'Pauline', emoji:'👩', content:'☀️', text:'Belle journée !'},
+  {user:'Kevin', emoji:'🧑', content:'🎮', text:'Gaming time !'},
+  {user:'Théo', emoji:'👨', content:'💡', text:'Conseil du jour appliqué !'},
+];
+let currentStory = 0;
+let storyTimer = null;
+
+function openStory(idx) {
+  currentStory = idx;
+  const viewer = document.getElementById('story-viewer');
+  viewer.style.display = 'flex';
+  renderStory();
+}
+
+function renderStory() {
+  const s = storiesData[currentStory];
+  if(!s) { closeStory(); return; }
+  const content = document.getElementById('story-content-display');
+  const name = document.getElementById('story-user-name');
+  const avatar = document.getElementById('story-user-avatar');
+  const fill = document.getElementById('story-bar-fill');
+  if(content) content.textContent = s.content;
+  if(name) name.textContent = '@'+s.user;
+  if(avatar) avatar.textContent = s.emoji;
+  if(fill) { fill.style.width='0%'; setTimeout(()=>{fill.style.transition='width 5s linear';fill.style.width='100%';},50); }
+  clearTimeout(storyTimer);
+  storyTimer = setTimeout(nextStory, 5000);
+}
+
+function nextStory() {
+  currentStory++;
+  if(currentStory >= storiesData.length) closeStory();
+  else renderStory();
+}
+
+function closeStory() {
+  document.getElementById('story-viewer').style.display='none';
+  clearTimeout(storyTimer);
+}
+
+function openMyStory() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*,video/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    showToast('📸 Story publiée ! (visible 24h)');
+    storiesData.unshift({user: currentUser?.user_metadata?.pseudo||'Moi', emoji: TEAM_INFO[userTeam]?.emoji||'🦊', content:'📷', text:'Ma story'});
+  };
+  input.click();
+}
+
+// =============================================
+// LIVE SYSTEM
+// =============================================
+let liveInterval = null;
+// ⚠️ CORRECTION ICI : apostrophe dans "J'adore" échappée avec \"
+const liveMessages = [
+  {user:'Pauline', msg:'Super live ! 🔥'},
+  {user:'Kevin_xX', msg:'Trop bien !'},
+  {user:'Léa', msg:"J'adore Swivo 🦊"},
+  {user:'Théo', msg:'👍👍👍'},
+  {user:'Marine', msg:'Merci pour les infos !'},
+  {user:'Alex', msg:'Première fois ici, waou !'},
+];
+
+function openLive() {
+  document.getElementById('live-room').style.display='flex';
+  simulateLiveChat();
+}
+
+function closeLive() {
+  document.getElementById('live-room').style.display='none';
+  clearInterval(liveInterval);
+}
+
+function simulateLiveChat() {
+  const chat = document.getElementById('live-chat-messages');
+  let i = 0;
+  liveInterval = setInterval(() => {
+    const msg = liveMessages[i % liveMessages.length];
+    if(chat) {
+      const div = document.createElement('div');
+      div.className = 'live-msg';
+      div.innerHTML = `<strong>@${msg.user}</strong> ${msg.msg}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    i++;
+  }, 2000);
+}
+
+function sendLiveMessage() {
+  const inp = document.getElementById('live-input');
+  if(!inp?.value.trim()) return;
+  const chat = document.getElementById('live-chat-messages');
+  const pseudo = currentUser?.user_metadata?.pseudo || 'Moi';
+  if(chat) {
+    const div = document.createElement('div');
+    div.className = 'live-msg';
+    div.innerHTML = `<strong style="color:var(--accent)">@${pseudo} (toi)</strong> ${inp.value}`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+  inp.value = '';
+}
+
+// =============================================
+// MEDIA UPLOAD IN POSTS
+// =============================================
+function uploadMedia(type) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = type === 'video' ? 'video/*' : 'image/*';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const preview = document.getElementById('post-media-preview');
+      const inner = document.getElementById('post-media-inner');
+      if(!preview || !inner) return;
+      preview.style.display = 'block';
+      if(type === 'video') {
+        inner.innerHTML = `<video src="${ev.target.result}" controls style="width:100%;border-radius:12px;max-height:280px"></video>`;
+      } else {
+        inner.innerHTML = `<img src="${ev.target.result}" style="width:100%;border-radius:12px;max-height:280px;object-fit:cover">`;
+      }
+      showToast(type==='video'?'🎥 Vidéo ajoutée !':'📸 Image ajoutée !');
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function removeMedia() {
+  const preview = document.getElementById('post-media-preview');
+  const inner = document.getElementById('post-media-inner');
+  if(preview) preview.style.display='none';
+  if(inner) inner.innerHTML='';
+}
+
+// =============================================
+// SECURITE
+// =============================================
+function sanitize(str) {
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+let lastActivity = Date.now();
+document.addEventListener('touchstart', () => lastActivity = Date.now());
+document.addEventListener('click', () => lastActivity = Date.now());
+setInterval(() => {
+  if(currentUser && Date.now() - lastActivity > 30*60*1000) {
+    showToast('🔒 Session expirée pour ta sécurité');
+    setTimeout(handleLogout, 2000);
+  }
+}, 60000);
 
 // =============================================
 // INIT
