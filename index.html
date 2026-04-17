@@ -1421,31 +1421,7 @@ function rotateTip() {
 // =============================================
 // WEATHER
 // =============================================
-function setWeatherFallback() {
-  document.getElementById('weather-icon').textContent = '🌤️';
-  document.getElementById('weather-temp').textContent = '18°C';
-  document.getElementById('weather-desc').textContent = 'Partiellement nuageux';
-}
-
-function initWeather() {
-  localStorage.setItem('swivo_weather_last', Date.now());
-  if(!navigator.geolocation){setWeatherFallback();return;}
-  navigator.geolocation.getCurrentPosition(async pos => {
-    try {
-      const {latitude:lat,longitude:lon} = pos.coords;
-      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-      const d = await r.json();
-      const cw = d.current_weather;
-      const temp = Math.round(cw.temperature);
-      const code = cw.weathercode;
-      const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌧️',95:'⛈️'};
-      const descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine',61:'Pluie',71:'Neige',80:'Averses',95:'Orageux'};
-      document.getElementById('weather-icon').textContent = icons[code]||'🌡️';
-      document.getElementById('weather-temp').textContent = temp+'°C';
-      document.getElementById('weather-desc').textContent = descs[code]||'Variable';
-    } catch(e){setWeatherFallback();}
-  }, ()=>setWeatherFallback(), {timeout:5000, maximumAge:300000});
-}
+// setWeatherFallback and initWeather defined below with auto-refresh
 
 // =============================================
 // BATTERY
@@ -1600,22 +1576,7 @@ function sendSticker(emoji,name) {
 // =============================================
 // PROFILE
 // =============================================
-function setMode(mode, btn) {
-  userMode = mode;
-  const badge = document.getElementById('mode-badge');
-  const modes = {
-    active: {emoji:'🟢', cls:'mode-active'},
-    inactive: {emoji:'⚫', cls:'mode-inactive'},
-    dnd: {emoji:'🔴', cls:'mode-dnd'},
-    sleep: {emoji:'🔵', cls:'mode-sleep'}
-  };
-  if(badge) { badge.className = 'profile-mode-badge ' + modes[mode].cls; badge.textContent = modes[mode].emoji; }
-  // Save with timestamp for 24h auto-expire
-  localStorage.setItem('swivo_mode', mode);
-  localStorage.setItem('swivo_mode_set_at', Date.now());
-  const labels = {active:'Actif 🟢', inactive:'Inactif ⚫', dnd:'Ne pas déranger 🔴', sleep:'Sleep 🔵 (expire dans 24h)'};
-  showToast('Mode : ' + labels[mode]);
-}
+// setMode defined below with 24h auto-expiry
 function togglePrivacy() {
   userPrivate=!userPrivate;
   document.getElementById('privacy-label').textContent=userPrivate?'Privé':'Public';
@@ -1662,8 +1623,6 @@ function switchProfileTab(el,idx) {
   el.classList.add('active');
   const content=document.getElementById('profile-content');
   if(idx===2){
-    renderFavorites();
-  } else if(idx===3){
     content.innerHTML='<div class="sec-title" style="padding:0 0 8px">Historique de visionnage</div>'+
     ['💡 Conseil APL','🗳️ Vote obligation vote','💰 Abonnements oubliés','💪 Hydratation quotidienne'].map(t=>
       `<div class="history-item"><div class="history-thumb">📄</div><div class="history-info"><div class="history-title">${t}</div><div class="history-sub">Swivo · Aujourd\'hui</div></div></div>`
@@ -2224,34 +2183,6 @@ N'oublie pas de vérifier tes abonnements !`,
   setTimeout(() => reminder.classList.remove('show'), 6000);
 }
 
-function renderFavorites() {
-  const content = document.getElementById('profile-content');
-  if(!content) return;
-  const favs = JSON.parse(localStorage.getItem('swivo_favorites') || '[]');
-  if(!favs.length) {
-    content.innerHTML = '<div style="color:var(--muted);font-size:.82rem;text-align:center;padding:20px">Aucun favori · Appuie sur 🔖 pour en ajouter !</div>';
-    return;
-  }
-  content.innerHTML = '<div class="sec-title" style="padding:8px 0">Tes favoris 🔖</div>' +
-    favs.slice().reverse().map((f, i) => `
-      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface);border-radius:10px;margin-bottom:8px;border:1px solid var(--border)">
-        <div style="width:36px;height:36px;border-radius:10px;background:rgba(108,99,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🔖</div>
-        <div style="flex:1">
-          <div style="font-size:.82rem;font-weight:600">${f.title.substring(0,60)}</div>
-          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">${new Date(f.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</div>
-        </div>
-        <button onclick="removeFavorite(${favs.length - 1 - i})" style="background:rgba(255,101,132,.1);border:none;color:var(--accent2);border-radius:6px;padding:4px 8px;font-size:.65rem;cursor:pointer">🗑️</button>
-      </div>
-    `).join('');
-}
-
-function removeFavorite(idx) {
-  favorites.splice(idx, 1);
-  localStorage.setItem('swivo_favorites', JSON.stringify(favorites));
-  renderFavorites();
-  showToast('🗑️ Favori supprimé');
-}
-
 // =============================================
 // STORIES SYSTEM
 // =============================================
@@ -2515,6 +2446,23 @@ function initSwipeGesture() {
 // =============================================
 // MODE AUTO-EXPIRE (24h max)
 // =============================================
+function setMode(mode, btn) {
+  userMode = mode;
+  const badge = document.getElementById('mode-badge');
+  const modes = {
+    active: {emoji:'🟢', cls:'mode-active'},
+    inactive: {emoji:'⚫', cls:'mode-inactive'},
+    dnd: {emoji:'🔴', cls:'mode-dnd'},
+    sleep: {emoji:'🔵', cls:'mode-sleep'}
+  };
+  if(badge) { badge.className = 'profile-mode-badge ' + modes[mode].cls; badge.textContent = modes[mode].emoji; }
+  // Save with timestamp for 24h auto-expire
+  localStorage.setItem('swivo_mode', mode);
+  localStorage.setItem('swivo_mode_set_at', Date.now());
+  const labels = {active:'Actif 🟢', inactive:'Inactif ⚫', dnd:'Ne pas déranger 🔴', sleep:'Sleep 🔵 (expire dans 24h)'};
+  showToast('Mode : ' + labels[mode]);
+}
+
 function checkModeExpiry() {
   const savedMode = localStorage.getItem('swivo_mode');
   const setAt = parseInt(localStorage.getItem('swivo_mode_set_at') || '0');
@@ -2545,6 +2493,59 @@ function startWeatherRefresh() {
       if(Date.now() - lastW > 5 * 60 * 1000) initWeather();
     }
   });
+}
+
+// Override initWeather to save timestamp
+const _origInitWeather = initWeather;
+function initWeather() {
+  localStorage.setItem('swivo_weather_last', Date.now());
+  if(!navigator.geolocation){setWeatherFallback();return;}
+  navigator.geolocation.getCurrentPosition(async pos => {
+    try {
+      const {latitude:lat,longitude:lon} = pos.coords;
+      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+      const d = await r.json();
+      const cw = d.current_weather;
+      const temp = Math.round(cw.temperature);
+      const code = cw.weathercode;
+      const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌧️',95:'⛈️'};
+      const descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine',61:'Pluie',71:'Neige',80:'Averses',95:'Orageux'};
+      document.getElementById('weather-icon').textContent = icons[code]||'🌡️';
+      document.getElementById('weather-temp').textContent = temp+'°C';
+      document.getElementById('weather-desc').textContent = descs[code]||'Variable';
+    } catch(e){setWeatherFallback();}
+  }, ()=>setWeatherFallback(), {timeout:5000, maximumAge:300000});
+}
+
+// =============================================
+// FAVORITES - display in profile
+// =============================================
+function renderFavorites() {
+  const content = document.getElementById('profile-content');
+  if(!content) return;
+  const favs = JSON.parse(localStorage.getItem('swivo_favorites') || '[]');
+  if(!favs.length) {
+    content.innerHTML = '<div style="color:var(--muted);font-size:.82rem;text-align:center;padding:20px">Aucun favori · Appuie sur 🔖 pour en ajouter !</div>';
+    return;
+  }
+  content.innerHTML = '<div class="sec-title" style="padding:8px 0">Tes favoris 🔖</div>' +
+    favs.slice().reverse().map((f, i) => `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface);border-radius:10px;margin-bottom:8px;border:1px solid var(--border)">
+        <div style="width:36px;height:36px;border-radius:10px;background:rgba(108,99,255,.1);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🔖</div>
+        <div style="flex:1">
+          <div style="font-size:.82rem;font-weight:600">${f.title.substring(0,60)}</div>
+          <div style="font-size:.68rem;color:var(--muted);margin-top:2px">${new Date(f.date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</div>
+        </div>
+        <button onclick="removeFavorite(${favs.length - 1 - i})" style="background:rgba(255,101,132,.1);border:none;color:var(--accent2);border-radius:6px;padding:4px 8px;font-size:.65rem;cursor:pointer">🗑️</button>
+      </div>
+    `).join('');
+}
+
+function removeFavorite(idx) {
+  favorites.splice(idx, 1);
+  localStorage.setItem('swivo_favorites', JSON.stringify(favorites));
+  renderFavorites();
+  showToast('🗑️ Favori supprimé');
 }
 
 // =============================================
@@ -2595,4 +2596,4 @@ async function init(){
 init();
 </script>
 </body>
-  </html>
+</html>
