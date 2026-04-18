@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 
+
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,6 +16,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
 <link rel="manifest" id="pwa-manifest">
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Swivo — Par tous, pour tous</title>
@@ -37,6 +39,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .scroll{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .scroll::-webkit-scrollbar{display:none}
 
+
 /* AUTH */
 .auth-page{justify-content:center;align-items:center;padding:32px 24px;gap:0}
 .auth-logo{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
@@ -56,12 +59,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
 
+
 /* TEAM SELECT */
 .team-grid{display:flex;gap:12px;justify-content:center;margin:16px 0}
 .team-card{flex:1;max-width:110px;border:2px solid var(--border);border-radius:18px;padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;background:var(--surface)}
 .team-card.selected{border-color:var(--accent);background:rgba(108,99,255,.1);transform:scale(1.05)}
 .team-card svg{width:60px;height:60px;margin-bottom:6px}
 .team-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem}
+
 
 /* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;flex-shrink:0}
@@ -70,6 +75,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .topbar-tab{padding:6px 12px;font-size:.78rem;font-family:'Syne',sans-serif;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer;transition:all .2s}
 .topbar-tab.active{color:var(--text);border-bottom-color:var(--accent)}
 .icon-btn{width:34px;height:34px;border-radius:10px;background:var(--surface);border:none;color:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;position:relative}
+
 
 /* WEATHER BAR */
 .weather-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:var(--surface);margin:0 12px 8px;border-radius:12px;border:1px solid var(--border);font-size:.78rem}
@@ -81,6 +87,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .battery-icon{width:22px;height:12px;border:1.5px solid var(--muted);border-radius:3px;position:relative;display:flex;align-items:center;padding:1px}
 .battery-icon::after{content:'';width:3px;height:6px;background:var(--muted);border-radius:0 2px 2px 0;position:absolute;right:-5px}
 .battery-fill{height:100%;border-radius:1px;transition:width .5s}
+
 
 /* CARDS */
 .card{background:var(--surface);border-radius:var(--radius);margin:8px 12px;overflow:hidden;border:1px solid var(--border)}
@@ -96,12 +103,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .act-btn svg{width:15px;height:15px}
 .act-btn.liked{color:var(--accent2)}
 
+
 /* TIP */
 .tip-box{margin:0 14px 10px;background:rgba(67,233,123,.06);border:1px solid rgba(67,233,123,.18);border-radius:14px;padding:13px}
 .tip-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:var(--accent3);margin-bottom:4px}
 .tip-text{font-size:.8rem;line-height:1.5;color:#9090a8}
 .tip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .tip-refresh{background:rgba(67,233,123,.1);border:1px solid rgba(67,233,123,.2);border-radius:8px;padding:4px 8px;color:var(--accent3);font-size:.65rem;font-weight:700;cursor:pointer;font-family:'Syne',sans-serif}
+
 
 /* VOTE */
 .vote-q{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;margin-bottom:8px;padding:0 14px}
@@ -113,10 +122,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .vote-bar-wrap{background:var(--surface2);border-radius:8px;height:8px;overflow:hidden;margin-bottom:4px}
 .vote-bar{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s ease}
 
+
 /* LIVE */
 .live-banner{margin:8px 12px;background:linear-gradient(135deg,rgba(255,101,132,.1),rgba(108,99,255,.08));border:1px solid rgba(255,101,132,.2);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .live-dot{width:8px;height:8px;background:var(--accent2);border-radius:50%;flex-shrink:0;animation:pulse 1.5s infinite}
 .live-badge{background:var(--accent2);color:#fff;font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:1px;flex-shrink:0}
+
 
 /* STORIES */
 .stories-row{display:flex;gap:10px;padding:10px 14px;overflow-x:auto;scrollbar-width:none;flex-shrink:0}
@@ -125,6 +136,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .story-ring{width:56px;height:56px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--accent),var(--accent2))}
 .story-avatar{width:100%;height:100%;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:2px solid var(--bg)}
 .story-name{font-size:.6rem;color:var(--muted);max-width:56px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 
 /* SERVERS */
 .servers-row{display:flex;gap:10px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
@@ -135,6 +147,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .server-name{font-size:.6rem;color:var(--muted);text-align:center}
 .sec-title{font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;padding:8px 14px 6px}
 
+
 /* BOTTOM NAV */
 .bottom-nav{display:flex;justify-content:space-around;align-items:center;padding:8px 8px 20px;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--muted);font-size:.55rem;font-family:'Syne',sans-serif;font-weight:600;transition:color .2s;padding:4px 6px;border-radius:10px;position:relative}
@@ -142,6 +155,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .nav-item svg{width:21px;height:21px}
 .nav-center{background:linear-gradient(135deg,var(--accent),var(--accent2));width:44px;height:44px;border-radius:14px;color:#fff;font-size:1.3rem;display:flex;align-items:center;justify-content:center;margin-top:-8px;box-shadow:0 4px 16px rgba(108,99,255,.4);border:none;cursor:pointer;flex-shrink:0}
 .nav-badge{position:absolute;top:2px;right:4px;width:8px;height:8px;background:var(--accent2);border-radius:50%;border:1.5px solid var(--surface)}
+
 
 /* PROFILE */
 .profile-header{padding:20px 16px 12px;display:flex;flex-direction:column;align-items:center;gap:10px}
@@ -162,6 +176,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .profile-tab{flex:1;text-align:center;padding:10px;font-size:.73rem;font-family:'Syne',sans-serif;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;cursor:pointer}
 .profile-tab.active{color:var(--text);border-bottom-color:var(--accent)}
 
+
 /* MESSAGING */
 .msg-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .15s}
 .msg-item:active{background:var(--surface)}
@@ -173,6 +188,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .msg-preview{font-size:.78rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .msg-time{font-size:.65rem;color:var(--muted);flex-shrink:0}
 .msg-unread{width:9px;height:9px;background:var(--accent);border-radius:50%;flex-shrink:0}
+
 
 /* CONVERSATION */
 .conv-topbar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -191,12 +207,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .conv-input:focus{border-color:var(--accent)}
 .send-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
+
 /* STICKERS */
 .sticker-panel{background:var(--surface);border-top:1px solid var(--border);padding:12px;display:none;flex-wrap:wrap;gap:8px;max-height:160px;overflow-y:auto}
 .sticker-panel.open{display:flex}
 .sticker{width:56px;height:56px;cursor:pointer;transition:transform .15s;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .sticker:active{transform:scale(.9)}
 .sticker svg{width:52px;height:52px}
+
 
 /* NOTEPAD */
 .notepad-wrap{padding:14px;display:flex;flex-direction:column;gap:10px;height:100%}
@@ -209,11 +227,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .note-item-date{font-size:.62rem;color:var(--muted);margin-top:6px}
 .note-delete{position:absolute;top:10px;right:10px;background:rgba(255,101,132,.1);border:none;color:var(--accent2);border-radius:6px;padding:3px 7px;font-size:.65rem;cursor:pointer}
 
+
 /* NOTE EDITOR */
 .note-editor-title{width:100%;background:transparent;border:none;color:var(--text);font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;outline:none;padding:14px 14px 4px}
 .note-editor-title::placeholder{color:var(--muted)}
 .note-editor-body{flex:1;width:100%;background:transparent;border:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:none;padding:8px 14px;line-height:1.6}
 .note-editor-body::placeholder{color:var(--muted)}
+
 
 /* AGENDA */
 .agenda-header{display:flex;align-items:center;justify-content:space-between;padding:14px}
@@ -225,6 +245,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .cal-day.has-event{position:relative}
 .cal-day.has-event::after{content:'';width:4px;height:4px;background:var(--accent2);border-radius:50%;position:absolute;bottom:3px}
 .cal-day-header{font-size:.65rem;color:var(--muted);text-align:center;padding:4px 0;font-weight:600}
+
 
 /* SETTINGS */
 .settings-section{padding:14px}
@@ -238,6 +259,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .toggle.on::after{left:23px}
 
+
 /* THEME */
 .theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .theme-opt{padding:12px;border-radius:12px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;text-align:center}
@@ -247,6 +269,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .color-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .color-dot{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s}
 .color-dot.selected{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.3);transform:scale(1.1)}
+
 
 /* TEAMS */
 .teams-section{padding:14px}
@@ -260,10 +283,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .team-bar-wrap{height:10px;background:var(--surface2);border-radius:8px;overflow:hidden;margin-top:8px}
 .team-bar{height:100%;border-radius:8px;transition:width .8s ease}
 
+
 /* REPORT MODAL */
 .report-reasons{display:flex;flex-direction:column;gap:8px}
 .report-reason{padding:12px 14px;background:var(--surface2);border-radius:10px;font-size:.85rem;cursor:pointer;border:1.5px solid transparent;transition:all .2s;display:flex;align-items:center;gap:8px}
 .report-reason:active,.report-reason.selected{border-color:var(--accent2);background:rgba(255,101,132,.08)}
+
 
 /* HISTORY */
 .history-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer}
@@ -271,6 +296,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .history-info{flex:1}
 .history-title{font-size:.82rem;font-weight:500;margin-bottom:2px}
 .history-sub{font-size:.7rem;color:var(--muted)}
+
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -280,20 +306,25 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'DM Sans'
 .modal-handle{width:36px;height:4px;background:var(--muted);border-radius:2px;margin:0 auto 18px}
 .modal-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;margin-bottom:14px}
 
+
 /* TOAST */
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);background:#1c1c2a;border:1px solid var(--border);border-radius:12px;padding:10px 20px;font-size:.82rem;color:var(--text);opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+
 /* SPINNER */
 .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+
 
 /* THEMES */
 body.light{--bg:#f5f5fa;--surface:#fff;--surface2:#ededf5;--text:#111122;--muted:#8888a0;--border:rgba(0,0,0,.08)}
 body.amoled{--bg:#000;--surface:#0a0a0a;--surface2:#111;--border:rgba(255,255,255,.05)}
 body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,255,255,.04)}
 
+
 /* FADE */
 .fade-up{animation:fadeUp .35s ease both}
+
 
 /* MASCOT SUPPORT */
 .support-card{margin:8px 12px;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px}
@@ -304,6 +335,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .support-text{font-size:.68rem;color:var(--muted);line-height:1.4}
 .support-btn{padding:6px 12px;border-radius:8px;border:none;font-size:.68rem;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;flex-shrink:0}
 .ad-slot{margin:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;text-align:center;min-height:70px;display:flex;align-items:center;justify-content:center}
+
 
 /* COMMENTS SECTION */
 .comments-section{padding:0 14px 10px;display:none}
@@ -319,15 +351,18 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .comment-time{font-size:.6rem;color:var(--muted);margin-top:3px}
 .comment-count{font-size:.72rem;color:var(--muted);padding:0 14px 6px}
 
+
 /* MEDIA UPLOAD */
 .media-preview{width:100%;border-radius:12px;overflow:hidden;background:var(--surface2);margin-bottom:10px;display:none;position:relative}
 .media-preview img,.media-preview video{width:100%;display:block;max-height:300px;object-fit:cover}
 .media-remove{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem}
 
+
 /* FAVORITES REMINDER */
 .fav-reminder{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:14px;padding:12px 16px;font-size:.82rem;max-width:340px;width:90%;z-index:998;box-shadow:0 4px 24px rgba(108,99,255,.4);opacity:0;pointer-events:none;transition:all .4s;text-align:center;line-height:1.4}
 .fav-reminder.show{opacity:1;pointer-events:all}
 .fav-reminder-close{display:inline-block;margin-top:6px;font-size:.72rem;opacity:.8;cursor:pointer}
+
 
 /* STORY VIEWER */
 .story-viewer{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -339,6 +374,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .story-user{position:absolute;top:28px;left:14px;display:flex;align-items:center;gap:8px;z-index:202}
 .story-user-avatar{width:32px;height:32px;border-radius:50%;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:.9rem;background:var(--surface2)}
 .story-user-name{color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem}
+
 
 /* LIVE ROOM */
 .live-room{position:fixed;inset:0;background:#000;z-index:200;display:flex;flex-direction:column}
@@ -352,9 +388,12 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .live-input{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 14px;color:#fff;font-size:.82rem;outline:none;font-family:'DM Sans',sans-serif}
 .live-input::placeholder{color:rgba(255,255,255,.4)}
 
+
 /* SECURITY */
 .security-lock{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;display:none}
 .security-lock.show{display:flex}
+
+
 
 
 /* REAL FEED PAGE */
@@ -385,10 +424,12 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 .feed-filter-btn{flex-shrink:0;padding:5px 12px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
 .feed-filter-btn.active{border-color:var(--accent);background:rgba(108,99,255,.12);color:var(--text)}
 
+
 </style>
 </head>
 <body>
 <div id="app">
+
 
 <!-- SPLASH -->
 <div class="page active" id="page-splash" style="justify-content:center;align-items:center;gap:14px">
@@ -416,6 +457,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   <div class="spinner" style="margin-top:36px"></div>
 </div>
 
+
 <!-- CHOOSE TEAM (signup step 2) -->
 <div class="page" id="page-choose-team">
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
@@ -442,6 +484,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- LOGIN -->
 <div class="page auth-page" id="page-login">
   <div id="login-mascot" style="font-size:3rem;animation:bounce 2s ease-in-out infinite;margin-bottom:10px">🦊</div>
@@ -456,6 +499,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <div class="auth-switch">Pas de compte ? <span onclick="showPage('page-signup')">Créer un compte</span></div>
   </div>
 </div>
+
 
 <!-- SIGNUP -->
 <div class="page auth-page" id="page-signup">
@@ -472,6 +516,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- FORGOT -->
 <div class="page auth-page" id="page-forgot">
   <div style="font-size:3rem;margin-bottom:10px">🔑</div>
@@ -484,6 +529,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <button class="btn-s" onclick="showPage('page-login')">← Retour</button>
   </div>
 </div>
+
 
 <!-- FEED -->
 <div class="page" id="page-feed">
@@ -537,20 +583,13 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
         <div id="comments-tip-list"></div>
       </div>
     </div>
-    <!-- STORIES -->
-    <div class="stories-row">
-      <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
-      <div class="story-item" onclick="openStory(0)"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
-      <div class="story-item" onclick="openStory(1)"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
-      <div class="story-item"><div class="story-ring"><div class="story-avatar">👨</div></div><div class="story-name">Théo</div></div>
-      <div class="story-item"><div class="story-ring"><div class="story-avatar">👧</div></div><div class="story-name">Léa</div></div>
-    </div>
     <!-- LIVE -->
     <div class="live-banner" onclick="openLive()">
       <div class="live-dot"></div>
       <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem">💬 Live — Comprendre son premier loyer</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px">@PaulineAdulte · 1 204 spectateurs</div></div>
       <div class="live-badge">LIVE</div>
     </div>
+
 
     <!-- MINI TEAM RANKING -->
     <div style="margin:8px 12px;background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:12px 14px;cursor:pointer" onclick="showPage('page-teams')">
@@ -580,37 +619,39 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       </div>
     </div>
 
-    <!-- TIP DU JOUR -->
+
+    <!-- ECO-GESTE DU JOUR -->
     <div class="card fade-up">
       <div class="card-header">
-        <div class="card-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">💡</div>
-        <div class="card-meta"><div class="card-name">Conseil du jour</div><div><span class="tag-pill" style="background:rgba(67,233,123,.12);color:#43e97b" id="tip-tag">Vie adulte</span> <span style="font-size:.62rem;color:var(--muted)" id="tip-date"></span></div></div>
-        <button class="tip-refresh" onclick="rotateTip()">🔀</button>
+        <div class="card-avatar" style="background:linear-gradient(135deg,#11998e,#38ef7d)">🌿</div>
+        <div class="card-meta"><div class="card-name">L'Éco-geste du jour</div><div><span class="tag-pill" style="background:rgba(17,153,142,.15);color:#38ef7d" id="eco-tag">Écologie</span> <span style="font-size:.62rem;color:var(--muted)" id="eco-date"></span></div></div>
+        <button class="tip-refresh" style="background:rgba(17,153,142,.1);border:1px solid rgba(56,239,125,.2);color:#38ef7d" onclick="rotateEco()">🔀</button>
       </div>
-      <div class="tip-box"><div class="tip-title" id="tip-title">Chargement...</div><div class="tip-text" id="tip-text"></div></div>
+      <div class="tip-box" style="background:rgba(17,153,142,.06);border:1px solid rgba(56,239,125,.18)"><div class="tip-title" id="eco-title" style="color:#38ef7d">Chargement...</div><div class="tip-text" id="eco-text"></div></div>
       <div class="card-actions">
-        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="tip-likes">2.4k</span></button>
-        <button class="act-btn" onclick="toggleComments('comments-tip')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id='cmt-tip'>0</span></button>
+        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span>1.1k</span></button>
+        <button class="act-btn" onclick="toggleComments('comments-eco')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="cmt-eco">0</span></button>
         <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
-        <button class="act-btn" onclick="saveFavorite('conseil',document.getElementById('tip-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
+        <button class="act-btn" onclick="saveFavorite('eco',document.getElementById('eco-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
       </div>
-      <div class="comments-section" id="comments-tip">
-        <div class="comment-count" id="cmt-count-tip">0 commentaire</div>
+      <div class="comments-section" id="comments-eco">
+        <div class="comment-count" id="cmt-count-eco">0 commentaire</div>
         <div class="comment-input-row">
-          <div class="comment-avatar" id="my-comment-avatar">🦊</div>
-          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')addComment('tip',this)">
-          <button class="comment-send" onclick="addComment('tip',this.previousElementSibling)">➤</button>
+          <div class="comment-avatar">🌿</div>
+          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')secureAddComment('eco',this)">
+          <button class="comment-send" onclick="secureAddComment('eco',this.previousElementSibling)">➤</button>
         </div>
-        <div id="comments-tip-list"></div>
+        <div id="comments-eco-list"></div>
       </div>
     </div>
     <!-- VOTE -->
     <div class="card fade-up">
       <div class="card-header">
         <div class="card-avatar" style="background:linear-gradient(135deg,#ff6584,#f472b6)">🗳️</div>
-        <div class="card-meta"><div class="card-name">Question du jour</div><div><span class="tag-pill" style="background:rgba(255,101,132,.12);color:#ff6584">Vote anonyme</span></div></div>
+        <div class="card-meta"><div class="card-name">Question du jour</div><div><span class="tag-pill" style="background:rgba(255,101,132,.12);color:#ff6584">Vote anonyme</span> <span style="font-size:.62rem;color:var(--muted)" id="vote-date"></span></div></div>
+        <button class="tip-refresh" style="background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.2);color:#ff6584" onclick="rotateVote()">🔀</button>
       </div>
-      <div class="vote-q" id="vote-question">Faut-il rendre le vote obligatoire en France ?</div>
+      <div class="vote-q" id="vote-question">Chargement...</div>
       <div style="padding:0 14px 6px;font-size:.72rem;color:var(--muted)">100% anonyme · Aucun jugement</div>
       <div class="vote-opts" id="vote-opts">
         <button class="vote-opt" onclick="castVote(this,'yes')">👍 Oui</button>
@@ -618,7 +659,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       </div>
       <div class="vote-result" id="vote-result" style="display:none">
         <div class="vote-bar-wrap"><div class="vote-bar" id="vote-bar" style="width:58%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px"><span>58% Oui</span><span>42% Non · 14 832 votes</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px" id="vote-result-text"><span>58% Oui</span><span>42% Non · 14 832 votes</span></div>
       </div>
       <div class="card-actions">
         <button class="act-btn" onclick="shareContent()">📤 Partager</button>
@@ -632,6 +673,30 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
           <button class="comment-send" onclick="secureAddComment('vote',this.previousElementSibling)">➤</button>
         </div>
         <div id="comments-vote-list"></div>
+      </div>
+    </div>
+    <!-- POSTURE ET LE CORPS -->
+    <div class="card fade-up">
+      <div class="card-header">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">🧘</div>
+        <div class="card-meta"><div class="card-name">Posture & le corps</div><div><span class="tag-pill" style="background:rgba(79,172,254,.15);color:#4facfe" id="posture-tag">Corps</span> <span style="font-size:.62rem;color:var(--muted)" id="posture-date"></span></div></div>
+        <button class="tip-refresh" style="background:rgba(79,172,254,.1);border:1px solid rgba(79,172,254,.2);color:#4facfe" onclick="rotatePosture()">🔀</button>
+      </div>
+      <div class="tip-box" style="background:rgba(79,172,254,.06);border:1px solid rgba(79,172,254,.18)"><div class="tip-title" id="posture-title" style="color:#4facfe">Chargement...</div><div class="tip-text" id="posture-text"></div></div>
+      <div class="card-actions">
+        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span>987</span></button>
+        <button class="act-btn" onclick="toggleComments('comments-posture')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="cmt-posture">0</span></button>
+        <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
+        <button class="act-btn" onclick="saveFavorite('posture',document.getElementById('posture-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
+      </div>
+      <div class="comments-section" id="comments-posture">
+        <div class="comment-count" id="cmt-count-posture">0 commentaire</div>
+        <div class="comment-input-row">
+          <div class="comment-avatar">🧘</div>
+          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')secureAddComment('posture',this)">
+          <button class="comment-send" onclick="secureAddComment('posture',this.previousElementSibling)">➤</button>
+        </div>
+        <div id="comments-posture-list"></div>
       </div>
     </div>
     <!-- BUDGET -->
@@ -682,6 +747,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- SEARCH -->
 <div class="page" id="page-search">
   <div class="topbar"><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800">Découvrir</div></div>
@@ -715,9 +781,18 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- MESSAGES -->
 <div class="page" id="page-messages">
   <div class="topbar"><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800">Messages 🔒</div><div style="font-size:.65rem;color:var(--accent3);background:rgba(67,233,123,.1);padding:3px 8px;border-radius:8px">Chiffré E2E</div></div>
+  <!-- STORIES -->
+  <div class="stories-row">
+    <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
+    <div class="story-item" onclick="openStory(0)"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
+    <div class="story-item" onclick="openStory(1)"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
+    <div class="story-item"><div class="story-ring"><div class="story-avatar">👨</div></div><div class="story-name">Théo</div></div>
+    <div class="story-item"><div class="story-ring"><div class="story-avatar">👧</div></div><div class="story-name">Léa</div></div>
+  </div>
   <div class="scroll" style="padding-bottom:80px">
     <div style="padding:6px 14px;font-size:.72rem;color:var(--muted);background:rgba(67,233,123,.05);border:1px solid rgba(67,233,123,.1);border-radius:10px;margin:8px 14px">🔐 Tes messages sont chiffrés de bout en bout. Personne d'autre ne peut les lire.</div>
     <div class="msg-item" onclick="openConversation('Pauline','👩','page-messages')"><div class="msg-avatar-wrap"><div class="msg-avatar" style="background:linear-gradient(135deg,#6c63ff,#ff6584)">👩</div><div class="online-dot"></div></div><div class="msg-info"><div class="msg-name">Pauline</div><div class="msg-preview">T'as vu le conseil du jour ? 😍</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="msg-time">14:32</div><div class="msg-unread"></div></div></div>
@@ -732,6 +807,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <div class="nav-item" onclick="gotoPage('page-profile',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profil</div>
   </div>
 </div>
+
 
 <!-- CONVERSATION -->
 <div class="page" id="page-conversation" style="display:flex;flex-direction:column">
@@ -768,6 +844,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <button class="send-btn" onclick="sendMessage()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></button>
   </div>
 </div>
+
 
 <!-- PROFILE -->
 <div class="page" id="page-profile">
@@ -827,6 +904,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- CREATE -->
 <div class="page" id="page-create">
   <div class="topbar"><button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Créer</div><div style="width:34px"></div></div>
@@ -854,6 +932,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- NOTEPAD -->
 <div class="page" id="page-notepad">
   <div class="topbar"><button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Notes 📝 <span style="font-size:.65rem;color:var(--accent3);font-weight:400">Privé & chiffré</span></div><button class="icon-btn" onclick="newNote()">＋</button></div>
@@ -863,12 +942,14 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- NOTE EDITOR -->
 <div class="page" id="page-note-editor" style="display:flex;flex-direction:column">
   <div class="topbar"><button class="back-btn" onclick="saveNote()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700">🔒 Note privée</div><button class="icon-btn" onclick="deleteCurrentNote()">🗑️</button></div>
   <input class="note-editor-title" id="note-editor-title" placeholder="Titre de la note...">
   <textarea class="note-editor-body" id="note-editor-body" placeholder="Écris ici... (privé et chiffré, personne ne peut lire)"></textarea>
 </div>
+
 
 <!-- AGENDA -->
 <div class="page" id="page-agenda">
@@ -889,6 +970,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
   </div>
 </div>
+
 
 <!-- TEAMS -->
 <div class="page" id="page-teams">
@@ -917,6 +999,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- NOTIFICATIONS -->
 <div class="page" id="page-notifs">
   <div class="topbar"><button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button><div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800">Notifications</div></div>
@@ -927,6 +1010,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)"><div style="width:38px;height:38px;border-radius:50%;background:rgba(255,101,132,.12);display:flex;align-items:center;justify-content:center;font-size:1.1rem">🏆</div><div style="flex:1;font-size:.82rem">Ta team <strong>Renard</strong> est en tête ! 🦊</div><div style="font-size:.65rem;color:var(--muted)">Hier</div></div>
   </div>
 </div>
+
 
 <!-- SETTINGS -->
 <div class="page" id="page-settings">
@@ -971,6 +1055,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-edit-profile" onclick="closeModalOut(event,'modal-edit-profile')">
   <div class="modal">
@@ -983,6 +1068,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
   </div>
 </div>
+
 
 <div class="modal-overlay" id="modal-report" onclick="closeModalOut(event,'modal-report')">
   <div class="modal">
@@ -1003,6 +1089,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <div class="modal-overlay" id="modal-stickers" onclick="closeModalOut(event,'modal-stickers')">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -1020,6 +1107,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <div class="modal-overlay" id="modal-servers" onclick="closeModalOut(event,'modal-servers')">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -1032,6 +1120,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
   </div>
 </div>
+
 
 <div class="modal-overlay" id="modal-category" onclick="closeModalOut(event,'modal-category')">
   <div class="modal">
@@ -1048,6 +1137,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <div class="modal-overlay" id="modal-add-event" onclick="closeModalOut(event,'modal-add-event')">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -1060,6 +1150,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
   </div>
 </div>
+
 
 <!-- ALGO FEED PAGE (Pour toi) -->
 <div class="page" id="page-algo-feed">
@@ -1114,11 +1205,13 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
+
 <!-- FAV REMINDER -->
 <div class="fav-reminder" id="fav-reminder">
   <div class="fav-reminder-text">💡 Rappel de ton favori !</div>
   <div class="fav-reminder-close" onclick="document.getElementById('fav-reminder').classList.remove('show')">✕ Fermer</div>
 </div>
+
 
 <!-- STORY VIEWER -->
 <div id="story-viewer" style="display:none;position:fixed;inset:0;background:#000;z-index:200;flex-direction:column;align-items:center;justify-content:center">
@@ -1134,6 +1227,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   <div style="position:absolute;left:0;top:0;width:35%;height:100%;cursor:pointer" onclick="currentStory--;if(currentStory<0)currentStory=0;renderStory()"></div>
   <div style="position:absolute;right:0;top:0;width:35%;height:100%;cursor:pointer" onclick="nextStory()"></div>
 </div>
+
 
 <!-- LIVE ROOM -->
 <div id="live-room" style="display:none;position:fixed;inset:0;background:#000;z-index:200;flex-direction:column">
@@ -1153,6 +1247,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 </div>
 <div class="toast" id="toast"></div>
 
+
 <script>
 // =============================================
 // CONFIG SUPABASE
@@ -1165,6 +1260,7 @@ try {
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   }
 } catch(e){ console.log('Supabase init failed:', e.message); }
+
 
 // =============================================
 // STATE
@@ -1183,6 +1279,7 @@ let currentNoteIdx = -1;
 let agendaDate = new Date();
 let madeWithAI = false;
 let pendingTeam = '';
+
 
 // =============================================
 // NAVIGATION
@@ -1211,6 +1308,7 @@ function gotoPage(id, el) {
   showPage(id);
 }
 
+
 // =============================================
 // MASCOTS SVG
 // =============================================
@@ -1224,6 +1322,7 @@ const TEAM_INFO = {
   cat: {name:'🐱 Team Chat', emoji:'🐱', color:'#a78bfa', mascotName:"Katia"},
   dog: {name:'🐶 Team Chien', emoji:'🐶', color:'#f59e0b', mascotName:"Waf"}
 };
+
 
 function applyTeam(team) {
   userTeam = team;
@@ -1252,6 +1351,7 @@ function applyTeam(team) {
   if(cs) cs.textContent = info.name;
 }
 
+
 // =============================================
 // TEAM SELECTION
 // =============================================
@@ -1265,6 +1365,7 @@ function confirmTeam() {
   applyTeam(pendingTeam);
   enterApp();
 }
+
 
 // =============================================
 // AUTH
@@ -1336,6 +1437,7 @@ async function handleLogout() {
   showToast('👋 À bientôt !');
 }
 
+
 function enterApp() {
   const savedPseudo = localStorage.getItem('swivo_pseudo');
   const savedBio = localStorage.getItem('swivo_bio');
@@ -1358,6 +1460,9 @@ function enterApp() {
   initSwipeGesture();
   checkModeExpiry();
   startWeatherRefresh();
+  initDailyEco();
+  initDailyPosture();
+  initDailyVote();
   // Restore topbar icons from settings
   const notesEnabled = localStorage.getItem('swivo_setting_notes') === '1';
   const agendaEnabled = localStorage.getItem('swivo_setting_agenda') === '1';
@@ -1378,6 +1483,7 @@ function enterApp() {
   showPage('page-feed');
   try{(adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}
 }
+
 
 // =============================================
 // 365 DAILY TIPS
@@ -1437,6 +1543,7 @@ const TIPS = [
   {tag:"Budget",t:"💡 Negocie ton salaire a chaque entretien",x:"La plupart des gens ne negocient jamais. Pourtant 70% des recruteurs ont une marge. Ose demander."},
 ];
 
+
 let currentTipIdx = 0;
 function initDailyTip() {
   const today = new Date().toDateString();
@@ -1474,6 +1581,7 @@ function rotateTip() {
   },150);
 }
 
+
 // =============================================
 // WEATHER
 // =============================================
@@ -1487,11 +1595,13 @@ function setWeatherFallback(){
   if(wd) wd.textContent='Position non autorisée';
 }
 
+
 // =============================================
 // BATTERY
 // =============================================
 let batteryObj = null;
 let batteryPollInterval = null;
+
 
 function updateBatteryUI() {
   const bat = batteryObj || navigator.battery || navigator.mozBattery || navigator.webkitBattery;
@@ -1506,6 +1616,7 @@ function updateBatteryUI() {
   }
   if(pctEl) pctEl.textContent = (charging ? '⚡' : '') + pct + '%';
 }
+
 
 async function initBattery() {
   try {
@@ -1532,6 +1643,7 @@ async function initBattery() {
   }
 }
 
+
 function setBatteryFallback() {
   const el = document.getElementById('battery-pct');
   // Try deprecated APIs as last resort
@@ -1539,6 +1651,7 @@ function setBatteryFallback() {
   if(bat) { batteryObj = bat; updateBatteryUI(); }
   else if(el) el.textContent = '🔋';
 }
+
 
 // =============================================
 // INTERACTIONS
@@ -1553,6 +1666,8 @@ function castVote(btn,choice) {
   document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>b.disabled=true);
   btn.classList.add(choice==='yes'?'voted-yes':'voted-no');
   document.getElementById('vote-result').style.display='block';
+  voteHasVoted = true;
+  localStorage.setItem('swivo_voted_today', new Date().toDateString());
   showToast('✅ Vote anonyme enregistré !');
 }
 function switchFeedTab(tab,el) {
@@ -1585,6 +1700,7 @@ function publishPost() {
   document.getElementById('stat-posts').textContent = parseInt(document.getElementById('stat-posts').textContent||0)+1;
   setTimeout(()=>goBack(),800);
 }
+
 
 // =============================================
 // MESSAGING
@@ -1636,6 +1752,7 @@ function sendSticker(emoji,name) {
   document.getElementById('sticker-panel').classList.remove('open');
   closeModal('modal-stickers');
 }
+
 
 // =============================================
 // PROFILE
@@ -1696,6 +1813,7 @@ function switchProfileTab(el,idx) {
   }
 }
 
+
 // =============================================
 // SETTINGS TOGGLES
 // =============================================
@@ -1733,6 +1851,8 @@ function setAccent(color,el) {
 }
 
 
+
+
 // =============================================
 // REAL FEED ALGORITHM (TikTok-like)
 // Algorithm priorities:
@@ -1753,10 +1873,12 @@ const ALGO_POSTS = [
   {id:8, author:"@Marie_B", emoji:"👩", avatar:"👩", content:"🏠", text:"Mon propriétaire a enfin remboursé ma caution après lettre recommandée ! 3 semaines de galère mais ça marche 💪", tag:"Logement", likes:156, comments:44, isLocal:true, isSmall:true, isEducational:true, isBrainrot:false, madeWithAI:false},
 ];
 
+
 let currentFeedPosts = [];
 let currentFeedIdx = 0;
 let activeFeedTag = 'all';
 let activeFeedComments = null;
+
 
 function scorePost(post) {
   let score = 0;
@@ -1779,6 +1901,7 @@ function scorePost(post) {
   return score;
 }
 
+
 function buildAlgoFeed(tag) {
   let posts = [...ALGO_POSTS];
   if(tag && tag !== 'all') posts = posts.filter(p => p.tag === tag);
@@ -1787,12 +1910,14 @@ function buildAlgoFeed(tag) {
   return posts;
 }
 
+
 function openAlgoFeed(tag) {
   activeFeedTag = tag || 'all';
   currentFeedPosts = buildAlgoFeed(activeFeedTag);
   renderAlgoFeed();
   showPage('page-algo-feed');
 }
+
 
 function renderAlgoFeed() {
   const container = document.getElementById('algo-feed-container');
@@ -1851,6 +1976,7 @@ function renderAlgoFeed() {
   `).join('');
 }
 
+
 function feedLike(postId, btn) {
   const post = ALGO_POSTS.find(p=>p.id===postId);
   if(!post) return;
@@ -1862,6 +1988,7 @@ function feedLike(postId, btn) {
   if(!liked) showToast('❤️ Liké !');
 }
 
+
 function toggleFeedComments(postId) {
   const overlay = document.getElementById('feed-comments-'+postId);
   if(!overlay) return;
@@ -1872,6 +1999,7 @@ function toggleFeedComments(postId) {
     setTimeout(()=>document.getElementById('feed-cmt-input-'+postId)?.focus(),300);
   }
 }
+
 
 function addFeedComment(postId, inputEl) {
   const text = sanitize(inputEl.value.trim());
@@ -1897,6 +2025,7 @@ function addFeedComment(postId, inputEl) {
   showToast('💬 Commentaire publié !');
 }
 
+
 function setFeedFilter(tag, btn) {
   document.querySelectorAll('.feed-filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -1906,6 +2035,7 @@ function setFeedFilter(tag, btn) {
   const feed = document.getElementById('algo-feed-container');
   if(feed) feed.scrollTop = 0;
 }
+
 
 // =============================================
 // REPORT SYSTEM
@@ -1934,6 +2064,7 @@ function submitReport(){
   closeModal('modal-report');
   showToast('✅ Signalement envoyé. Merci !');
 }
+
 
 // =============================================
 // NOTEPAD (chiffré localement)
@@ -1968,6 +2099,7 @@ function saveNote(){
 }
 function deleteNote(i){notes.splice(i,1);localStorage.setItem('swivo_notes',JSON.stringify(notes));renderNotes();showToast('🗑️ Note supprimée');}
 function deleteCurrentNote(){if(currentNoteIdx>=0)deleteNote(currentNoteIdx);goBack();}
+
 
 // =============================================
 // AGENDA
@@ -2026,6 +2158,7 @@ function addEvent(){
 }
 function deleteEvent(i){agendaEvents.splice(i,1);localStorage.setItem('swivo_events',JSON.stringify(agendaEvents));renderCalendar();showToast('🗑️ Supprimé');}
 
+
 // =============================================
 // MODALS
 // =============================================
@@ -2033,10 +2166,12 @@ function openModal(id){document.getElementById(id)?.classList.add('open');}
 function closeModal(id){document.getElementById(id)?.classList.remove('open');}
 function closeModalOut(e,id){if(e.target===document.getElementById(id))closeModal(id);}
 
+
 // =============================================
 // SEARCH
 // =============================================
 function handleSearch(v){}
+
 
 // =============================================
 // TOAST
@@ -2047,6 +2182,9 @@ function showToast(msg){
   t.textContent=msg;t.classList.add('show');
   clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2500);
 }
+
+
+
 
 
 
@@ -2079,36 +2217,9 @@ function setupPWA() { try {
 } catch(e){console.log('PWA error:',e);}
 }
 
-// Register Service Worker for offline use
-if('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      // Inline service worker as blob
-      const swCode = `
-        const CACHE = 'swivo-v3';
-        const ASSETS = ['/'];
-        self.addEventListener('install', e => {
-          e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
-          self.skipWaiting();
-        });
-        self.addEventListener('activate', e => {
-          e.waitUntil(caches.keys().then(keys => 
-            Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))
-          ));
-        });
-        self.addEventListener('fetch', e => {
-          if(e.request.method !== 'GET') return;
-          e.respondWith(
-            fetch(e.request).catch(() => caches.match(e.request))
-          );
-        });
-      `;
-      const swBlob = new Blob([swCode], {type:'application/javascript'});
-      const swUrl = URL.createObjectURL(swBlob);
-      await navigator.serviceWorker.register(swUrl, {scope:'/'});
-    } catch(e) { console.log('SW not supported in this context'); }
-  });
-}
+
+// Service Worker — blob URL non supporté dans ce contexte, désactivé intentionnellement
+
 
 // =============================================
 // SECURITY HARDENING
@@ -2117,6 +2228,7 @@ if('serviceWorker' in navigator) {
 if(window.top !== window.self) {
   try { window.top.location = window.self.location; } catch(e) { /* silent */ }
 }
+
 
 // Sanitize all user inputs
 function sanitize(str) {
@@ -2131,6 +2243,7 @@ function sanitize(str) {
     .slice(0, 1000); // Max length
 }
 
+
 // Rate limiter
 const rateLimits = {};
 function rateLimit(key, maxCalls, windowMs) {
@@ -2141,6 +2254,7 @@ function rateLimit(key, maxCalls, windowMs) {
   rateLimits[key].push(now);
   return true;
 }
+
 
 // Detect suspicious behavior
 let failedAttempts = parseInt(localStorage.getItem('swivo_failed_auth')||'0');
@@ -2158,18 +2272,22 @@ function trackFailedAuth() {
   return true;
 }
 
+
 // Clear failed attempts on success
 function clearFailedAuth() {
   failedAttempts = 0;
   localStorage.setItem('swivo_failed_auth','0');
 }
 
+
 // Right-click prevention removed for compatibility
+
 
 // =============================================
 // COMMENTS SYSTEM
 // =============================================
 const commentsData = {};
+
 
 function toggleComments(id) {
   const section = document.getElementById(id);
@@ -2179,6 +2297,7 @@ function toggleComments(id) {
     section.querySelector('.comment-input')?.focus();
   }
 }
+
 
 function addComment(postId, inputEl) {
   const text = inputEl.value.trim();
@@ -2203,6 +2322,7 @@ function addComment(postId, inputEl) {
   showToast('💬 Commentaire publié !');
 }
 
+
 function renderComments(postId) {
   const list = document.getElementById('comments-'+postId+'-list');
   if(!list) return;
@@ -2221,10 +2341,12 @@ function renderComments(postId) {
   list.scrollTop = list.scrollHeight;
 }
 
+
 // =============================================
 // FAVORITES WITH SMART REMINDERS
 // =============================================
 let favorites = JSON.parse(localStorage.getItem('swivo_favorites') || '[]');
+
 
 function saveFavorite(type, title) {
   const fav = {type, title, date: Date.now(), reminded: false};
@@ -2236,6 +2358,7 @@ function saveFavorite(type, title) {
   const delay = 30000 + Math.random() * 60000; // 30-90 secondes en démo (réel = heures)
   setTimeout(() => showFavoriteReminder(fav), delay);
 }
+
 
 function showFavoriteReminder(fav) {
   const reminder = document.getElementById('fav-reminder');
@@ -2257,6 +2380,7 @@ N'oublie pas de vérifier tes abonnements !`,
   setTimeout(() => reminder.classList.remove('show'), 6000);
 }
 
+
 // =============================================
 // STORIES SYSTEM
 // =============================================
@@ -2268,12 +2392,14 @@ const storiesData = [
 let currentStory = 0;
 let storyTimer = null;
 
+
 function openStory(idx) {
   currentStory = idx;
   const viewer = document.getElementById('story-viewer');
   viewer.style.display = 'flex';
   renderStory();
 }
+
 
 function renderStory() {
   const s = storiesData[currentStory];
@@ -2291,16 +2417,19 @@ function renderStory() {
   storyTimer = setTimeout(nextStory, 5000);
 }
 
+
 function nextStory() {
   currentStory++;
   if(currentStory >= storiesData.length) closeStory();
   else renderStory();
 }
 
+
 function closeStory() {
   document.getElementById('story-viewer').style.display='none';
   clearTimeout(storyTimer);
 }
+
 
 function openMyStory() {
   const input = document.createElement('input');
@@ -2315,6 +2444,7 @@ function openMyStory() {
   input.click();
 }
 
+
 // =============================================
 // LIVE SYSTEM
 // =============================================
@@ -2328,15 +2458,18 @@ const liveMessages = [
   {user:"Alex", msg:"Première fois ici, waou !"},
 ];
 
+
 function openLive() {
   document.getElementById('live-room').style.display='flex';
   simulateLiveChat();
 }
 
+
 function closeLive() {
   document.getElementById('live-room').style.display='none';
   clearInterval(liveInterval);
 }
+
 
 function simulateLiveChat() {
   const chat = document.getElementById('live-chat-messages');
@@ -2354,6 +2487,7 @@ function simulateLiveChat() {
   }, 2000);
 }
 
+
 function sendLiveMessage() {
   const inp = document.getElementById('live-input');
   if(!inp?.value.trim()) return;
@@ -2368,6 +2502,7 @@ function sendLiveMessage() {
   }
   inp.value = '';
 }
+
 
 // =============================================
 // MEDIA UPLOAD IN POSTS
@@ -2397,6 +2532,7 @@ function uploadMedia(type) {
   input.click();
 }
 
+
 function removeMedia() {
   const preview = document.getElementById('post-media-preview');
   const inner = document.getElementById('post-media-inner');
@@ -2404,10 +2540,12 @@ function removeMedia() {
   if(inner) inner.innerHTML='';
 }
 
+
 // =============================================
 // SECURITY - CSP & Input sanitization
 // =============================================
 // sanitize defined above
+
 
 function secureAddComment(postId, inputEl) {
   const text = sanitize(inputEl.value.trim());
@@ -2421,9 +2559,11 @@ function secureAddComment(postId, inputEl) {
   addComment(postId, inputEl);
 }
 
+
 // Override addComment inputs to use sanitize
 const _origAddComment = addComment;
 // Already sanitizing in addComment via textContent
+
 
 // Session timeout security
 let lastActivity = Date.now();
@@ -2435,6 +2575,8 @@ setInterval(() => {
     setTimeout(handleLogout, 2000);
   }
 }, 60000);
+
+
 
 
 // =============================================
@@ -2453,7 +2595,9 @@ const BUDGET_TIPS = [
   "<strong>💰 Le chèque énergie</strong><br><br>Si tes revenus sont modestes, tu peux avoir droit jusqu'à 277€ d'aide annuelle. Vérifie sur chequeenergie.gouv.fr en 2 minutes.",
 ];
 
+
 let currentBudgetTipIdx = 0;
+
 
 function initBudgetTip() {
   const today = new Date().toDateString();
@@ -2469,16 +2613,19 @@ function initBudgetTip() {
   renderBudgetTip();
 }
 
+
 function renderBudgetTip() {
   const el = document.getElementById('budget-tip-text');
   if(el) el.innerHTML = BUDGET_TIPS[currentBudgetTipIdx % BUDGET_TIPS.length];
 }
+
 
 function rotateBudgetTip() {
   currentBudgetTipIdx = (currentBudgetTipIdx + 1) % BUDGET_TIPS.length;
   renderBudgetTip();
   showToast('💰 Nouveau conseil budget !');
 }
+
 
 // =============================================
 // SWIPE GESTURE: Feed <-> Pour toi
@@ -2517,6 +2664,7 @@ function initSwipeGesture() {
   }
 }
 
+
 // =============================================
 // MODE AUTO-EXPIRE (24h max)
 // =============================================
@@ -2537,6 +2685,7 @@ function setMode(mode, btn) {
   showToast('Mode : ' + labels[mode]);
 }
 
+
 function checkModeExpiry() {
   const savedMode = localStorage.getItem('swivo_mode');
   const setAt = parseInt(localStorage.getItem('swivo_mode_set_at') || '0');
@@ -2554,6 +2703,7 @@ function checkModeExpiry() {
   }
 }
 
+
 // =============================================
 // WEATHER - refresh every 30 min
 // =============================================
@@ -2568,6 +2718,7 @@ function startWeatherRefresh() {
     }
   });
 }
+
 
 function initWeather() {
   localStorage.setItem('swivo_weather_last', Date.now());
@@ -2599,6 +2750,7 @@ function initWeather() {
   );
 }
 
+
 // =============================================
 // FAVORITES - display in profile
 // =============================================
@@ -2623,12 +2775,239 @@ function renderFavorites() {
     `).join('');
 }
 
+
 function removeFavorite(idx) {
   favorites.splice(idx, 1);
   localStorage.setItem('swivo_favorites', JSON.stringify(favorites));
   renderFavorites();
   showToast('🗑️ Favori supprimé');
 }
+
+
+// =============================================
+// ECO-GESTE DU JOUR
+// =============================================
+const ECO_TIPS = [
+  {tag:"Cuisine",t:"🧽 Nettoyer son micro-ondes naturellement",x:"Mets un bol d'eau avec du jus de citron 5 min au micro-ondes. La vapeur ramollit les salissures, tu n'as plus qu'à essuyer. Zéro produit chimique."},
+  {tag:"Alimentation",t:"🍎 Savoir quels fruits sont de saison",x:"Fraises en hiver = 5x plus de CO2 que des pommes locales. Consulte l'app 'Frutas de saison' ou tape ton mois sur Google. Moins cher et meilleur pour la planète."},
+  {tag:"Numérique",t:"📧 La règle des 5 secondes pour les mails",x:"Chaque mail stocké = électricité utilisée en permanence. Si tu n'as pas rouvert un mail en 6 mois, supprime-le. Vide ta corbeille et les spams une fois par semaine."},
+  {tag:"Maison",t:"💡 Éteindre les veilles, c'est 80€/an d'économies",x:"Les appareils en veille (TV, box, chargeurs branchés) représentent 10% de ta facture électrique. Une multiprise à interrupteur règle tout ça."},
+  {tag:"Courses",t:"🛍️ Le sac réutilisable dans ton sac à dos",x:"Un Français utilise en moyenne 100 sacs plastique par an. Glisse un tote bag plié dans ta poche ou ton sac. Réflexe à prendre une fois pour toutes."},
+  {tag:"Eau",t:"🚿 Réduire sa douche de 2 minutes = 30L économisés",x:"Une douche de 8 min utilise 60L. Si tu passes à 6 min tous les jours, c'est 10 000L par an en moins sur ta facture et sur la planète."},
+  {tag:"Transport",t:"🚲 Le vélo pour les trajets -5km",x:"80% des trajets en voiture font moins de 5km. Le vélo est souvent plus rapide en ville sur ces distances. Et tu brûles des calories gratuitement."},
+  {tag:"Alimentation",t:"🥩 Remplacer 1 repas carné par semaine",x:"Un repas à base de légumineuses à la place de viande rouge = 3 kg de CO2 évités. Lentilles corail curry : 20 min, moins de 1€, délicieux."},
+  {tag:"Maison",t:"🌡️ Baisser le chauffage d'1 degré = -7% de facture",x:"19°C dans le salon est la température recommandée. 17°C dans la chambre pour dormir. Un pull et quelques degrés de moins font une vraie différence."},
+  {tag:"Courses",t:"🥕 Les légumes 'moches' coûtent 30% moins cher",x:"Carrefour, Lidl, et surtout les marchés en fin de journée : fruits et légumes imparfaits mais parfaitement bons. Zéro gaspillage, plus d'économies."},
+  {tag:"Numérique",t:"📱 Activer le mode sombre économise la batterie",x:"Sur les écrans OLED (iPhone X+, Samsung Galaxy), les pixels noirs sont éteints. Mode sombre = moins de batterie consommée = moins de recharges = moins d'énergie."},
+  {tag:"Maison",t:"🧴 Fabriquer son liquide vaisselle maison",x:"Savon noir + eau chaude + quelques gouttes d'huile essentielle de citron. Aussi efficace, 5x moins cher, emballage zéro déchet."},
+  {tag:"Eau",t:"♻️ Récupérer l'eau de cuisson des pâtes",x:"Laisse-la refroidir et utilise-la pour arroser tes plantes (l'amidon est un engrais naturel) ou pour laver tes légumes. Rien ne se perd."},
+  {tag:"Courses",t:"🗓️ Planifier ses repas évite 30% de gaspillage",x:"Un Français jette en moyenne 29kg de nourriture par an. Faire une liste de courses basée sur un menu hebdomadaire divise ce chiffre par 3."},
+  {tag:"Transport",t:"🤝 Le covoiturage pour les longs trajets",x:"BlaBlaCar coûte en moyenne 5x moins cher que le train de dernière minute. Et tu divises ton empreinte carbone par le nombre de passagers."},
+  {tag:"Maison",t:"🪟 Aérer 10 min suffit, pas 30",x:"10 min d'aération rapide avec 2 fenêtres ouvertes renouvelle l'air d'une pièce sans refroidir les murs. Refroidir les murs = 4x plus d'énergie pour réchauffer."},
+  {tag:"Alimentation",t:"🫙 Les bocaux en verre durent 20 ans",x:"Garde tes pots de confiture, de moutarde, etc. Ils servent à conserver, à emporter le déjeuner, à ranger. Zéro achat de Tupperware plastique."},
+  {tag:"Numérique",t:"☁️ Supprimer ses photos en double libère du cloud",x:"Le stockage cloud consomme de l'électricité en permanence. Un tri mensuel des photos dupliquées ou floues réduit ton empreinte numérique."},
+  {tag:"Maison",t:"🌿 Une plante dépolluante dans chaque pièce",x:"Pothos, aloe vera, ficus : ces plantes absorbent les COV (composés organiques volatils) émis par tes meubles et peintures. Et c'est beau."},
+  {tag:"Courses",t:"🏪 Faire ses courses le matin réduit les achats impulsifs",x:"Le soir, tu es fatigué et tu achètes plus. Le matin, tu es rassasié et tu t'en tiens à ta liste. Économies et moins de gaspillage garantis."},
+  {tag:"Transport",t:"🚶 Marcher 20 min/jour = 0 émissions et meilleure santé",x:"Pour les trajets de moins de 2km, la marche est aussi rapide que la voiture en ville (chercher parking inclus). Et ton corps te dira merci."},
+  {tag:"Eau",t:"🪥 Couper l'eau en se brossant les dents",x:"Un robinet ouvert gaspille 6L par minute. Brossage = 2 min = 12L. 4 personnes dans un foyer = 17 500L économisés par an. Geste automatique à prendre."},
+  {tag:"Maison",t:"🧹 Le vinaigre blanc remplace 10 produits ménagers",x:"Calcaire, traces sur les vitres, mauvaises odeurs, tissu assouplissant... Un bidon de vinaigre blanc à 1€ fait tout ça. Économique et non toxique."},
+  {tag:"Alimentation",t:"🧊 Ne pas mettre de plats chauds au frigo",x:"Un plat chaud augmente la température du frigo, qui doit forcer pour revenir à 4°C. Laisse refroidir à température ambiante max 1h30 avant de réfrigérer."},
+  {tag:"Numérique",t:"🎵 Télécharger sa musique vs streaming",x:"Télécharger une playlist en Wi-Fi puis l'écouter offline consomme 10x moins d'énergie réseau que le streaming en 4G. Spotify, Deezer : l'option 'hors ligne' existe."},
+  {tag:"Transport",t:"🚌 Les transports en commun le soir = moins de stress",x:"Lire, écouter de la musique, décompresser : le trajet en métro/bus devient du temps pour toi. Ton bilan carbone et ta tension artérielle te remercient."},
+  {tag:"Maison",t:"🔋 Recharger son téléphone la nuit, mythe ou réalité ?",x:"Les batteries lithium modernes s'arrêtent automatiquement à 100%. Mais débrancher dès que c'est plein évite la surchauffe et prolonge la durée de vie de ta batterie."},
+  {tag:"Courses",t:"🫧 Acheter ses produits en vrac = -70% d'emballages",x:"Les épiceries en vrac sont parfois plus chères, mais les grandes surfaces proposent de plus en plus de rayons vrac. Une transition progressive est déjà un grand geste."},
+  {tag:"Alimentation",t:"🍞 Le pain sec devient chapelure maison",x:"Mixe du pain rassis séché au four = chapelure parfaite. Pas de gaspillage, pas d'achat. Valable aussi pour les croûtons de salade."},
+  {tag:"Numérique",t:"💻 Régler la luminosité de l'écran à 50%",x:"Un écran à pleine luminosité consomme 40% plus d'énergie qu'à 50%. Pour la lecture ou le bureau, 50% suffit largement. Ta batterie et tes yeux apprécient."},
+];
+
+let currentEcoIdx = 0;
+function initDailyEco() {
+  const today = new Date().toDateString();
+  const stored = localStorage.getItem('swivo_eco_date');
+  if(stored === today) {
+    currentEcoIdx = parseInt(localStorage.getItem('swivo_eco_idx') || '0');
+  } else {
+    const dayN = Math.floor(Date.now() / 86400000);
+    currentEcoIdx = (dayN + 7) % ECO_TIPS.length;
+    localStorage.setItem('swivo_eco_idx', currentEcoIdx);
+    localStorage.setItem('swivo_eco_date', today);
+  }
+  renderEco();
+  const d = new Date();
+  const el = document.getElementById('eco-date');
+  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+}
+function renderEco() {
+  const t = ECO_TIPS[currentEcoIdx % ECO_TIPS.length];
+  const el1 = document.getElementById('eco-title');
+  const el2 = document.getElementById('eco-text');
+  const el3 = document.getElementById('eco-tag');
+  if(el1) el1.textContent = t.t;
+  if(el2) el2.textContent = t.x;
+  if(el3) el3.textContent = t.tag;
+}
+function rotateEco() {
+  const box = document.querySelector('#eco-title')?.closest('.tip-box');
+  if(box){box.style.opacity='0';box.style.transform='translateY(4px)';}
+  setTimeout(()=>{
+    currentEcoIdx = (currentEcoIdx + 1) % ECO_TIPS.length;
+    renderEco();
+    if(box){box.style.transition='all .3s';box.style.opacity='1';box.style.transform='translateY(0)';}
+  }, 150);
+}
+
+
+// =============================================
+// POSTURE & LE CORPS DU JOUR
+// =============================================
+const POSTURE_TIPS = [
+  {tag:"Posture",t:"💺 La règle du 90-90-90 pour s'asseoir",x:"Hanches à 90°, genoux à 90°, chevilles à 90°. Dos droit, écran à hauteur des yeux. Même 20 min dans cette position bénéfique suffit à recalibrer ton corps."},
+  {tag:"Dos",t:"🧍 Se lever toutes les 45 minutes",x:"Rester assis plus de 45 min d'affilée augmente la pression sur les disques lombaires de 40%. Mets une alarme : lève-toi 2 min, marche, secoue les bras."},
+  {tag:"Cou",t:"📱 Le 'text neck' touche 80% des jeunes adultes",x:"Regarder son téléphone tête baissée ajoute jusqu'à 27kg de pression sur la nuque. Ramène le téléphone à hauteur des yeux plutôt que de baisser la tête."},
+  {tag:"Respiration",t:"🫁 Respirer par le ventre, pas par la poitrine",x:"Pose une main sur le ventre : il doit se gonfler à l'inspiration, pas la poitrine. La respiration abdominale active le nerf vague et réduit le stress en 60 secondes."},
+  {tag:"Pieds",t:"👟 Marcher pieds nus chez soi renforce la voûte plantaire",x:"Les chaussures supportent trop les pieds, qui s'affaiblissent. 15 min pieds nus par jour sur du carrelage ou de l'herbe renforce les muscles du pied et améliore l'équilibre."},
+  {tag:"Yeux",t:"👁️ La règle 20-20-20 contre la fatigue oculaire",x:"Toutes les 20 minutes d'écran, regarde quelque chose à 20 pieds (6m) pendant 20 secondes. Réduit les tensions oculaires et les maux de tête liés aux écrans."},
+  {tag:"Épaules",t:"🔄 Rouler les épaules en arrière 10 fois par jour",x:"On a tendance à rentrer les épaules vers l'avant (position 'bureau'). 10 rotations vers l'arrière 3 fois par jour corrigent cette tension et ouvrent la cage thoracique."},
+  {tag:"Dos",t:"🛏️ La position de sommeil idéale pour le dos",x:"Sur le côté avec un coussin entre les genoux : neutre pour la colonne. Sur le dos avec un coussin sous les genoux : parfait pour les lombaires. Sur le ventre : à éviter absolument."},
+  {tag:"Hydratation",t:"💧 La déshydratation comprime les disques vertébraux",x:"Les disques intervertébraux sont composés à 80% d'eau. Une hydratation insuffisante les rend moins élastiques, ce qui cause des douleurs au dos. Bois 1,5 à 2L/jour."},
+  {tag:"Nuque",t:"🙆 L'étirement 'oreille épaule' soulage la nuque",x:"Incline doucement l'oreille droite vers l'épaule droite, tiens 20 sec, relâche. Idem à gauche. 3 fois de chaque côté. Parfait après avoir travaillé devant un écran."},
+  {tag:"Circulation",t:"🦵 Lever les jambes contre un mur 10 min",x:"Allonge-toi, pose les jambes à 90° contre un mur. Ça drainede la lymphe, réduit les gonflements et la fatigue des jambes. Idéal en fin de journée."},
+  {tag:"Core",t:"💪 La sangle abdominale, base de tout",x:"Un ventre faible = dos douloureux. Pas besoin de crunchs : la planche (gainage) 3x30 secondes par jour suffit pour renforcer les muscles profonds qui soutiennent ta colonne."},
+  {tag:"Mâchoire",t:"😬 Le bruxisme touche 1 adulte sur 3",x:"Grincement ou serrement des dents (souvent la nuit ou au stress). Symptômes : mâchoire tendue, maux de tête. Un dentiste peut proposer une gouttière. Masse les tempes."},
+  {tag:"Chaleur",t:"🛁 Un bain chaud détend mieux que les médicaments",x:"38-40°C pendant 20 min déclenche la libération de chaleur par le corps après, ce qui baisse la température centrale et prépare au sommeil. Mieux que la plupart des somnifères."},
+  {tag:"Dos",t:"🎒 Porter son sac à dos des deux côtés",x:"Un sac porté sur une épaule crée une asymétrie musculaire chronique. Porte-le sur les deux épaules ou change de côté régulièrement. La scoliose fonctionnelle se prévient tôt."},
+  {tag:"Cervical",t:"🖥️ L'écran doit être à hauteur des yeux",x:"Le haut de ton écran doit être au niveau de ton regard horizontal. Si tu regardes en bas, tu contractes les cervicaux en permanence. Surélève l'écran avec des livres si besoin."},
+  {tag:"Flexibilité",t:"🧘 3 étirements anti-douleur lombaire",x:"1) Genoux sur la poitrine allongé, 30 sec. 2) Torsion vertébrale couché, 30 sec. 3) Posture enfant (yoga), 30 sec. Pratiqués le matin, ils réduisent les douleurs de 70%."},
+  {tag:"Mouvement",t:"💃 La danse améliore la coordination mieux que le sport",x:"La danse stimule simultanément la mémoire spatiale, l'équilibre, la coordination et le rythme cardiaque. 20 min de danse libre dans ta chambre = cardio + bien-être + coordination."},
+  {tag:"Mauvaises habitudes",t:"🛋️ Être avachi dans le canapé pendant 2h contracte le psoas",x:"Le psoas est le muscle qui relie ta colonne à ton fémur. En position avachie, il se raccourcit. Résultat : douleurs au bas du dos et aux hanches. Étire-le en fente basse."},
+  {tag:"Respiration",t:"🌬️ La cohérence cardiaque en 5 minutes",x:"Inspire 5 sec, expire 5 sec, répète 6 fois par minute pendant 5 min. Cette technique synchronise le cœur et le cerveau, réduit le cortisol (hormone du stress) et améliore la concentration."},
+  {tag:"Jambes",t:"🧦 Les varices se préviennent dès 25 ans",x:"Évite de croiser les jambes assises, porte des chaussettes de compression pour les longs trajets, et alterne chaud/froid sous la douche sur les mollets. La génétique joue, mais les habitudes aussi."},
+  {tag:"Poignets",t:"⌨️ Les poignets en ligne droite pour taper",x:"Taper avec les poignets fléchis vers le bas crée des micro-traumatismes répétitifs (tunnel carpien). Ton clavier doit être plat ou légèrement incliné vers toi, pas surélevé."},
+  {tag:"Hanches",t:"🏃 Étirer les fléchisseurs des hanches chaque matin",x:"Assis toute la journée, tes fléchisseurs de hanches se contractent. En fente basse, pousse les hanches vers l'avant pendant 30 sec de chaque côté. Libère les lombaires en 1 semaine."},
+  {tag:"Chevilles",t:"🔁 Tourner les chevilles stimule la circulation",x:"10 rotations de cheville dans chaque sens, 2 fois par jour. Particulièrement utile si tu travailles debout ou assis longtemps. Réduit le risque de phlébite sur les longs vols."},
+  {tag:"Tension",t:"🤸 La posture 'starfish' réduit le stress en 2 min",x:"Allonge-toi sur le dos, bras et jambes en étoile, les paumes vers le plafond. 2 minutes dans cette position active le système nerveux parasympathique. Essaie entre deux tâches."},
+  {tag:"Genoux",t:"🏋️ Monter les escaliers préserve les genoux",x:"Monter les escaliers renforce les quadriceps, les ischio-jambiers et les fessiers — les muscles qui protègent l'articulation du genou. Descendre met plus de pression : tiens la rampe."},
+  {tag:"Tension musculaire",t:"🛑 Le scanning corporel pour détecter les tensions cachées",x:"Ferme les yeux, pars du sommet du crâne et descends mentalement jusqu'aux orteils. Là où tu sens de la tension, contracte puis relâche. Pratique au lit avant de dormir."},
+  {tag:"Abdominaux",t:"🎯 La respiration 360 pour activer le core en profondeur",x:"Inspire en gonflant le ventre, les côtés ET le dos. Expire en rentrant doucement le nombril. C'est la respiration naturelle que les bébés font et que les adultes ont perdue."},
+  {tag:"Sommeil",t:"🌙 L'oreiller trop haut force la nuque",x:"L'oreiller doit maintenir la tête en ligne avec la colonne : pas trop haut, pas trop bas. Teste en positionnant ta tête et en demandant à quelqu'un si ton profil est droit."},
+  {tag:"Muscles",t:"🔥 S'étirer à froid : mythe ou réalité ?",x:"Étirements statiques à froid = risque de déchirure. Avant sport : mobilisation dynamique (rotations, balancements). Après sport ou en soirée : étirements statiques 30 sec. L'ordre change tout."},
+];
+
+let currentPostureIdx = 0;
+function initDailyPosture() {
+  const today = new Date().toDateString();
+  const stored = localStorage.getItem('swivo_posture_date');
+  if(stored === today) {
+    currentPostureIdx = parseInt(localStorage.getItem('swivo_posture_idx') || '0');
+  } else {
+    const dayN = Math.floor(Date.now() / 86400000);
+    currentPostureIdx = (dayN + 13) % POSTURE_TIPS.length;
+    localStorage.setItem('swivo_posture_idx', currentPostureIdx);
+    localStorage.setItem('swivo_posture_date', today);
+  }
+  renderPosture();
+  const d = new Date();
+  const el = document.getElementById('posture-date');
+  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+}
+function renderPosture() {
+  const t = POSTURE_TIPS[currentPostureIdx % POSTURE_TIPS.length];
+  const el1 = document.getElementById('posture-title');
+  const el2 = document.getElementById('posture-text');
+  const el3 = document.getElementById('posture-tag');
+  if(el1) el1.textContent = t.t;
+  if(el2) el2.textContent = t.x;
+  if(el3) el3.textContent = t.tag;
+}
+function rotatePosture() {
+  const box = document.querySelector('#posture-title')?.closest('.tip-box');
+  if(box){box.style.opacity='0';box.style.transform='translateY(4px)';}
+  setTimeout(()=>{
+    currentPostureIdx = (currentPostureIdx + 1) % POSTURE_TIPS.length;
+    renderPosture();
+    if(box){box.style.transition='all .3s';box.style.opacity='1';box.style.transform='translateY(0)';}
+  }, 150);
+}
+
+
+// =============================================
+// QUESTION DU JOUR — DYNAMIQUE
+// =============================================
+const VOTE_QUESTIONS = [
+  "Faut-il rendre le vote obligatoire en France ?",
+  "Internet devrait-il être un droit fondamental universel ?",
+  "Devrions-nous réduire la semaine de travail à 4 jours ?",
+  "Faut-il interdire TikTok aux moins de 16 ans ?",
+  "Le revenu universel est-il une bonne idée ?",
+  "Devrait-on supprimer les notes à l'école primaire ?",
+  "Faut-il rendre les transports en commun gratuits ?",
+  "Le télétravail 3 jours/semaine devrait-il être un droit ?",
+  "Faut-il limiter les prix des loyers dans les grandes villes ?",
+  "Devrait-on interdire la pub alimentaire ciblant les enfants ?",
+  "Le service militaire obligatoire a-t-il du sens aujourd'hui ?",
+  "Faut-il baisser l'âge de la retraite à 60 ans ?",
+  "Les réseaux sociaux nuisent-ils à la santé mentale des jeunes ?",
+  "Devrait-on taxer davantage les très grandes fortunes ?",
+  "Faut-il rendre l'éducation financière obligatoire au lycée ?",
+  "Le végétarisme devrait-il être encouragé par l'État ?",
+  "Faut-il interdire les SUV en centre-ville ?",
+  "Devrait-on rendre la thérapie psy accessible gratuitement ?",
+  "L'IA va-t-elle détruire plus d'emplois qu'elle n'en crée ?",
+  "Faut-il légaliser le cannabis en France ?",
+  "Le sport devrait-il être obligatoire à l'université ?",
+  "Faut-il interdire les écrans avant 3 ans ?",
+  "Devrait-on financer les études par un impôt post-diplôme ?",
+  "Le droit de vote à 16 ans est-il une bonne idée ?",
+  "Faut-il rendre le don d'organes automatique ?",
+  "Les influenceurs devraient-ils payer plus d'impôts ?",
+  "Faut-il interdire la livraison de repas à vélo la nuit ?",
+  "L'école devrait-elle enseigner la méditation ?",
+  "Faut-il plafonner les salaires des PDG ?",
+  "Devrait-on rendre le covoiturage obligatoire pour les trajets domicile-travail ?",
+];
+
+let currentVoteIdx = 0;
+let voteHasVoted = false;
+function initDailyVote() {
+  const today = new Date().toDateString();
+  const stored = localStorage.getItem('swivo_vote_date');
+  if(stored === today) {
+    currentVoteIdx = parseInt(localStorage.getItem('swivo_vote_idx') || '0');
+    voteHasVoted = localStorage.getItem('swivo_voted_today') === today;
+  } else {
+    const dayN = Math.floor(Date.now() / 86400000);
+    currentVoteIdx = (dayN + 3) % VOTE_QUESTIONS.length;
+    localStorage.setItem('swivo_vote_idx', currentVoteIdx);
+    localStorage.setItem('swivo_vote_date', today);
+    voteHasVoted = false;
+  }
+  renderVote();
+  const d = new Date();
+  const el = document.getElementById('vote-date');
+  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+  if(voteHasVoted) {
+    document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>b.disabled=true);
+    document.getElementById('vote-result').style.display = 'block';
+  }
+}
+function renderVote() {
+  const q = VOTE_QUESTIONS[currentVoteIdx % VOTE_QUESTIONS.length];
+  const el = document.getElementById('vote-question');
+  if(el) el.textContent = q;
+}
+function rotateVote() {
+  const qEl = document.getElementById('vote-question');
+  if(qEl){qEl.style.opacity='0';}
+  setTimeout(()=>{
+    currentVoteIdx = (currentVoteIdx + 1) % VOTE_QUESTIONS.length;
+    renderVote();
+    voteHasVoted = false;
+    document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>{b.disabled=false;b.className='vote-opt';});
+    document.getElementById('vote-result').style.display='none';
+    if(qEl){qEl.style.transition='opacity .3s';qEl.style.opacity='1';}
+  }, 150);
+}
+
 
 // =============================================
 // INIT
