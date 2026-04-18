@@ -490,6 +490,8 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   <div class="topbar">
     <div class="topbar-logo" id="feed-logo" style="background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Swivo</div>
     <div style="display:flex;gap:6px;align-items:center">
+      <button class="icon-btn" id="topbar-notes-btn" onclick="showPage('page-notepad')" title="Notes" style="display:none">📝</button>
+      <button class="icon-btn" id="topbar-agenda-btn" onclick="showPage('page-agenda')" title="Agenda" style="display:none">📅</button>
       <button class="icon-btn" onclick="showPage('page-search')" title="Rechercher">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="17" height="17"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </button>
@@ -511,6 +513,30 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
         <span id="battery-pct">--</span>
       </div>
     </div>
+    <!-- TIP DU JOUR -->
+    <div class="card fade-up">
+      <div class="card-header">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">💡</div>
+        <div class="card-meta"><div class="card-name">Conseil du jour</div><div><span class="tag-pill" style="background:rgba(67,233,123,.12);color:#43e97b" id="tip-tag">Vie adulte</span> <span style="font-size:.62rem;color:var(--muted)" id="tip-date"></span></div></div>
+        <button class="tip-refresh" onclick="rotateTip()">🔀</button>
+      </div>
+      <div class="tip-box"><div class="tip-title" id="tip-title">Chargement...</div><div class="tip-text" id="tip-text"></div></div>
+      <div class="card-actions">
+        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="tip-likes">2.4k</span></button>
+        <button class="act-btn" onclick="toggleComments('comments-tip')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id='cmt-tip'>0</span></button>
+        <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
+        <button class="act-btn" onclick="saveFavorite('conseil',document.getElementById('tip-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
+      </div>
+      <div class="comments-section" id="comments-tip">
+        <div class="comment-count" id="cmt-count-tip">0 commentaire</div>
+        <div class="comment-input-row">
+          <div class="comment-avatar" id="my-comment-avatar">🦊</div>
+          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')secureAddComment('tip',this)">
+          <button class="comment-send" onclick="secureAddComment('tip',this.previousElementSibling)">➤</button>
+        </div>
+        <div id="comments-tip-list"></div>
+      </div>
+    </div>
     <!-- STORIES -->
     <div class="stories-row">
       <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
@@ -525,15 +551,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem">💬 Live — Comprendre son premier loyer</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px">@PaulineAdulte · 1 204 spectateurs</div></div>
       <div class="live-badge">LIVE</div>
     </div>
-    <!-- SERVERS -->
-    <div class="sec-title">Tes serveurs</div>
-    <div class="servers-row" style="margin-bottom:10px">
-      <div class="server-chip" onclick="showToast('🗳️ Politique')"><div class="server-icon">🗳️</div><div class="server-name">Politique</div></div>
-      <div class="server-chip" onclick="showToast('🍳 Cuisine')"><div class="server-icon">🍳</div><div class="server-name">Cuisine</div></div>
-      <div class="server-chip" onclick="showToast('🎮 Gaming')"><div class="server-icon">🎮</div><div class="server-name">Gaming</div></div>
-      <div class="server-chip" onclick="showToast('💡 Vie adulte')"><div class="server-icon">💡</div><div class="server-name">Vie adulte</div></div>
-      <div class="server-chip" onclick="openModal('modal-servers')"><div class="server-icon">➕</div><div class="server-name">Plus</div></div>
-    </div>
+
     <!-- MINI TEAM RANKING -->
     <div style="margin:8px 12px;background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:12px 14px;cursor:pointer" onclick="showPage('page-teams')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
@@ -1043,12 +1061,31 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
   </div>
 </div>
 
-<!-- ALGO FEED PAGE (Pour toi / Abonnements with real algorithm) -->
+<!-- ALGO FEED PAGE (Pour toi) -->
 <div class="page" id="page-algo-feed">
   <div class="topbar">
     <button class="back-btn" onclick="goBack()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="22" height="22"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
     <div style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">Pour toi</div>
-    <button class="icon-btn" onclick="openModal('modal-report')">⚑</button>
+    <div style="display:flex;gap:6px">
+      <button class="icon-btn" onclick="showPage('page-search')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></button>
+      <button class="icon-btn" onclick="openModal('modal-report')">⚑</button>
+    </div>
+  </div>
+  <!-- LIVES ROW - TikTok style -->
+  <div id="algo-lives-row" style="display:flex;gap:8px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(255,101,132,.12);border:1px solid rgba(255,101,132,.25);border-radius:20px;padding:5px 12px;cursor:pointer;flex-shrink:0" onclick="openLive()">
+      <div style="width:7px;height:7px;background:#ff6584;border-radius:50%;animation:pulse 1.5s infinite"></div>
+      <span style="font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif;color:#ff6584">LIVE</span>
+      <span style="font-size:.7rem;color:var(--muted)">@PaulineAdulte</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.2);border-radius:20px;padding:5px 12px;cursor:pointer;flex-shrink:0" onclick="openLive()">
+      <div style="width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite"></div>
+      <span style="font-size:.72rem;font-weight:700;font-family:'Syne',sans-serif;color:var(--accent)">LIVE</span>
+      <span style="font-size:.7rem;color:var(--muted)">@Kevin_xX</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;background:rgba(67,233,123,.08);border:1px solid rgba(67,233,123,.2);border-radius:20px;padding:5px 12px;cursor:pointer;flex-shrink:0" onclick="showToast('🟢 Live terminé')">
+      <span style="font-size:.7rem;color:var(--muted)">🎵 @ThéoMusique</span>
+    </div>
   </div>
   <!-- FILTER TAGS -->
   <div class="feed-tag-filter">
@@ -1060,13 +1097,20 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     <button class="feed-filter-btn" onclick="setFeedFilter('Politique',this)">🗳️ Politique</button>
     <button class="feed-filter-btn" onclick="setFeedFilter('Santé mentale',this)">🧠 Santé</button>
   </div>
-  <!-- ALGO INFO -->
-  <div style="padding:6px 12px;font-size:.65rem;color:var(--muted);text-align:center;border-bottom:1px solid var(--border)">
-    🦊 Algorithme Swivo : favorise les créateurs locaux et le contenu éducatif
+  <div style="padding:4px 12px;font-size:.62rem;color:var(--muted);text-align:center;border-bottom:1px solid var(--border)">
+    🦊 Algo Swivo : locaux & éducatif en priorité
   </div>
   <!-- FEED CONTAINER -->
-  <div class="scroll" id="algo-feed-container" style="scroll-snap-type:y mandatory;padding-bottom:20px">
+  <div class="scroll" id="algo-feed-container" style="padding-bottom:80px">
     <!-- Rendered by JS -->
+  </div>
+  <!-- BOTTOM NAV in Pour toi too -->
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="gotoPage('page-feed',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Accueil</div>
+    <div class="nav-item active"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4"/></svg>Pour toi</div>
+    <button class="nav-center" onclick="showPage('page-create')">＋</button>
+    <div class="nav-item" onclick="gotoPage('page-messages',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Messages</div>
+    <div class="nav-item" onclick="gotoPage('page-profile',this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>Profil</div>
   </div>
 </div>
 
@@ -1314,6 +1358,18 @@ function enterApp() {
   initSwipeGesture();
   checkModeExpiry();
   startWeatherRefresh();
+  // Restore topbar icons from settings
+  const notesEnabled = localStorage.getItem('swivo_setting_notes') === '1';
+  const agendaEnabled = localStorage.getItem('swivo_setting_agenda') === '1';
+  const nb = document.getElementById('topbar-notes-btn');
+  const ab = document.getElementById('topbar-agenda-btn');
+  if(nb && notesEnabled) nb.style.display='flex';
+  if(ab && agendaEnabled) ab.style.display='flex';
+  // Sync toggle buttons
+  const tn = document.getElementById('toggle-notes');
+  const ta = document.getElementById('toggle-agenda');
+  if(tn && notesEnabled) tn.classList.add('on');
+  if(ta && agendaEnabled) ta.classList.add('on');
   // Check vote comment avatar
   const vca = document.getElementById('vote-comment-avatar');
   if(vca) vca.textContent = TEAM_INFO[userTeam]?.emoji || '🦊';
@@ -1422,6 +1478,14 @@ function rotateTip() {
 // WEATHER
 // =============================================
 // setWeatherFallback and initWeather defined below with auto-refresh
+function setWeatherFallback(){
+  const wi = document.getElementById('weather-icon');
+  const wt = document.getElementById('weather-temp');
+  const wd = document.getElementById('weather-desc');
+  if(wi) wi.textContent='🌤️';
+  if(wt) wt.textContent='--°C';
+  if(wd) wd.textContent='Position non autorisée';
+}
 
 // =============================================
 // BATTERY
@@ -1643,6 +1707,16 @@ function toggleSetting(btn,key) {
   if(key==='weather'){
     const wb=document.getElementById('weather-bar');
     if(wb) wb.style.display=on?'flex':'none';
+  }
+  if(key==='notes'){
+    const nb=document.getElementById('topbar-notes-btn');
+    if(nb) nb.style.display=on?'flex':'none';
+    localStorage.setItem('swivo_setting_notes', on?'1':'0');
+  }
+  if(key==='agenda'){
+    const ab=document.getElementById('topbar-agenda-btn');
+    if(ab) ab.style.display=on?'flex':'none';
+    localStorage.setItem('swivo_setting_agenda', on?'1':'0');
   }
 }
 function setTheme(cls,el) {
@@ -2495,26 +2569,34 @@ function startWeatherRefresh() {
   });
 }
 
-// Override initWeather to save timestamp
-const _origInitWeather = initWeather;
 function initWeather() {
   localStorage.setItem('swivo_weather_last', Date.now());
-  if(!navigator.geolocation){setWeatherFallback();return;}
-  navigator.geolocation.getCurrentPosition(async pos => {
-    try {
-      const {latitude:lat,longitude:lon} = pos.coords;
-      const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
-      const d = await r.json();
-      const cw = d.current_weather;
-      const temp = Math.round(cw.temperature);
-      const code = cw.weathercode;
-      const icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',61:'🌧️',71:'❄️',80:'🌧️',95:'⛈️'};
-      const descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Partiellement nuageux',3:'Couvert',45:'Brouillard',51:'Bruine',61:'Pluie',71:'Neige',80:'Averses',95:'Orageux'};
-      document.getElementById('weather-icon').textContent = icons[code]||'🌡️';
-      document.getElementById('weather-temp').textContent = temp+'°C';
-      document.getElementById('weather-desc').textContent = descs[code]||'Variable';
-    } catch(e){setWeatherFallback();}
-  }, ()=>setWeatherFallback(), {timeout:5000, maximumAge:300000});
+  if(!navigator.geolocation){ setWeatherFallback(); return; }
+  navigator.geolocation.getCurrentPosition(
+    async function(pos) {
+      try {
+        var lat = pos.coords.latitude;
+        var lon = pos.coords.longitude;
+        var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true';
+        var resp = await fetch(url);
+        if(!resp.ok) { setWeatherFallback(); return; }
+        var data = await resp.json();
+        var cw = data.current_weather;
+        var temp = Math.round(cw.temperature);
+        var code = cw.weathercode;
+        var icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',85:'❄️',86:'❄️',95:'⛈️',96:'⛈️',99:'⛈️'};
+        var descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Nuageux',3:'Couvert',45:'Brouillard',48:'Brouillard',51:'Bruine légère',53:'Bruine',55:'Bruine forte',61:'Pluie légère',63:'Pluie',65:'Pluie forte',71:'Neige légère',73:'Neige',75:'Neige forte',80:'Averses',81:'Averses',82:'Averses fortes',95:'Orage',96:'Orage',99:'Orage fort'};
+        var wi = document.getElementById('weather-icon');
+        var wt = document.getElementById('weather-temp');
+        var wd = document.getElementById('weather-desc');
+        if(wi) wi.textContent = icons[code] || '🌡️';
+        if(wt) wt.textContent = temp + '°C';
+        if(wd) wd.textContent = descs[code] || 'Variable';
+      } catch(err) { setWeatherFallback(); }
+    },
+    function() { setWeatherFallback(); },
+    { timeout: 8000, maximumAge: 600000, enableHighAccuracy: false }
+  );
 }
 
 // =============================================
