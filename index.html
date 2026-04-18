@@ -583,6 +583,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
         <div id="comments-tip-list"></div>
       </div>
     </div>
+    <!-- Stories moved to Messages page -->
     <!-- LIVE -->
     <div class="live-banner" onclick="openLive()">
       <div class="live-dot"></div>
@@ -620,46 +621,23 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
     </div>
 
 
-    <!-- ECO-GESTE DU JOUR -->
-    <div class="card fade-up">
-      <div class="card-header">
-        <div class="card-avatar" style="background:linear-gradient(135deg,#11998e,#38ef7d)">🌿</div>
-        <div class="card-meta"><div class="card-name">L'Éco-geste du jour</div><div><span class="tag-pill" style="background:rgba(17,153,142,.15);color:#38ef7d" id="eco-tag">Écologie</span> <span style="font-size:.62rem;color:var(--muted)" id="eco-date"></span></div></div>
-        <button class="tip-refresh" style="background:rgba(17,153,142,.1);border:1px solid rgba(56,239,125,.2);color:#38ef7d" onclick="rotateEco()">🔀</button>
-      </div>
-      <div class="tip-box" style="background:rgba(17,153,142,.06);border:1px solid rgba(56,239,125,.18)"><div class="tip-title" id="eco-title" style="color:#38ef7d">Chargement...</div><div class="tip-text" id="eco-text"></div></div>
-      <div class="card-actions">
-        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span>1.1k</span></button>
-        <button class="act-btn" onclick="toggleComments('comments-eco')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="cmt-eco">0</span></button>
-        <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
-        <button class="act-btn" onclick="saveFavorite('eco',document.getElementById('eco-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
-      </div>
-      <div class="comments-section" id="comments-eco">
-        <div class="comment-count" id="cmt-count-eco">0 commentaire</div>
-        <div class="comment-input-row">
-          <div class="comment-avatar">🌿</div>
-          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')secureAddComment('eco',this)">
-          <button class="comment-send" onclick="secureAddComment('eco',this.previousElementSibling)">➤</button>
-        </div>
-        <div id="comments-eco-list"></div>
-      </div>
-    </div>
+    <!-- TIP DU JOUR -->
+    
     <!-- VOTE -->
     <div class="card fade-up">
       <div class="card-header">
         <div class="card-avatar" style="background:linear-gradient(135deg,#ff6584,#f472b6)">🗳️</div>
-        <div class="card-meta"><div class="card-name">Question du jour</div><div><span class="tag-pill" style="background:rgba(255,101,132,.12);color:#ff6584">Vote anonyme</span> <span style="font-size:.62rem;color:var(--muted)" id="vote-date"></span></div></div>
-        <button class="tip-refresh" style="background:rgba(255,101,132,.1);border:1px solid rgba(255,101,132,.2);color:#ff6584" onclick="rotateVote()">🔀</button>
+        <div class="card-meta"><div class="card-name">Question du jour</div><div><span class="tag-pill" style="background:rgba(255,101,132,.12);color:#ff6584">Vote anonyme</span></div></div>
       </div>
       <div class="vote-q" id="vote-question">Chargement...</div>
       <div style="padding:0 14px 6px;font-size:.72rem;color:var(--muted)">100% anonyme · Aucun jugement</div>
       <div class="vote-opts" id="vote-opts">
-        <button class="vote-opt" onclick="castVote(this,'yes')">👍 Oui</button>
-        <button class="vote-opt" onclick="castVote(this,'no')">👎 Non</button>
+        <button class="vote-opt" id="vote-btn-yes" onclick="castVote(this,'yes')">👍 Oui</button>
+        <button class="vote-opt" id="vote-btn-no" onclick="castVote(this,'no')">👎 Non</button>
       </div>
       <div class="vote-result" id="vote-result" style="display:none">
         <div class="vote-bar-wrap"><div class="vote-bar" id="vote-bar" style="width:58%"></div></div>
-        <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px" id="vote-result-text"><span>58% Oui</span><span>42% Non · 14 832 votes</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted);margin-top:4px"><span>58% Oui</span><span>42% Non · 14 832 votes</span></div>
       </div>
       <div class="card-actions">
         <button class="act-btn" onclick="shareContent()">📤 Partager</button>
@@ -675,28 +653,38 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
         <div id="comments-vote-list"></div>
       </div>
     </div>
-    <!-- POSTURE ET LE CORPS -->
+    <!-- ECO-GESTE DU JOUR -->
     <div class="card fade-up">
       <div class="card-header">
-        <div class="card-avatar" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">🧘</div>
-        <div class="card-meta"><div class="card-name">Posture & le corps</div><div><span class="tag-pill" style="background:rgba(79,172,254,.15);color:#4facfe" id="posture-tag">Corps</span> <span style="font-size:.62rem;color:var(--muted)" id="posture-date"></span></div></div>
-        <button class="tip-refresh" style="background:rgba(79,172,254,.1);border:1px solid rgba(79,172,254,.2);color:#4facfe" onclick="rotatePosture()">🔀</button>
+        <div class="card-avatar" style="background:linear-gradient(135deg,#38f9d7,#4facfe)">🌿</div>
+        <div class="card-meta"><div class="card-name">Éco-geste du jour</div><div><span class="tag-pill" style="background:rgba(56,249,215,.1);color:#38f9d7" id="eco-tag">Pratique</span> <span style="font-size:.62rem;color:var(--muted)" id="eco-date"></span></div></div>
+        <button class="tip-refresh" style="background:rgba(56,249,215,.1);border-color:rgba(56,249,215,.25);color:#38f9d7" onclick="rotateEco()">🔀</button>
       </div>
-      <div class="tip-box" style="background:rgba(79,172,254,.06);border:1px solid rgba(79,172,254,.18)"><div class="tip-title" id="posture-title" style="color:#4facfe">Chargement...</div><div class="tip-text" id="posture-text"></div></div>
+      <div style="margin:0 14px 10px;background:rgba(56,249,215,.06);border:1px solid rgba(56,249,215,.18);border-radius:14px;padding:13px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:#38f9d7;margin-bottom:4px" id="eco-title">Chargement...</div>
+        <div style="font-size:.8rem;line-height:1.5;color:#9090a8" id="eco-text"></div>
+      </div>
       <div class="card-actions">
-        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span>987</span></button>
-        <button class="act-btn" onclick="toggleComments('comments-posture')"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg><span id="cmt-posture">0</span></button>
+        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="eco-likes">0</span></button>
         <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
-        <button class="act-btn" onclick="saveFavorite('posture',document.getElementById('posture-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Favoris</button>
+        <button class="act-btn" onclick="saveFavorite('eco',document.getElementById('eco-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Sauver</button>
       </div>
-      <div class="comments-section" id="comments-posture">
-        <div class="comment-count" id="cmt-count-posture">0 commentaire</div>
-        <div class="comment-input-row">
-          <div class="comment-avatar">🧘</div>
-          <input class="comment-input" placeholder="Ton commentaire..." onkeydown="if(event.key==='Enter')secureAddComment('posture',this)">
-          <button class="comment-send" onclick="secureAddComment('posture',this.previousElementSibling)">➤</button>
-        </div>
-        <div id="comments-posture-list"></div>
+    </div>
+    <!-- POSTURE ET CORPS DU JOUR -->
+    <div class="card fade-up">
+      <div class="card-header">
+        <div class="card-avatar" style="background:linear-gradient(135deg,#f953c6,#b91d73)">🧘</div>
+        <div class="card-meta"><div class="card-name">Posture & Corps</div><div><span class="tag-pill" style="background:rgba(249,83,198,.1);color:#f953c6" id="posture-tag">Corps</span> <span style="font-size:.62rem;color:var(--muted)" id="posture-date"></span></div></div>
+        <button class="tip-refresh" style="background:rgba(249,83,198,.1);border-color:rgba(249,83,198,.25);color:#f953c6" onclick="rotatePosture()">🔀</button>
+      </div>
+      <div style="margin:0 14px 10px;background:rgba(249,83,198,.05);border:1px solid rgba(249,83,198,.18);border-radius:14px;padding:13px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:#f953c6;margin-bottom:4px" id="posture-title">Chargement...</div>
+        <div style="font-size:.8rem;line-height:1.5;color:#9090a8" id="posture-text"></div>
+      </div>
+      <div class="card-actions">
+        <button class="act-btn" onclick="toggleLike(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg><span id="posture-likes">0</span></button>
+        <button class="act-btn" onclick="shareContent()"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>Partager</button>
+        <button class="act-btn" onclick="saveFavorite('posture',document.getElementById('posture-title').textContent)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/></svg>Sauver</button>
       </div>
     </div>
     <!-- BUDGET -->
@@ -785,9 +773,9 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
 <!-- MESSAGES -->
 <div class="page" id="page-messages">
   <div class="topbar"><div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800">Messages 🔒</div><div style="font-size:.65rem;color:var(--accent3);background:rgba(67,233,123,.1);padding:3px 8px;border-radius:8px">Chiffré E2E</div></div>
-  <!-- STORIES -->
-  <div class="stories-row">
-    <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent)">＋</div></div><div class="story-name">Toi</div></div>
+  <!-- STORIES in Messages -->
+  <div class="stories-row" style="border-bottom:1px solid var(--border);padding-bottom:12px">
+    <div class="story-item" onclick="openMyStory()"><div class="story-ring" style="background:var(--surface2)"><div class="story-avatar" style="color:var(--accent);font-size:.85rem">＋</div></div><div class="story-name">Ma story</div></div>
     <div class="story-item" onclick="openStory(0)"><div class="story-ring"><div class="story-avatar">👩</div></div><div class="story-name">Pauline</div></div>
     <div class="story-item" onclick="openStory(1)"><div class="story-ring"><div class="story-avatar">🧑</div></div><div class="story-name">Kevin</div></div>
     <div class="story-item"><div class="story-ring"><div class="story-avatar">👨</div></div><div class="story-name">Théo</div></div>
@@ -1457,12 +1445,12 @@ function enterApp() {
   setupPWA();
   clearFailedAuth();
   initBudgetTip();
+  initDailyVote();
+  initEcoTip();
+  initPostureTip();
   initSwipeGesture();
   checkModeExpiry();
   startWeatherRefresh();
-  initDailyEco();
-  initDailyPosture();
-  initDailyVote();
   // Restore topbar icons from settings
   const notesEnabled = localStorage.getItem('swivo_setting_notes') === '1';
   const agendaEnabled = localStorage.getItem('swivo_setting_agenda') === '1';
@@ -1662,14 +1650,7 @@ function toggleLike(btn) {
   if(s) s.style.color = btn.classList.contains('liked') ? 'var(--accent2)' : '';
   if(btn.classList.contains('liked')) showToast('❤️ Liké !');
 }
-function castVote(btn,choice) {
-  document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>b.disabled=true);
-  btn.classList.add(choice==='yes'?'voted-yes':'voted-no');
-  document.getElementById('vote-result').style.display='block';
-  voteHasVoted = true;
-  localStorage.setItem('swivo_voted_today', new Date().toDateString());
-  showToast('✅ Vote anonyme enregistré !');
-}
+// castVote redefined below with daily vote system
 function switchFeedTab(tab,el) {
   document.querySelectorAll('.topbar-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
@@ -2218,7 +2199,8 @@ function setupPWA() { try {
 }
 
 
-// Service Worker — blob URL non supporté dans ce contexte, désactivé intentionnellement
+// Register Service Worker for offline use
+// SW removed
 
 
 // =============================================
@@ -2784,230 +2766,237 @@ function removeFavorite(idx) {
 }
 
 
-// =============================================
-// ECO-GESTE DU JOUR
-// =============================================
-const ECO_TIPS = [
-  {tag:"Cuisine",t:"🧽 Nettoyer son micro-ondes naturellement",x:"Mets un bol d'eau avec du jus de citron 5 min au micro-ondes. La vapeur ramollit les salissures, tu n'as plus qu'à essuyer. Zéro produit chimique."},
-  {tag:"Alimentation",t:"🍎 Savoir quels fruits sont de saison",x:"Fraises en hiver = 5x plus de CO2 que des pommes locales. Consulte l'app 'Frutas de saison' ou tape ton mois sur Google. Moins cher et meilleur pour la planète."},
-  {tag:"Numérique",t:"📧 La règle des 5 secondes pour les mails",x:"Chaque mail stocké = électricité utilisée en permanence. Si tu n'as pas rouvert un mail en 6 mois, supprime-le. Vide ta corbeille et les spams une fois par semaine."},
-  {tag:"Maison",t:"💡 Éteindre les veilles, c'est 80€/an d'économies",x:"Les appareils en veille (TV, box, chargeurs branchés) représentent 10% de ta facture électrique. Une multiprise à interrupteur règle tout ça."},
-  {tag:"Courses",t:"🛍️ Le sac réutilisable dans ton sac à dos",x:"Un Français utilise en moyenne 100 sacs plastique par an. Glisse un tote bag plié dans ta poche ou ton sac. Réflexe à prendre une fois pour toutes."},
-  {tag:"Eau",t:"🚿 Réduire sa douche de 2 minutes = 30L économisés",x:"Une douche de 8 min utilise 60L. Si tu passes à 6 min tous les jours, c'est 10 000L par an en moins sur ta facture et sur la planète."},
-  {tag:"Transport",t:"🚲 Le vélo pour les trajets -5km",x:"80% des trajets en voiture font moins de 5km. Le vélo est souvent plus rapide en ville sur ces distances. Et tu brûles des calories gratuitement."},
-  {tag:"Alimentation",t:"🥩 Remplacer 1 repas carné par semaine",x:"Un repas à base de légumineuses à la place de viande rouge = 3 kg de CO2 évités. Lentilles corail curry : 20 min, moins de 1€, délicieux."},
-  {tag:"Maison",t:"🌡️ Baisser le chauffage d'1 degré = -7% de facture",x:"19°C dans le salon est la température recommandée. 17°C dans la chambre pour dormir. Un pull et quelques degrés de moins font une vraie différence."},
-  {tag:"Courses",t:"🥕 Les légumes 'moches' coûtent 30% moins cher",x:"Carrefour, Lidl, et surtout les marchés en fin de journée : fruits et légumes imparfaits mais parfaitement bons. Zéro gaspillage, plus d'économies."},
-  {tag:"Numérique",t:"📱 Activer le mode sombre économise la batterie",x:"Sur les écrans OLED (iPhone X+, Samsung Galaxy), les pixels noirs sont éteints. Mode sombre = moins de batterie consommée = moins de recharges = moins d'énergie."},
-  {tag:"Maison",t:"🧴 Fabriquer son liquide vaisselle maison",x:"Savon noir + eau chaude + quelques gouttes d'huile essentielle de citron. Aussi efficace, 5x moins cher, emballage zéro déchet."},
-  {tag:"Eau",t:"♻️ Récupérer l'eau de cuisson des pâtes",x:"Laisse-la refroidir et utilise-la pour arroser tes plantes (l'amidon est un engrais naturel) ou pour laver tes légumes. Rien ne se perd."},
-  {tag:"Courses",t:"🗓️ Planifier ses repas évite 30% de gaspillage",x:"Un Français jette en moyenne 29kg de nourriture par an. Faire une liste de courses basée sur un menu hebdomadaire divise ce chiffre par 3."},
-  {tag:"Transport",t:"🤝 Le covoiturage pour les longs trajets",x:"BlaBlaCar coûte en moyenne 5x moins cher que le train de dernière minute. Et tu divises ton empreinte carbone par le nombre de passagers."},
-  {tag:"Maison",t:"🪟 Aérer 10 min suffit, pas 30",x:"10 min d'aération rapide avec 2 fenêtres ouvertes renouvelle l'air d'une pièce sans refroidir les murs. Refroidir les murs = 4x plus d'énergie pour réchauffer."},
-  {tag:"Alimentation",t:"🫙 Les bocaux en verre durent 20 ans",x:"Garde tes pots de confiture, de moutarde, etc. Ils servent à conserver, à emporter le déjeuner, à ranger. Zéro achat de Tupperware plastique."},
-  {tag:"Numérique",t:"☁️ Supprimer ses photos en double libère du cloud",x:"Le stockage cloud consomme de l'électricité en permanence. Un tri mensuel des photos dupliquées ou floues réduit ton empreinte numérique."},
-  {tag:"Maison",t:"🌿 Une plante dépolluante dans chaque pièce",x:"Pothos, aloe vera, ficus : ces plantes absorbent les COV (composés organiques volatils) émis par tes meubles et peintures. Et c'est beau."},
-  {tag:"Courses",t:"🏪 Faire ses courses le matin réduit les achats impulsifs",x:"Le soir, tu es fatigué et tu achètes plus. Le matin, tu es rassasié et tu t'en tiens à ta liste. Économies et moins de gaspillage garantis."},
-  {tag:"Transport",t:"🚶 Marcher 20 min/jour = 0 émissions et meilleure santé",x:"Pour les trajets de moins de 2km, la marche est aussi rapide que la voiture en ville (chercher parking inclus). Et ton corps te dira merci."},
-  {tag:"Eau",t:"🪥 Couper l'eau en se brossant les dents",x:"Un robinet ouvert gaspille 6L par minute. Brossage = 2 min = 12L. 4 personnes dans un foyer = 17 500L économisés par an. Geste automatique à prendre."},
-  {tag:"Maison",t:"🧹 Le vinaigre blanc remplace 10 produits ménagers",x:"Calcaire, traces sur les vitres, mauvaises odeurs, tissu assouplissant... Un bidon de vinaigre blanc à 1€ fait tout ça. Économique et non toxique."},
-  {tag:"Alimentation",t:"🧊 Ne pas mettre de plats chauds au frigo",x:"Un plat chaud augmente la température du frigo, qui doit forcer pour revenir à 4°C. Laisse refroidir à température ambiante max 1h30 avant de réfrigérer."},
-  {tag:"Numérique",t:"🎵 Télécharger sa musique vs streaming",x:"Télécharger une playlist en Wi-Fi puis l'écouter offline consomme 10x moins d'énergie réseau que le streaming en 4G. Spotify, Deezer : l'option 'hors ligne' existe."},
-  {tag:"Transport",t:"🚌 Les transports en commun le soir = moins de stress",x:"Lire, écouter de la musique, décompresser : le trajet en métro/bus devient du temps pour toi. Ton bilan carbone et ta tension artérielle te remercient."},
-  {tag:"Maison",t:"🔋 Recharger son téléphone la nuit, mythe ou réalité ?",x:"Les batteries lithium modernes s'arrêtent automatiquement à 100%. Mais débrancher dès que c'est plein évite la surchauffe et prolonge la durée de vie de ta batterie."},
-  {tag:"Courses",t:"🫧 Acheter ses produits en vrac = -70% d'emballages",x:"Les épiceries en vrac sont parfois plus chères, mais les grandes surfaces proposent de plus en plus de rayons vrac. Une transition progressive est déjà un grand geste."},
-  {tag:"Alimentation",t:"🍞 Le pain sec devient chapelure maison",x:"Mixe du pain rassis séché au four = chapelure parfaite. Pas de gaspillage, pas d'achat. Valable aussi pour les croûtons de salade."},
-  {tag:"Numérique",t:"💻 Régler la luminosité de l'écran à 50%",x:"Un écran à pleine luminosité consomme 40% plus d'énergie qu'à 50%. Pour la lecture ou le bureau, 50% suffit largement. Ta batterie et tes yeux apprécient."},
-];
-
-let currentEcoIdx = 0;
-function initDailyEco() {
-  const today = new Date().toDateString();
-  const stored = localStorage.getItem('swivo_eco_date');
-  if(stored === today) {
-    currentEcoIdx = parseInt(localStorage.getItem('swivo_eco_idx') || '0');
-  } else {
-    const dayN = Math.floor(Date.now() / 86400000);
-    currentEcoIdx = (dayN + 7) % ECO_TIPS.length;
-    localStorage.setItem('swivo_eco_idx', currentEcoIdx);
-    localStorage.setItem('swivo_eco_date', today);
-  }
-  renderEco();
-  const d = new Date();
-  const el = document.getElementById('eco-date');
-  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-}
-function renderEco() {
-  const t = ECO_TIPS[currentEcoIdx % ECO_TIPS.length];
-  const el1 = document.getElementById('eco-title');
-  const el2 = document.getElementById('eco-text');
-  const el3 = document.getElementById('eco-tag');
-  if(el1) el1.textContent = t.t;
-  if(el2) el2.textContent = t.x;
-  if(el3) el3.textContent = t.tag;
-}
-function rotateEco() {
-  const box = document.querySelector('#eco-title')?.closest('.tip-box');
-  if(box){box.style.opacity='0';box.style.transform='translateY(4px)';}
-  setTimeout(()=>{
-    currentEcoIdx = (currentEcoIdx + 1) % ECO_TIPS.length;
-    renderEco();
-    if(box){box.style.transition='all .3s';box.style.opacity='1';box.style.transform='translateY(0)';}
-  }, 150);
-}
-
 
 // =============================================
-// POSTURE & LE CORPS DU JOUR
+// DAILY ROTATING QUESTIONS (Question du jour)
 // =============================================
-const POSTURE_TIPS = [
-  {tag:"Posture",t:"💺 La règle du 90-90-90 pour s'asseoir",x:"Hanches à 90°, genoux à 90°, chevilles à 90°. Dos droit, écran à hauteur des yeux. Même 20 min dans cette position bénéfique suffit à recalibrer ton corps."},
-  {tag:"Dos",t:"🧍 Se lever toutes les 45 minutes",x:"Rester assis plus de 45 min d'affilée augmente la pression sur les disques lombaires de 40%. Mets une alarme : lève-toi 2 min, marche, secoue les bras."},
-  {tag:"Cou",t:"📱 Le 'text neck' touche 80% des jeunes adultes",x:"Regarder son téléphone tête baissée ajoute jusqu'à 27kg de pression sur la nuque. Ramène le téléphone à hauteur des yeux plutôt que de baisser la tête."},
-  {tag:"Respiration",t:"🫁 Respirer par le ventre, pas par la poitrine",x:"Pose une main sur le ventre : il doit se gonfler à l'inspiration, pas la poitrine. La respiration abdominale active le nerf vague et réduit le stress en 60 secondes."},
-  {tag:"Pieds",t:"👟 Marcher pieds nus chez soi renforce la voûte plantaire",x:"Les chaussures supportent trop les pieds, qui s'affaiblissent. 15 min pieds nus par jour sur du carrelage ou de l'herbe renforce les muscles du pied et améliore l'équilibre."},
-  {tag:"Yeux",t:"👁️ La règle 20-20-20 contre la fatigue oculaire",x:"Toutes les 20 minutes d'écran, regarde quelque chose à 20 pieds (6m) pendant 20 secondes. Réduit les tensions oculaires et les maux de tête liés aux écrans."},
-  {tag:"Épaules",t:"🔄 Rouler les épaules en arrière 10 fois par jour",x:"On a tendance à rentrer les épaules vers l'avant (position 'bureau'). 10 rotations vers l'arrière 3 fois par jour corrigent cette tension et ouvrent la cage thoracique."},
-  {tag:"Dos",t:"🛏️ La position de sommeil idéale pour le dos",x:"Sur le côté avec un coussin entre les genoux : neutre pour la colonne. Sur le dos avec un coussin sous les genoux : parfait pour les lombaires. Sur le ventre : à éviter absolument."},
-  {tag:"Hydratation",t:"💧 La déshydratation comprime les disques vertébraux",x:"Les disques intervertébraux sont composés à 80% d'eau. Une hydratation insuffisante les rend moins élastiques, ce qui cause des douleurs au dos. Bois 1,5 à 2L/jour."},
-  {tag:"Nuque",t:"🙆 L'étirement 'oreille épaule' soulage la nuque",x:"Incline doucement l'oreille droite vers l'épaule droite, tiens 20 sec, relâche. Idem à gauche. 3 fois de chaque côté. Parfait après avoir travaillé devant un écran."},
-  {tag:"Circulation",t:"🦵 Lever les jambes contre un mur 10 min",x:"Allonge-toi, pose les jambes à 90° contre un mur. Ça drainede la lymphe, réduit les gonflements et la fatigue des jambes. Idéal en fin de journée."},
-  {tag:"Core",t:"💪 La sangle abdominale, base de tout",x:"Un ventre faible = dos douloureux. Pas besoin de crunchs : la planche (gainage) 3x30 secondes par jour suffit pour renforcer les muscles profonds qui soutiennent ta colonne."},
-  {tag:"Mâchoire",t:"😬 Le bruxisme touche 1 adulte sur 3",x:"Grincement ou serrement des dents (souvent la nuit ou au stress). Symptômes : mâchoire tendue, maux de tête. Un dentiste peut proposer une gouttière. Masse les tempes."},
-  {tag:"Chaleur",t:"🛁 Un bain chaud détend mieux que les médicaments",x:"38-40°C pendant 20 min déclenche la libération de chaleur par le corps après, ce qui baisse la température centrale et prépare au sommeil. Mieux que la plupart des somnifères."},
-  {tag:"Dos",t:"🎒 Porter son sac à dos des deux côtés",x:"Un sac porté sur une épaule crée une asymétrie musculaire chronique. Porte-le sur les deux épaules ou change de côté régulièrement. La scoliose fonctionnelle se prévient tôt."},
-  {tag:"Cervical",t:"🖥️ L'écran doit être à hauteur des yeux",x:"Le haut de ton écran doit être au niveau de ton regard horizontal. Si tu regardes en bas, tu contractes les cervicaux en permanence. Surélève l'écran avec des livres si besoin."},
-  {tag:"Flexibilité",t:"🧘 3 étirements anti-douleur lombaire",x:"1) Genoux sur la poitrine allongé, 30 sec. 2) Torsion vertébrale couché, 30 sec. 3) Posture enfant (yoga), 30 sec. Pratiqués le matin, ils réduisent les douleurs de 70%."},
-  {tag:"Mouvement",t:"💃 La danse améliore la coordination mieux que le sport",x:"La danse stimule simultanément la mémoire spatiale, l'équilibre, la coordination et le rythme cardiaque. 20 min de danse libre dans ta chambre = cardio + bien-être + coordination."},
-  {tag:"Mauvaises habitudes",t:"🛋️ Être avachi dans le canapé pendant 2h contracte le psoas",x:"Le psoas est le muscle qui relie ta colonne à ton fémur. En position avachie, il se raccourcit. Résultat : douleurs au bas du dos et aux hanches. Étire-le en fente basse."},
-  {tag:"Respiration",t:"🌬️ La cohérence cardiaque en 5 minutes",x:"Inspire 5 sec, expire 5 sec, répète 6 fois par minute pendant 5 min. Cette technique synchronise le cœur et le cerveau, réduit le cortisol (hormone du stress) et améliore la concentration."},
-  {tag:"Jambes",t:"🧦 Les varices se préviennent dès 25 ans",x:"Évite de croiser les jambes assises, porte des chaussettes de compression pour les longs trajets, et alterne chaud/froid sous la douche sur les mollets. La génétique joue, mais les habitudes aussi."},
-  {tag:"Poignets",t:"⌨️ Les poignets en ligne droite pour taper",x:"Taper avec les poignets fléchis vers le bas crée des micro-traumatismes répétitifs (tunnel carpien). Ton clavier doit être plat ou légèrement incliné vers toi, pas surélevé."},
-  {tag:"Hanches",t:"🏃 Étirer les fléchisseurs des hanches chaque matin",x:"Assis toute la journée, tes fléchisseurs de hanches se contractent. En fente basse, pousse les hanches vers l'avant pendant 30 sec de chaque côté. Libère les lombaires en 1 semaine."},
-  {tag:"Chevilles",t:"🔁 Tourner les chevilles stimule la circulation",x:"10 rotations de cheville dans chaque sens, 2 fois par jour. Particulièrement utile si tu travailles debout ou assis longtemps. Réduit le risque de phlébite sur les longs vols."},
-  {tag:"Tension",t:"🤸 La posture 'starfish' réduit le stress en 2 min",x:"Allonge-toi sur le dos, bras et jambes en étoile, les paumes vers le plafond. 2 minutes dans cette position active le système nerveux parasympathique. Essaie entre deux tâches."},
-  {tag:"Genoux",t:"🏋️ Monter les escaliers préserve les genoux",x:"Monter les escaliers renforce les quadriceps, les ischio-jambiers et les fessiers — les muscles qui protègent l'articulation du genou. Descendre met plus de pression : tiens la rampe."},
-  {tag:"Tension musculaire",t:"🛑 Le scanning corporel pour détecter les tensions cachées",x:"Ferme les yeux, pars du sommet du crâne et descends mentalement jusqu'aux orteils. Là où tu sens de la tension, contracte puis relâche. Pratique au lit avant de dormir."},
-  {tag:"Abdominaux",t:"🎯 La respiration 360 pour activer le core en profondeur",x:"Inspire en gonflant le ventre, les côtés ET le dos. Expire en rentrant doucement le nombril. C'est la respiration naturelle que les bébés font et que les adultes ont perdue."},
-  {tag:"Sommeil",t:"🌙 L'oreiller trop haut force la nuque",x:"L'oreiller doit maintenir la tête en ligne avec la colonne : pas trop haut, pas trop bas. Teste en positionnant ta tête et en demandant à quelqu'un si ton profil est droit."},
-  {tag:"Muscles",t:"🔥 S'étirer à froid : mythe ou réalité ?",x:"Étirements statiques à froid = risque de déchirure. Avant sport : mobilisation dynamique (rotations, balancements). Après sport ou en soirée : étirements statiques 30 sec. L'ordre change tout."},
-];
-
-let currentPostureIdx = 0;
-function initDailyPosture() {
-  const today = new Date().toDateString();
-  const stored = localStorage.getItem('swivo_posture_date');
-  if(stored === today) {
-    currentPostureIdx = parseInt(localStorage.getItem('swivo_posture_idx') || '0');
-  } else {
-    const dayN = Math.floor(Date.now() / 86400000);
-    currentPostureIdx = (dayN + 13) % POSTURE_TIPS.length;
-    localStorage.setItem('swivo_posture_idx', currentPostureIdx);
-    localStorage.setItem('swivo_posture_date', today);
-  }
-  renderPosture();
-  const d = new Date();
-  const el = document.getElementById('posture-date');
-  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-}
-function renderPosture() {
-  const t = POSTURE_TIPS[currentPostureIdx % POSTURE_TIPS.length];
-  const el1 = document.getElementById('posture-title');
-  const el2 = document.getElementById('posture-text');
-  const el3 = document.getElementById('posture-tag');
-  if(el1) el1.textContent = t.t;
-  if(el2) el2.textContent = t.x;
-  if(el3) el3.textContent = t.tag;
-}
-function rotatePosture() {
-  const box = document.querySelector('#posture-title')?.closest('.tip-box');
-  if(box){box.style.opacity='0';box.style.transform='translateY(4px)';}
-  setTimeout(()=>{
-    currentPostureIdx = (currentPostureIdx + 1) % POSTURE_TIPS.length;
-    renderPosture();
-    if(box){box.style.transition='all .3s';box.style.opacity='1';box.style.transform='translateY(0)';}
-  }, 150);
-}
-
-
-// =============================================
-// QUESTION DU JOUR — DYNAMIQUE
-// =============================================
-const VOTE_QUESTIONS = [
-  "Faut-il rendre le vote obligatoire en France ?",
-  "Internet devrait-il être un droit fondamental universel ?",
-  "Devrions-nous réduire la semaine de travail à 4 jours ?",
-  "Faut-il interdire TikTok aux moins de 16 ans ?",
-  "Le revenu universel est-il une bonne idée ?",
-  "Devrait-on supprimer les notes à l'école primaire ?",
-  "Faut-il rendre les transports en commun gratuits ?",
-  "Le télétravail 3 jours/semaine devrait-il être un droit ?",
-  "Faut-il limiter les prix des loyers dans les grandes villes ?",
-  "Devrait-on interdire la pub alimentaire ciblant les enfants ?",
-  "Le service militaire obligatoire a-t-il du sens aujourd'hui ?",
-  "Faut-il baisser l'âge de la retraite à 60 ans ?",
-  "Les réseaux sociaux nuisent-ils à la santé mentale des jeunes ?",
-  "Devrait-on taxer davantage les très grandes fortunes ?",
-  "Faut-il rendre l'éducation financière obligatoire au lycée ?",
-  "Le végétarisme devrait-il être encouragé par l'État ?",
-  "Faut-il interdire les SUV en centre-ville ?",
-  "Devrait-on rendre la thérapie psy accessible gratuitement ?",
-  "L'IA va-t-elle détruire plus d'emplois qu'elle n'en crée ?",
-  "Faut-il légaliser le cannabis en France ?",
-  "Le sport devrait-il être obligatoire à l'université ?",
-  "Faut-il interdire les écrans avant 3 ans ?",
-  "Devrait-on financer les études par un impôt post-diplôme ?",
-  "Le droit de vote à 16 ans est-il une bonne idée ?",
-  "Faut-il rendre le don d'organes automatique ?",
-  "Les influenceurs devraient-ils payer plus d'impôts ?",
-  "Faut-il interdire la livraison de repas à vélo la nuit ?",
-  "L'école devrait-elle enseigner la méditation ?",
-  "Faut-il plafonner les salaires des PDG ?",
-  "Devrait-on rendre le covoiturage obligatoire pour les trajets domicile-travail ?",
+const DAILY_QUESTIONS = [
+  {q:"Faut-il rendre le vote obligatoire en France ?", yes:"Oui, obligatoire", no:"Non, libre"},
+  {q:"La semaine de 4 jours au travail : bonne idee ?", yes:"Oui, adoptons-la", no:"Non, trop tot"},
+  {q:"Devrait-on interdire les fast-foods pres des ecoles ?", yes:"Oui, absolument", no:"Non, liberte"},
+  {q:"Les reseaux sociaux font-ils plus de mal que de bien ?", yes:"Plus de mal", no:"Plus de bien"},
+  {q:"Le service militaire devrait-il etre obligatoire ?", yes:"Oui, obligatoire", no:"Non, volontaire"},
+  {q:"Faut-il taxer davantage les produits ultra-transformes ?", yes:"Oui, taxons", no:"Non, liberte"},
+  {q:"Internet devrait-il etre un droit fondamental ?", yes:"Oui, c'est essentiel", no:"Non, pas prioritaire"},
+  {q:"Le teletravail devrait-il etre la norme ?", yes:"Oui, generalisons", no:"Non, bureau preferable"},
+  {q:"Faut-il baisser la majorite electorale a 16 ans ?", yes:"Oui, 16 ans", no:"Non, garder 18 ans"},
+  {q:"Les animaux de compagnie devraient-ils etre remboursables chez le veto ?", yes:"Oui, comme nous", no:"Non, trop couteux"},
+  {q:"La publicite pour les enfants devrait-elle etre interdite ?", yes:"Oui, protegeons-les", no:"Non, encadrons-la"},
+  {q:"Le cannabis devrait-il etre legalise en France ?", yes:"Oui, legalisons", no:"Non, restons fermes"},
+  {q:"Faut-il rendre la langue des signes obligatoire a l'ecole ?", yes:"Oui, incluons tous", no:"Non, pas prioritaire"},
+  {q:"L'intelligence artificielle est-elle une menace pour l'emploi ?", yes:"Oui, danger reel", no:"Non, opportunite"},
+  {q:"La viande devrait-elle couter plus cher pour l'environnement ?", yes:"Oui, prix juste", no:"Non, trop difficile"},
 ];
 
 let currentVoteIdx = 0;
-let voteHasVoted = false;
+let voteAnswered = false;
+
 function initDailyVote() {
-  const today = new Date().toDateString();
-  const stored = localStorage.getItem('swivo_vote_date');
+  var today = new Date().toDateString();
+  var stored = localStorage.getItem('swivo_vote_date');
   if(stored === today) {
     currentVoteIdx = parseInt(localStorage.getItem('swivo_vote_idx') || '0');
-    voteHasVoted = localStorage.getItem('swivo_voted_today') === today;
+    var wasAnswered = localStorage.getItem('swivo_vote_answered_'+currentVoteIdx) === '1';
+    if(wasAnswered) {
+      showVoteResult();
+      voteAnswered = true;
+    }
   } else {
-    const dayN = Math.floor(Date.now() / 86400000);
-    currentVoteIdx = (dayN + 3) % VOTE_QUESTIONS.length;
+    var dayN = Math.floor(Date.now()/86400000) + 5;
+    currentVoteIdx = dayN % DAILY_QUESTIONS.length;
     localStorage.setItem('swivo_vote_idx', currentVoteIdx);
     localStorage.setItem('swivo_vote_date', today);
-    voteHasVoted = false;
+    voteAnswered = false;
   }
-  renderVote();
-  const d = new Date();
-  const el = document.getElementById('vote-date');
-  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
-  if(voteHasVoted) {
-    document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>b.disabled=true);
-    document.getElementById('vote-result').style.display = 'block';
-  }
-}
-function renderVote() {
-  const q = VOTE_QUESTIONS[currentVoteIdx % VOTE_QUESTIONS.length];
-  const el = document.getElementById('vote-question');
-  if(el) el.textContent = q;
-}
-function rotateVote() {
-  const qEl = document.getElementById('vote-question');
-  if(qEl){qEl.style.opacity='0';}
-  setTimeout(()=>{
-    currentVoteIdx = (currentVoteIdx + 1) % VOTE_QUESTIONS.length;
-    renderVote();
-    voteHasVoted = false;
-    document.querySelectorAll('#vote-opts .vote-opt').forEach(b=>{b.disabled=false;b.className='vote-opt';});
-    document.getElementById('vote-result').style.display='none';
-    if(qEl){qEl.style.transition='opacity .3s';qEl.style.opacity='1';}
-  }, 150);
+  renderVoteQuestion();
 }
 
+function renderVoteQuestion() {
+  var q = DAILY_QUESTIONS[currentVoteIdx % DAILY_QUESTIONS.length];
+  var qEl = document.getElementById('vote-question');
+  var yesBtn = document.getElementById('vote-btn-yes');
+  var noBtn = document.getElementById('vote-btn-no');
+  if(qEl) qEl.textContent = q.q;
+  if(yesBtn) yesBtn.textContent = '👍 ' + q.yes;
+  if(noBtn) noBtn.textContent = '👎 ' + q.no;
+}
+
+function showVoteResult() {
+  var res = document.getElementById('vote-result');
+  var opts = document.getElementById('vote-opts');
+  if(res) res.style.display = 'block';
+  if(opts) { opts.querySelectorAll('.vote-opt').forEach(function(b){ b.disabled = true; }); }
+}
+
+// Override castVote to persist
+var _origCastVote = window.castVote;
+function castVote(btn, choice) {
+  if(voteAnswered) return;
+  voteAnswered = true;
+  btn.classList.add(choice === 'yes' ? 'voted-yes' : 'voted-no');
+  localStorage.setItem('swivo_vote_answered_'+currentVoteIdx, '1');
+  showVoteResult();
+  showToast('Vote anonyme enregistre !');
+}
+
+// =============================================
+// ECO-GESTE DU JOUR (50 tips)
+// =============================================
+const ECO_TIPS = [
+  {tag:"Cuisine",t:"Nettoyer son micro-ondes naturellement",x:"Mets un bol d'eau avec du citron, fais chauffer 5 min. La vapeur ramollit les salissures, tu essuies sans produit chimique. Efficace et zero dechet."},
+  {tag:"Alimentation",t:"Connaitre les fruits de saison",x:"En avril : fraises, rhubarbe. En ete : peches, abricots, tomates. En automne : pommes, poires, raisins. Moins cher, meilleur gout, empreinte carbone reduite."},
+  {tag:"Email",t:"La regle des 5 secondes pour les mails",x:"Si un mail ne necessite qu'une reponse rapide, reponds dans les 5 secondes. Ca evite la procrastination et garde ta boite propre. Desabonne-toi des newsletters inutiles."},
+  {tag:"Maison",t:"Faire son liquide vaisselle maison",x:"1L d'eau chaude + 200ml de savon de Marseille liquide + 2 cuil. de bicarbonate. Moins de plastique, moins de produits chimiques, 5 fois moins cher."},
+  {tag:"Energie",t:"Debrancher les appareils en veille",x:"Un televiseur en veille consomme jusqu'a 15W. Sur un an c'est 130 kWh, soit 20 a 25 euros gaspilles. Utilise une multiprise avec interrupteur."},
+  {tag:"Transport",t:"Le velo pour les trajets courts",x:"80% des trajets en voiture font moins de 5km. Le velo : zero emission, zero frais de carburant, zero parking. Et en ville c'est souvent plus rapide."},
+  {tag:"Alimentation",t:"Reduire le gaspillage alimentaire",x:"En France, chaque foyer jette en moyenne 29kg de nourriture par an. Plan de repas le dimanche, liste de courses, zero frigo vide. Econome 400 euros par an."},
+  {tag:"Eau",t:"Recupurer l'eau froide de la douche",x:"Avant que l'eau chauffe, poses un seau sous le robinet. Utilise-la pour arroser les plantes ou tirer la chasse. 5 litres econmises par douche."},
+  {tag:"Vetements",t:"Laver ses vetements a 30 degres",x:"Laver a 30 degres consomme 40% d'energie en moins qu'a 60 degres. Et ca suffit pour la majorite des vetements. Tes habits durent aussi plus longtemps."},
+  {tag:"Maison",t:"Remplacer le papier essuie-tout",x:"Un rouleau de papier essuie-tout par semaine c'est 52 rouleaux par an. Des lavettes en tissu (vieilles chaussettes coupees) font le meme boulot a vie."},
+  {tag:"Numerique",t:"Nettoyer sa boite mail reduit la pollution",x:"1 mail stocke = 10g de CO2 par an. Si tu as 10 000 mails stockes = 100kg de CO2. Supprime, desabonne, archive. L'empreinte numerique est reelle."},
+  {tag:"Jardinage",t:"Faire son compost simplement",x:"Epluchures, marc de cafe, coquilles d'oeufs, carton. Un composteur de balcon suffit pour reduire ses dechets organiques de 30%. Et tu obtiens du terreau gratuit."},
+  {tag:"Courses",t:"Acheter en vrac",x:"Le vrac c'est moins d'emballages, souvent moins cher, et tu choisis exactement la quantite dont tu as besoin. De plus en plus de supermarches proposent des rayons vrac."},
+  {tag:"Chauffage",t:"Baisser le chauffage d'un degre",x:"Baisser le thermostat d'1 degre = 7% d'economie d'energie. A 19-20 degres tu dors mieux. Un pull suffit largement en interieur."},
+  {tag:"Beaute",t:"Les pastilles de shampoing solide",x:"Un shampoing solide remplace 3 flacons plastique. Dure 6 a 8 semaines. Pas de sulfates, pas d'eau inutile dans la formule. Parfait pour voyager."},
+  {tag:"Alimentation",t:"Manger moins de viande rouge",x:"1 kg de boeuf = 27 kg de CO2 emis. Un seul repas vegetarien par semaine sur un an = 100kg de CO2 evites. Sans priver de proteines avec legumineuses, oeufs, poisson."},
+  {tag:"Maison",t:"Ampoules LED : le calcul qui convainc",x:"Une ampoule LED consomme 10x moins qu'une ampoule classique. Duree de vie 15 000h vs 1 000h. En 3 ans elle s'est rentabilisee et te fait economiser 60 euros."},
+  {tag:"Courses",t:"Tote bag et contenants reutilisables",x:"Un sac plastique s'utilise en moyenne 12 minutes mais met 400 ans a se degrader. Un tote bag utilise 15 fois compense son empreinte. Simple et definitif."},
+  {tag:"Eau",t:"Installer un reducteur de debit",x:"Un reducteur de debit sur ton robinet coute 5 euros et reduit la consommation d'eau de 50%. Installes en 30 secondes, amortis en 1 mois sur ta facture."},
+  {tag:"Alimentation",t:"Les legumes moches, pareil dedans",x:"Les legumes 'moches' sont refuses par les supermaches mais ont exactement les memes nutriments. Moins chers de 30%, evites le gaspillage. Cherche en AMAP ou marche local."},
+  {tag:"Transport",t:"Covoiturage pour les trajets quotidiens",x:"BlaBlaCar Daily ou Karos pour les trajets domicile-travail. Partages les frais, reduit les emissions. En moyenne 250 euros economies par mois pour le passager."},
+  {tag:"Maison",t:"La bouteille d'eau reutilisable",x:"1 francais utilise en moyenne 150 bouteilles plastique par an. Une gourde de qualite dure 10 ans. Economie estimee : 200 euros par an. L'eau du robinet en France est controlee."},
+  {tag:"Numerique",t:"Mode sombre pour economiser la batterie",x:"Sur un ecran OLED, le mode sombre reduit la consommation d'energie jusqu'a 60%. Moins de recharges = batterie qui dure plus longtemps = moins d'achats."},
+  {tag:"Alimentation",t:"Cuisiner en grande quantite",x:"Cuisiner pour 4 repas d'un coup = 4x moins d'energie utilisee. Le batch cooking reduit aussi le gaspillage et te fait gagner du temps toute la semaine."},
+  {tag:"Maison",t:"Laisser secher le linge a l'air libre",x:"Le seche-linge est le 2eme plus gros consommateur d'energie apres le chauffage. Le linge secho naturellement dure aussi plus longtemps. Economie : 100 euros par an."},
+  {tag:"Courses",t:"Reparer avant de remplacer",x:"En France, le bonus reparation offre jusqu'a 25 euros de reduction sur la reparation d'appareils electroniques. bonusreparation.gouv.fr. Etends la vie de tes objets."},
+  {tag:"Beaute",t:"L'huile de coco : 15 usages",x:"Demaquillant, soin cheveux, hydratant corps, traitement ongles, beurre a levres... Un seul pot remplace 5 produits. Bio, naturel, zero dechet."},
+  {tag:"Jardin",t:"Recuperer l'eau de pluie",x:"Un recupurateur d'eau de pluie (50 a 100 euros) peut fournir 50% de l'eau necessaire au jardin. L'eau de pluie est aussi meilleure pour les plantes."},
+  {tag:"Transport",t:"Gonfler ses pneus a la bonne pression",x:"Des pneus sous-gonfles augmentent la consommation de carburant de 3 a 5%. Verifie tous les mois. En 1 an sur 15 000km c'est jusqu'a 80 euros et 200kg de CO2 economises."},
+  {tag:"Numerique",t:"Compresser ses photos avant envoi",x:"Envoyer une photo non compressee par mail = 4MB en serveur indefiniment. Utilise Squoosh.app (gratuit) pour reduire de 90% la taille sans perte visible."},
+  {tag:"Alimentation",t:"Les herbes aromatiques sur le rebord",x:"Basilic, ciboulette, menthe, persil sur ton rebord de fenetre. Zero plastique d'emballage, toujours frais, meilleur gout, et c'est tres facile a cultiver."},
+  {tag:"Maison",t:"Fabriquer son detergent naturel",x:"1 litre d'eau + 2 cuil. de bicarbonate + 2 cuil. de vinaigre blanc + huile essentielle. Nettoie autant que les produits chimiques, zero toxicite, 10 fois moins cher."},
+  {tag:"Transport",t:"La trottinette electrique pour 2-5km",x:"Pour les trajets entre 2 et 5km, la trottinette electrique est le moyen de transport le plus efficace. 0.02 kWh au km. Zero embouteillage. Location a 0.15 euros par minute."},
+  {tag:"Alimentation",t:"Lire l'etiquette : Nutriscore et Ecoscore",x:"Le Nutriscore evalue la qualite nutritionnelle (A a E). L'Ecoscore (en developpement) evalue l'impact environnemental. Les deux ensemble = choix eclaire."},
+  {tag:"Maison",t:"Double vitrage : investissement rentable",x:"Le double vitrage reduit les deperditions thermiques de 50%. Aide MaPrimeRenov peut couvrir jusqu'a 75% du cout. Amortissement en 5 a 10 ans sur la facture energetique."},
+  {tag:"Numerique",t:"Supprimer les applis non utilisees",x:"Chaque appli inutilisee continue de consommer de la donnee en fond et de l'espace serveur. Audit mensuel de tes apps = batterie amelioree, stockage libere, vie privee protegee."},
+];
+
+let currentEcoIdx = 0;
+
+function initEcoTip() {
+  var today = new Date().toDateString();
+  var stored = localStorage.getItem('swivo_eco_date');
+  if(stored === today) {
+    currentEcoIdx = parseInt(localStorage.getItem('swivo_eco_idx') || '0');
+  } else {
+    var dayN = Math.floor(Date.now()/86400000) + 2;
+    currentEcoIdx = dayN % ECO_TIPS.length;
+    localStorage.setItem('swivo_eco_idx', currentEcoIdx);
+    localStorage.setItem('swivo_eco_date', today);
+  }
+  renderEcoTip();
+  var d = new Date();
+  var el = document.getElementById('eco-date');
+  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+}
+
+function renderEcoTip() {
+  var t = ECO_TIPS[currentEcoIdx % ECO_TIPS.length];
+  var el1 = document.getElementById('eco-title');
+  var el2 = document.getElementById('eco-text');
+  var el3 = document.getElementById('eco-tag');
+  if(el1) el1.textContent = '🌿 ' + t.t;
+  if(el2) el2.textContent = t.x;
+  if(el3) el3.textContent = t.tag;
+}
+
+function rotateEco() {
+  var box = document.querySelector('[id="eco-title"]')?.closest('div[style]');
+  currentEcoIdx = (currentEcoIdx + 1) % ECO_TIPS.length;
+  renderEcoTip();
+  showToast('🌿 Nouvel eco-geste !');
+}
+
+// =============================================
+// POSTURE ET CORPS DU JOUR (40 tips)
+// =============================================
+const POSTURE_TIPS = [
+  {tag:"Dos",t:"La regle du 90-90-90 au bureau",x:"Pieds a plat, genoux a 90 degres, hanches a 90 degres, coudes a 90 degres. Ecran au niveau des yeux. C'est la position la moins fatiguante pour le dos sur la duree."},
+  {tag:"Yeux",t:"La regle 20-20-20 pour les ecrans",x:"Toutes les 20 minutes, regarde a 20 pieds (6m) pendant 20 secondes. Ca relache les muscles oculaires et reduit la fatigue visuelle de 40%. Fais-en une habitude."},
+  {tag:"Nuque",t:"La nuque textuelle : un probleme moderne",x:"Pencher la tete de 30 degres sur ton telephone = 18kg de pression sur la nuque. A 60 degres = 27kg. Tiens ton telephone a hauteur des yeux. Ta nuque te remerciera."},
+  {tag:"Sommeil",t:"La position de sommeil ideale",x:"Sur le cote avec un oreiller entre les genoux = meilleure position pour la colonne. Sur le dos avec support lombaire = 2eme choix. Sur le ventre = a eviter absolument."},
+  {tag:"Circulation",t:"Se lever toutes les heures",x:"Rester assis plus de 90 minutes ralentit la circulation et crispe le dos. Mets une alarme toutes les heures, leve-toi 2 minutes, marche. Reduit le risque de lombalgies de 30%."},
+  {tag:"Core",t:"La gaine abdominale au quotidien",x:"Contracter legerement tes abdominaux (comme si tu allais recevoir un coup) en position assise protege ton dos. Fais-le 10 secondes toutes les heures pour renforcer ton core."},
+  {tag:"Epaules",t:"Exercice anti-nuque tendue : 30 secondes",x:"Assis, amene lentement l'oreille vers l'epaule, tiens 15 secondes. Change de cote. Fais-le 2x par jour. Soulage les tensions cervicales dues aux ecrans."},
+  {tag:"Pieds",t:"Marcher pieds nus chez soi",x:"Marcher pieds nus renforce les muscles intrinseques du pied, ameliore l'equilibre et la proprioception. 20 minutes par jour suffisent pour des effets notables sur la posture globale."},
+  {tag:"Respiration",t:"La respiration abdominale anti-stress",x:"Inspire 4 secondes par le ventre (le ventre sort), expire 6 secondes. 10 repetitions. Reduit le cortisol (hormone du stress), detend les muscles du dos, ameliore la posture."},
+  {tag:"Hanches",t:"Ouvrir les hanches apres position assise",x:"Assis en tailleur, genoux vers le bas, penche-toi legerement en avant. Tiens 30 secondes. Les flexeurs de hanche se raccourcissent en restant assis - cet exercice les detend."},
+  {tag:"Poignets",t:"Exercice poignets pour les utilisateurs de clavier",x:"Etends le bras, tire les doigts vers toi avec l'autre main, tiens 15 secondes. Change de sens. Fais apres chaque session de 2h de clavier. Previent le syndrome du canal carpien."},
+  {tag:"Dos",t:"Lordose lombaire : la verifier facilement",x:"Debout contre un mur, talons a 5cm du mur. Tu dois pouvoir passer une main entre ton bas du dos et le mur (ni plus ni moins). Sinon ta lordose est excessive ou insuffisante."},
+  {tag:"Hydratation",t:"Les disques intervertebraux et l'eau",x:"Les disques entre tes vertebres sont a 80% d'eau. Quand tu es deshydrate, ils s'amincissent et compriment les nerfs. Boire 1.5L par jour = moins de maux de dos. Simple."},
+  {tag:"Yeux",t:"Cligner des yeux : oublie avec les ecrans",x:"On cligne en moyenne 15x par minute. Devant un ecran : 5-7x. Ca assece les yeux. Rappels conscients pour cligner plus souvent. Des larmes artificielles si les yeux sont secs."},
+  {tag:"Genoux",t:"La montee d'escaliers : une opportunite",x:"Monter les escaliers en poussant sur les talons (pas les orteils) active mieux les fessiers et protege les genoux. Ca renforce aussi les quadriceps passivement."},
+  {tag:"Ventre",t:"Manger lentement et bien mastiquer",x:"Mastiquer 20 a 30 fois par bouchee active la digestion, evite les ballonnements et donne le temps au cerveau de ressentir la satiete. Tu manges moins et digeres mieux."},
+  {tag:"Dos",t:"Le deadlift sans barre : ramasser par terre",x:"Pour ramasser quelque chose, plie les genoux en gardant le dos droit plutot que de te courber. Ca protege les vertebres lombaires. 80% des maux de dos viennent de mauvais gestes."},
+  {tag:"Epaules",t:"Les trapez : relacher la tension",x:"Hausse les epaules vers les oreilles, tiens 5 secondes, relache brusquement. Fais 5 fois. Vide les tensions accumulees dans les trapeziens en quelques secondes."},
+  {tag:"Circulation",t:"Surever les jambes apres une longue journee",x:"Allonge-toi, pieds sureleves (coussin, mur). 15 minutes. Reduit l'oedeme des chevilles, facilite le retour veineux, soulage les jambes lourdes. Tres efficace."},
+  {tag:"Sommeil",t:"Temperature ideale pour dormir",x:"18-19 degres C est la temperature optimale pour le sommeil. La baisse de temperature corporelle necessaire a l'endormissement est facilitee. Au-dessus de 22 degres, le sommeil se degrade."},
+  {tag:"Core",t:"Le gainage, pas que les abdos",x:"Le gainage renforce toute la chaine posturale : dos, abdos, fessiers, epaules. 3x30 secondes de planche par jour suffit pour des resultats en 4 semaines. Pas besoin de gym."},
+  {tag:"Cou",t:"Les cercles de cou : avec prudence",x:"Amener doucement le menton vers la poitrine, tourner lentement d'un cote puis de l'autre (demi-cercle seulement, jamais en arriere). Lubrifie les articulaires cervicales."},
+  {tag:"Pieds",t:"Le rouleau sous le pied",x:"Une balle de tennis sous le pied, roule lentement pendant 2 minutes. Detend le fascia plantaire, soulage les douleurs de talon et ameliore la proprioception. Faire assis."},
+  {tag:"Dos",t:"Matelas : verifier le soutien",x:"Ton matelas doit maintenir la colonne en position neutre. Test : glisse une main sous tes lombaires en position couchee. Trop facile = trop mou. Pas possible = trop dur."},
+  {tag:"Respiration",t:"Respirer par le nez, pas par la bouche",x:"La respiration nasale filtre, humidifie et rechauffre l'air. Elle produit aussi du monoxyde d'azote qui dilate les vaisseaux. La bouche en secours, pas en habitude."},
+  {tag:"Epaules",t:"Ouvrir la cage thoracique : posture eagle",x:"Entrelace les doigts, tourne les paumes vers le bas, etire les bras devant toi. Tu ouvres la partie superieure du dos. Tiens 20 secondes. Anti-voute dorsale."},
+  {tag:"Equilibre",t:"Se tenir sur un pied en se brossant les dents",x:"30 secondes sur chaque pied matin et soir. Ameliore l'equilibre et la proprioception. Reduit le risque de chutes de 30% sur le long terme. Facile a integrer."},
+  {tag:"Ventre",t:"Ne pas manger dans les 3h avant de dormir",x:"Le systeme digestif doit etre au repos pendant le sommeil. Manger tard = reflux, sommeil agite, prise de poids. Le corps repare et regenere, pas digere, la nuit."},
+  {tag:"Cou",t:"L'oreiller : la hauteur compte",x:"Sur le cote : oreiller qui comble l'espace entre l'epaule et la tete. Sur le dos : oreiller fin. Le but : que la colonne cervicale soit dans le prolongement du reste de la colonne."},
+  {tag:"Core",t:"Aspirer le nombril : le transverse",x:"Le muscle transverse est la gaine naturelle du ventre. Pour l'activer : expire et aspire le nombril vers la colonne, tiens 5 secondes. Fais 10x. Renforce sans solliciter les lombaires."},
+  {tag:"Circulation",t:"Marcher 10 minutes apres chaque repas",x:"10 minutes de marche apres un repas reduit le pic de glycemie de 30%, ameliore la digestion et brule des calories sans effort. Habitude des plus efficaces au rapport benefice/effort."},
+  {tag:"Dos",t:"Le chat-vache : mobilite lombaire",x:"A 4 pattes, inspire et creuse le dos (regard vers le haut), expire et arrondis le dos (regard vers le nombril). 10 repetitions. Mobilise toute la colonne, ideal au reveil."},
+  {tag:"Yeux",t:"L'eclairage: la regle de l'angle",x:"L'ecran ne doit pas etre en face d'une fenetre ni vous en avoir une dans le dos. La lumiere doit venir sur le cote. Reduit les reflets, la fatigue oculaire et les maux de tete."},
+  {tag:"Pieds",t:"Des chaussures qui respectent le pied",x:"La chaussure ideale : zero elevation du talon, pointe large (orteils ne se serrent pas), semelle souple. Fuyez les talons hauts quotidiens et les chaussures trop rigides."},
+  {tag:"Epaules",t:"Le retrait scapulaire pour contrer la voute",x:"Assis, pince les omoplates comme si tu voulais tenir un crayon entre elles. Tiens 5 secondes, relache. Fais 10x. Corrige directement la posture voute du travailler devant ecran."},
+  {tag:"Sommeil",t:"Routine de decompression 30min avant dormir",x:"Ecrans off, lumieres tamisees, 10 minutes d'etirements doux, lecture ou meditation. Le cerveau associe ces signaux au sommeil et l'endormissement devient plus rapide et profond."},
+  {tag:"Hydratation",t:"Boire avant d'avoir soif",x:"La soif signale une deshydratation deja installee. Boire regulierement en petites quantites vaut mieux que de grandes quantites rarement. 1 verre toutes les 1.5h minimum."},
+  {tag:"Dos",t:"Soulever une charge : la technique",x:"Pieds ecartes a largeur d'epaules, genoux plies, dos droit, charge collee au corps, pousse avec les jambes. Ne pas tordre le buste. Meme pour des poids legers : le geste protege."},
+  {tag:"Cou",t:"Ecran a la bonne distance et hauteur",x:"Distance: un bras tendu entre toi et l'ecran. Hauteur: le haut de l'ecran au niveau des yeux (pas en dessous). Ca evite de pencher la tete et protege les cervicales."},
+  {tag:"Core",t:"La marche : meilleur exercice pour le dos",x:"30 minutes de marche par jour renforce le core, mobilise la colonne, favorise la circulation. Gratuit, sans equipement, zero impact. Le medecin que tu portes en toi."},
+];
+
+let currentPostureIdx = 0;
+
+function initPostureTip() {
+  var today = new Date().toDateString();
+  var stored = localStorage.getItem('swivo_posture_date');
+  if(stored === today) {
+    currentPostureIdx = parseInt(localStorage.getItem('swivo_posture_idx') || '0');
+  } else {
+    var dayN = Math.floor(Date.now()/86400000) + 3;
+    currentPostureIdx = dayN % POSTURE_TIPS.length;
+    localStorage.setItem('swivo_posture_idx', currentPostureIdx);
+    localStorage.setItem('swivo_posture_date', today);
+  }
+  renderPostureTip();
+  var d = new Date();
+  var el = document.getElementById('posture-date');
+  if(el) el.textContent = d.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'short'});
+}
+
+function renderPostureTip() {
+  var t = POSTURE_TIPS[currentPostureIdx % POSTURE_TIPS.length];
+  var el1 = document.getElementById('posture-title');
+  var el2 = document.getElementById('posture-text');
+  var el3 = document.getElementById('posture-tag');
+  if(el1) el1.textContent = '🧘 ' + t.t;
+  if(el2) el2.textContent = t.x;
+  if(el3) el3.textContent = t.tag;
+}
+
+function rotatePosture() {
+  currentPostureIdx = (currentPostureIdx + 1) % POSTURE_TIPS.length;
+  renderPostureTip();
+  showToast('🧘 Nouveau conseil posture !');
+}
 
 // =============================================
 // INIT
@@ -3056,5 +3045,6 @@ async function init(){
 }
 init();
 </script>
+
 </body>
-</html>
+  </html>
