@@ -564,7 +564,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <div class="card-header">
         <div class="card-avatar" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">💡</div>
         <div class="card-meta"><div class="card-name">Conseil du jour</div><div><span class="tag-pill" style="background:rgba(67,233,123,.12);color:#43e97b" id="tip-tag">Vie adulte</span> <span style="font-size:.62rem;color:var(--muted)" id="tip-date"></span></div></div>
-        <button class="tip-refresh" onclick="rotateTip()">🔀</button>
+        
       </div>
       <div class="tip-box"><div class="tip-title" id="tip-title">Chargement...</div><div class="tip-text" id="tip-text"></div></div>
       <div class="card-actions">
@@ -584,12 +584,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       </div>
     </div>
     <!-- Stories moved to Messages page -->
-    <!-- LIVE -->
-    <div class="live-banner" onclick="openLive()">
-      <div class="live-dot"></div>
-      <div style="flex:1"><div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem">💬 Live — Comprendre son premier loyer</div><div style="font-size:.68rem;color:var(--muted);margin-top:2px">@PaulineAdulte · 1 204 spectateurs</div></div>
-      <div class="live-badge">LIVE</div>
-    </div>
+    <!-- Live removed from accueil -->
 
 
     <!-- MINI TEAM RANKING -->
@@ -658,7 +653,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <div class="card-header">
         <div class="card-avatar" style="background:linear-gradient(135deg,#38f9d7,#4facfe)">🌿</div>
         <div class="card-meta"><div class="card-name">Éco-geste du jour</div><div><span class="tag-pill" style="background:rgba(56,249,215,.1);color:#38f9d7" id="eco-tag">Pratique</span> <span style="font-size:.62rem;color:var(--muted)" id="eco-date"></span></div></div>
-        <button class="tip-refresh" style="background:rgba(56,249,215,.1);border-color:rgba(56,249,215,.25);color:#38f9d7" onclick="rotateEco()">🔀</button>
+        
       </div>
       <div style="margin:0 14px 10px;background:rgba(56,249,215,.06);border:1px solid rgba(56,249,215,.18);border-radius:14px;padding:13px">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:#38f9d7;margin-bottom:4px" id="eco-title">Chargement...</div>
@@ -675,7 +670,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       <div class="card-header">
         <div class="card-avatar" style="background:linear-gradient(135deg,#f953c6,#b91d73)">🧘</div>
         <div class="card-meta"><div class="card-name">Posture & Corps</div><div><span class="tag-pill" style="background:rgba(249,83,198,.1);color:#f953c6" id="posture-tag">Corps</span> <span style="font-size:.62rem;color:var(--muted)" id="posture-date"></span></div></div>
-        <button class="tip-refresh" style="background:rgba(249,83,198,.1);border-color:rgba(249,83,198,.25);color:#f953c6" onclick="rotatePosture()">🔀</button>
+        
       </div>
       <div style="margin:0 14px 10px;background:rgba(249,83,198,.05);border:1px solid rgba(249,83,198,.18);border-radius:14px;padding:13px">
         <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;color:#f953c6;margin-bottom:4px" id="posture-title">Chargement...</div>
@@ -2703,33 +2698,43 @@ function startWeatherRefresh() {
 
 
 function initWeather() {
-  localStorage.setItem('swivo_weather_last', Date.now());
-  if(!navigator.geolocation){ setWeatherFallback(); return; }
-  navigator.geolocation.getCurrentPosition(
-    async function(pos) {
-      try {
-        var lat = pos.coords.latitude;
-        var lon = pos.coords.longitude;
-        var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true';
-        var resp = await fetch(url);
-        if(!resp.ok) { setWeatherFallback(); return; }
-        var data = await resp.json();
-        var cw = data.current_weather;
-        var temp = Math.round(cw.temperature);
-        var code = cw.weathercode;
-        var icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',85:'❄️',86:'❄️',95:'⛈️',96:'⛈️',99:'⛈️'};
-        var descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Nuageux',3:'Couvert',45:'Brouillard',48:'Brouillard',51:'Bruine légère',53:'Bruine',55:'Bruine forte',61:'Pluie légère',63:'Pluie',65:'Pluie forte',71:'Neige légère',73:'Neige',75:'Neige forte',80:'Averses',81:'Averses',82:'Averses fortes',95:'Orage',96:'Orage',99:'Orage fort'};
-        var wi = document.getElementById('weather-icon');
-        var wt = document.getElementById('weather-temp');
-        var wd = document.getElementById('weather-desc');
-        if(wi) wi.textContent = icons[code] || '🌡️';
-        if(wt) wt.textContent = temp + '°C';
-        if(wd) wd.textContent = descs[code] || 'Variable';
-      } catch(err) { setWeatherFallback(); }
-    },
-    function() { setWeatherFallback(); },
-    { timeout: 8000, maximumAge: 600000, enableHighAccuracy: false }
-  );
+  function applyWeather(lat, lon) {
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&current_weather=true';
+    fetch(url).then(function(r){ return r.json(); }).then(function(data){
+      var cw = data.current_weather;
+      var temp = Math.round(cw.temperature);
+      var code = parseInt(cw.weathercode);
+      var icons = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌦️',55:'🌦️',61:'🌧️',63:'🌧️',65:'🌧️',71:'❄️',73:'❄️',75:'❄️',77:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',85:'❄️',86:'❄️',95:'⛈️',96:'⛈️',99:'⛈️'};
+      var descs = {0:'Ensoleillé',1:'Peu nuageux',2:'Nuageux',3:'Couvert',45:'Brouillard',48:'Brouillard',51:'Bruine',53:'Bruine',55:'Bruine',61:'Pluie légère',63:'Pluie',65:'Pluie forte',71:'Neige légère',73:'Neige',75:'Neige forte',77:'Neige',80:'Averses',81:'Averses',82:'Averses',85:'Neige',86:'Neige',95:'Orage',96:'Orage',99:'Orage'};
+      var wi = document.getElementById('weather-icon');
+      var wt = document.getElementById('weather-temp');
+      var wd = document.getElementById('weather-desc');
+      if(wi) wi.textContent = icons[code] || '🌡️';
+      if(wt) wt.textContent = temp + '°C';
+      if(wd) wd.textContent = descs[code] || 'Variable';
+    }).catch(function(){ setWeatherFallback(); });
+  }
+
+  // Try GPS first
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(pos){ applyWeather(pos.coords.latitude, pos.coords.longitude); },
+      function(){
+        // GPS denied - use IP geolocation fallback
+        fetch('https://ipapi.co/json/').then(function(r){ return r.json(); }).then(function(d){
+          if(d.latitude && d.longitude){ applyWeather(d.latitude, d.longitude); }
+          else { setWeatherFallback(); }
+        }).catch(function(){ setWeatherFallback(); });
+      },
+      { timeout: 6000, maximumAge: 300000, enableHighAccuracy: false }
+    );
+  } else {
+    // No geolocation at all - use IP
+    fetch('https://ipapi.co/json/').then(function(r){ return r.json(); }).then(function(d){
+      if(d.latitude && d.longitude){ applyWeather(d.latitude, d.longitude); }
+      else { setWeatherFallback(); }
+    }).catch(function(){ setWeatherFallback(); });
+  }
 }
 
 
@@ -2828,15 +2833,15 @@ function showVoteResult() {
   if(opts) { opts.querySelectorAll('.vote-opt').forEach(function(b){ b.disabled = true; }); }
 }
 
-// Override castVote to persist
-var _origCastVote = window.castVote;
 function castVote(btn, choice) {
   if(voteAnswered) return;
   voteAnswered = true;
+  document.querySelectorAll('#vote-opts .vote-opt').forEach(function(b){ b.disabled = true; });
   btn.classList.add(choice === 'yes' ? 'voted-yes' : 'voted-no');
   localStorage.setItem('swivo_vote_answered_'+currentVoteIdx, '1');
-  showVoteResult();
-  showToast('Vote anonyme enregistre !');
+  var res = document.getElementById('vote-result');
+  if(res) res.style.display = 'block';
+  showToast('✅ Vote anonyme enregistré !');
 }
 
 // =============================================
@@ -3047,4 +3052,4 @@ init();
 </script>
 
 </body>
-                                                                            </html>
+  </html>
