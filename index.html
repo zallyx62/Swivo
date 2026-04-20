@@ -716,7 +716,7 @@ body.noir{--bg:#000000;--surface:#080808;--surface2:#0f0f0f;--border:rgba(255,25
       </div>
     </div>
     <!-- SUPPORT -->
-    <div class="support-card support-paypal"><div style="font-size:1.3rem">💙</div><div class="support-info"><div class="support-title" style="color:#4facfe">Faire un don</div><div class="support-text">Swivo est 100% gratuit. Un don aide à le faire grandir.</div></div><button class="support-btn" style="background:#0070f0;color:#fff" onclick="window.open('https://paypal.me/swivo','_blank')">PayPal</button></div>
+    <div class="support-card support-paypal"><div style="font-size:1.3rem">💙</div><div class="support-info"><div class="support-title" style="color:#4facfe">Faire un don</div><div class="support-text">Swivo est 100% gratuit. Un don aide à le faire grandir.</div></div><button class="support-btn" style="background:#0070f0;color:#fff" onclick="window.open('https://www.paypal.me/zallyx','_blank')">PayPal</button></div>
     <div class="support-card support-free"><div style="font-size:1.3rem">🆓</div><div class="support-info"><div class="support-title" style="color:#43e97b">Soutien gratuit</div><div class="support-text">Clique sur une pub — ça nous aide gratuitement 🙏</div></div><button class="support-btn" style="background:rgba(67,233,123,.15);color:#43e97b;border:1px solid rgba(67,233,123,.3)" onclick="showToast('🙏 Merci !')">Une pub →</button></div>
     <div class="ad-slot"><ins class="adsbygoogle" style="display:block;width:100%;min-height:60px" data-ad-client="ca-pub-1381945888605291" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins></div>
     <div style="height:20px"></div>
@@ -1359,47 +1359,128 @@ async function handleLogin() {
   const err = document.getElementById('login-err');
   const stayConnected = document.getElementById('stay-connected')?.checked;
   err.textContent = '';
-  if(!email||!pass){err.textContent='⚠️ Remplis tous les champs';return;}
+
+  if(!email || !pass) { err.textContent = '⚠️ Remplis tous les champs'; return; }
+  if(pass.length < 6) { err.textContent = '⚠️ Mot de passe trop court (min 6 car.)'; return; }
+
+  // Show loading state
+  const btn = document.querySelector('#page-login .btn-p');
+  const origText = btn ? btn.textContent : '';
+  if(btn) { btn.textContent = 'Connexion...'; btn.disabled = true; }
+
+  let loginOk = false;
+
+  // Try Supabase with timeout
   if(sb) {
-    const {data,error} = await sb.auth.signInWithPassword({email,password:pass});
-    if(error){err.textContent='❌ Email ou mot de passe incorrect';if(!trackFailedAuth())return;return;}
-    currentUser=data.user;
-  } else {
-    currentUser={email,id:'demo',user_metadata:{pseudo:email.split('@')[0]}};
+    try {
+      const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000));
+      const loginReq = sb.auth.signInWithPassword({email, password: pass});
+      const result = await Promise.race([loginReq, timeout]);
+      if(result && result.data && result.data.user && !result.error) {
+        currentUser = result.data.user;
+        loginOk = true;
+      } else if(result && result.error) {
+        // Real auth error (wrong password)
+        if(btn) { btn.textContent = origText; btn.disabled = false; }
+        err.textContent = '❌ Email ou mot de passe incorrect';
+        trackFailedAuth();
+        return;
+      }
+    } catch(e) {
+      // Network error or timeout — fall through to local mode
+      console.log('Supabase unreachable, using local mode:', e.message);
+    }
   }
-  // Persist session if "rester connecté" checked
+
+  // Local/demo mode: accept any valid email+pass (6+ chars)
+  if(!loginOk) {
+    // Check if this user has a saved local account
+    const savedAccounts = JSON.parse(localStorage.getItem('swivo_local_accounts') || '{}');
+    if(savedAccounts[email]) {
+      if(savedAccounts[email].pass === pass) {
+        currentUser = { email, id: 'local_' + email, user_metadata: { pseudo: savedAccounts[email].pseudo } };
+        loginOk = true;
+      } else {
+        if(btn) { btn.textContent = origText; btn.disabled = false; }
+        err.textContent = '❌ Mot de passe incorrect';
+        return;
+      }
+    } else {
+      // First time local login - accept and create local account
+      const pseudo = email.split('@')[0];
+      currentUser = { email, id: 'local_' + email, user_metadata: { pseudo } };
+      savedAccounts[email] = { pass, pseudo };
+      localStorage.setItem('swivo_local_accounts', JSON.stringify(savedAccounts));
+      loginOk = true;
+    }
+  }
+
+  if(!loginOk) {
+    if(btn) { btn.textContent = origText; btn.disabled = false; }
+    err.textContent = '❌ Connexion impossible, réessaie';
+    return;
+  }
+
+  if(btn) { btn.textContent = origText; btn.disabled = false; }
+
+  // Persist session
   if(stayConnected) {
     localStorage.setItem('swivo_session', JSON.stringify({
-      email, pseudo: currentUser?.user_metadata?.pseudo || email.split('@')[0],
-      id: currentUser?.id || 'demo', savedAt: Date.now()
+      email,
+      pseudo: currentUser?.user_metadata?.pseudo || email.split('@')[0],
+      id: currentUser?.id || 'demo',
+      savedAt: Date.now()
     }));
   } else {
     localStorage.removeItem('swivo_session');
   }
+
   const savedTeam = localStorage.getItem('swivo_team');
   if(savedTeam) { applyTeam(savedTeam); enterApp(); }
   else showPage('page-choose-team');
+  clearFailedAuth();
 }
 async function handleSignup() {
   const pseudo = document.getElementById('signup-pseudo').value.trim();
   const email = document.getElementById('signup-email').value.trim();
   const pass = document.getElementById('signup-password').value;
   const err = document.getElementById('signup-err');
-  err.textContent='';
+  err.textContent = '';
   if(!pseudo||!email||!pass){err.textContent='⚠️ Remplis tous les champs';return;}
   if(pass.length<6){err.textContent='⚠️ Mot de passe min 6 caractères';return;}
-  if(sb){
-    const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{pseudo}}});
-    if(error){err.textContent='❌ '+error.message;return;}
-    currentUser=data.user;
-  } else {
-    currentUser={email,id:'demo',user_metadata:{pseudo}};
+
+  const btn = document.querySelector('#page-signup .btn-p');
+  const origText = btn ? btn.textContent : '';
+  if(btn) { btn.textContent = 'Création...'; btn.disabled = true; }
+
+  let signupOk = false;
+  if(sb) {
+    try {
+      const timeout = new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('timeout')); }, 5000); });
+      const req = sb.auth.signUp({email, password: pass, options:{data:{pseudo}}});
+      const result = await Promise.race([req, timeout]);
+      if(result && result.data && result.data.user && !result.error) {
+        currentUser = result.data.user;
+        signupOk = true;
+      }
+    } catch(e) {
+      console.log('Supabase signup failed, local mode:', e.message);
+    }
   }
-  // Auto-save session on signup
-  const stayConn = document.getElementById('stay-connected-signup')?.checked;
-  if(stayConn !== false) {
+
+  if(!signupOk) {
+    const savedAccounts = JSON.parse(localStorage.getItem('swivo_local_accounts') || '{}');
+    savedAccounts[email] = { pass, pseudo };
+    localStorage.setItem('swivo_local_accounts', JSON.stringify(savedAccounts));
+    currentUser = { email, id: 'local_' + email, user_metadata: { pseudo } };
+  }
+
+  if(btn) { btn.textContent = origText; btn.disabled = false; }
+
+  const stayConn = document.getElementById('stay-connected-signup') ? document.getElementById('stay-connected-signup').checked : true;
+  if(stayConn) {
     localStorage.setItem('swivo_session', JSON.stringify({
-      email, pseudo, id: currentUser?.id||'demo', savedAt: Date.now()
+      email, pseudo, id: currentUser ? currentUser.id : 'local', savedAt: Date.now()
     }));
   }
   showPage('page-choose-team');
@@ -2195,7 +2276,34 @@ function setupPWA() { try {
 
 
 // Register Service Worker for offline use
-// SW removed
+
+// =============================================
+// SERVICE WORKER - PWA Install Support
+// =============================================
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    try {
+      var swCode = [
+        "var CACHE='swivo-v4';",
+        "self.addEventListener('install',function(e){self.skipWaiting();});",
+        "self.addEventListener('activate',function(e){",
+        "  e.waitUntil(caches.keys().then(function(keys){",
+        "    return Promise.all(keys.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));",
+        "  }));",
+        "});",
+        "self.addEventListener('fetch',function(e){",
+        "  if(e.request.method!=='GET')return;",
+        "  e.respondWith(fetch(e.request).catch(function(){return caches.match(e.request);}));",
+        "});"
+      ].join('\n');
+      var blob = new Blob([swCode], {type:'application/javascript'});
+      var url = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(url, {scope: '/'})
+        .then(function(reg){ console.log('SW registered'); })
+        .catch(function(e){ console.log('SW skipped (file:// context)'); });
+    } catch(e) { /* SW not supported */ }
+  });
+}
 
 
 // =============================================
@@ -3052,4 +3160,4 @@ init();
 </script>
 
 </body>
-  </html>
+                                                                                                                                                                                                                                                                                                       </html>
