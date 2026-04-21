@@ -1354,143 +1354,182 @@ function confirmTeam() {
 // AUTH
 // =============================================
 async function handleLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass = document.getElementById('login-password').value;
-  const err = document.getElementById('login-err');
-  const stayConnected = document.getElementById('stay-connected')?.checked;
-  err.textContent = '';
+  var emailEl = document.getElementById('login-email');
+  var passEl  = document.getElementById('login-password');
+  var errEl   = document.getElementById('login-err');
+  var stayEl  = document.getElementById('stay-connected');
+  var btn     = document.querySelector('#page-login .btn-p');
 
-  if(!email || !pass) { err.textContent = '⚠️ Remplis tous les champs'; return; }
-  if(pass.length < 6) { err.textContent = '⚠️ Mot de passe trop court (min 6 car.)'; return; }
+  var email = emailEl ? emailEl.value.trim() : '';
+  var pass  = passEl  ? passEl.value : '';
+  var stay  = stayEl  ? stayEl.checked : true;
 
-  // Show loading state
-  const btn = document.querySelector('#page-login .btn-p');
-  const origText = btn ? btn.textContent : '';
-  if(btn) { btn.textContent = 'Connexion...'; btn.disabled = true; }
-
-  let loginOk = false;
-
-  // Try Supabase with timeout
-  if(sb) {
-    try {
-      const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 5000));
-      const loginReq = sb.auth.signInWithPassword({email, password: pass});
-      const result = await Promise.race([loginReq, timeout]);
-      if(result && result.data && result.data.user && !result.error) {
-        currentUser = result.data.user;
-        loginOk = true;
-      } else if(result && result.error) {
-        // Real auth error (wrong password)
-        if(btn) { btn.textContent = origText; btn.disabled = false; }
-        err.textContent = '❌ Email ou mot de passe incorrect';
-        trackFailedAuth();
-        return;
-      }
-    } catch(e) {
-      // Network error or timeout — fall through to local mode
-      console.log('Supabase unreachable, using local mode:', e.message);
-    }
+  if(errEl) errEl.textContent = '';
+  if(!email || !pass) {
+    if(errEl) errEl.textContent = '⚠️ Remplis tous les champs';
+    return;
   }
-
-  // Local/demo mode: accept any valid email+pass (6+ chars)
-  if(!loginOk) {
-    // Check if this user has a saved local account
-    const savedAccounts = JSON.parse(localStorage.getItem('swivo_local_accounts') || '{}');
-    if(savedAccounts[email]) {
-      if(savedAccounts[email].pass === pass) {
-        currentUser = { email, id: 'local_' + email, user_metadata: { pseudo: savedAccounts[email].pseudo } };
-        loginOk = true;
-      } else {
-        if(btn) { btn.textContent = origText; btn.disabled = false; }
-        err.textContent = '❌ Mot de passe incorrect';
-        return;
-      }
-    } else {
-      // First time local login - accept and create local account
-      const pseudo = email.split('@')[0];
-      currentUser = { email, id: 'local_' + email, user_metadata: { pseudo } };
-      savedAccounts[email] = { pass, pseudo };
-      localStorage.setItem('swivo_local_accounts', JSON.stringify(savedAccounts));
-      loginOk = true;
-    }
-  }
-
-  if(!loginOk) {
-    if(btn) { btn.textContent = origText; btn.disabled = false; }
-    err.textContent = '❌ Connexion impossible, réessaie';
+  if(pass.length < 6) {
+    if(errEl) errEl.textContent = '⚠️ Mot de passe trop court (min 6 car.)';
     return;
   }
 
-  if(btn) { btn.textContent = origText; btn.disabled = false; }
+  if(btn) { btn.textContent = 'Connexion...'; btn.disabled = true; }
 
-  // Persist session
-  if(stayConnected) {
+  // === LOCAL AUTH (works always, even offline/WebView) ===
+  var accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem('swivo_accounts') || '{}'); } catch(e) {}
+
+  var account = accounts[email.toLowerCase()];
+
+  if(account) {
+    // Account exists locally
+    if(account.pass !== pass) {
+      if(btn) { btn.textContent = 'Se connecter'; btn.disabled = false; }
+      if(errEl) errEl.textContent = '❌ Mot de passe incorrect';
+      trackFailedAuth();
+      return;
+    }
+    // Local login success
+    currentUser = { email: email, id: account.id || ('local_'+email), user_metadata: { pseudo: account.pseudo } };
+  } else {
+    // No local account — first login, create local account automatically
+    var pseudo = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g,'');
+    var newId = 'local_' + Date.now();
+    accounts[email.toLowerCase()] = { pass: pass, pseudo: pseudo, id: newId, createdAt: Date.now() };
+    localStorage.setItem('swivo_accounts', JSON.stringify(accounts));
+    currentUser = { email: email, id: newId, user_metadata: { pseudo: pseudo } };
+  }
+
+  // Try Supabase in background (non-blocking)
+  if(sb) {
+    sb.auth.signInWithPassword({email: email, password: pass}).then(function(res){
+      if(res && res.data && res.data.user) {
+        currentUser = res.data.user;
+        // Update local account with real Supabase data
+        var accs = {};
+        try { accs = JSON.parse(localStorage.getItem('swivo_accounts') || '{}'); } catch(e){}
+        if(!accs[email.toLowerCase()]) accs[email.toLowerCase()] = {};
+        accs[email.toLowerCase()].supabaseId = res.data.user.id;
+        localStorage.setItem('swivo_accounts', JSON.stringify(accs));
+      }
+    }).catch(function(e){ /* silent - local auth already succeeded */ });
+  }
+
+  // Save session
+  if(stay) {
     localStorage.setItem('swivo_session', JSON.stringify({
-      email,
-      pseudo: currentUser?.user_metadata?.pseudo || email.split('@')[0],
-      id: currentUser?.id || 'demo',
+      email: email,
+      pseudo: currentUser.user_metadata ? currentUser.user_metadata.pseudo : email.split('@')[0],
+      id: currentUser.id,
       savedAt: Date.now()
     }));
   } else {
     localStorage.removeItem('swivo_session');
   }
 
-  const savedTeam = localStorage.getItem('swivo_team');
+  clearFailedAuth();
+  if(btn) { btn.textContent = 'Se connecter'; btn.disabled = false; }
+
+  var savedTeam = localStorage.getItem('swivo_team');
   if(savedTeam) { applyTeam(savedTeam); enterApp(); }
   else showPage('page-choose-team');
-  clearFailedAuth();
 }
 async function handleSignup() {
-  const pseudo = document.getElementById('signup-pseudo').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const pass = document.getElementById('signup-password').value;
-  const err = document.getElementById('signup-err');
-  err.textContent = '';
-  if(!pseudo||!email||!pass){err.textContent='⚠️ Remplis tous les champs';return;}
-  if(pass.length<6){err.textContent='⚠️ Mot de passe min 6 caractères';return;}
+  var pseudoEl = document.getElementById('signup-pseudo');
+  var emailEl  = document.getElementById('signup-email');
+  var passEl   = document.getElementById('signup-password');
+  var errEl    = document.getElementById('signup-err');
+  var stayEl   = document.getElementById('stay-connected-signup');
+  var btn      = document.querySelector('#page-signup .btn-p');
 
-  const btn = document.querySelector('#page-signup .btn-p');
-  const origText = btn ? btn.textContent : '';
+  var pseudo = pseudoEl ? pseudoEl.value.trim() : '';
+  var email  = emailEl  ? emailEl.value.trim()  : '';
+  var pass   = passEl   ? passEl.value          : '';
+  var stay   = stayEl   ? stayEl.checked        : true;
+
+  if(errEl) errEl.textContent = '';
+  if(!pseudo || !email || !pass) {
+    if(errEl) errEl.textContent = '⚠️ Remplis tous les champs';
+    return;
+  }
+  if(pass.length < 6) {
+    if(errEl) errEl.textContent = '⚠️ Mot de passe min 6 caractères';
+    return;
+  }
+
   if(btn) { btn.textContent = 'Création...'; btn.disabled = true; }
 
-  let signupOk = false;
+  // === LOCAL SIGNUP (always works) ===
+  var accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem('swivo_accounts') || '{}'); } catch(e) {}
+
+  var newId = 'local_' + Date.now();
+  // If account exists, update it; otherwise create
+  if(!accounts[email.toLowerCase()]) {
+    accounts[email.toLowerCase()] = { pass: pass, pseudo: pseudo, id: newId, createdAt: Date.now() };
+  } else {
+    accounts[email.toLowerCase()].pseudo = pseudo;
+    newId = accounts[email.toLowerCase()].id || newId;
+  }
+  localStorage.setItem('swivo_accounts', JSON.stringify(accounts));
+  currentUser = { email: email, id: newId, user_metadata: { pseudo: pseudo } };
+
+  // Try Supabase in background (non-blocking)
   if(sb) {
-    try {
-      const timeout = new Promise(function(_,rej){ setTimeout(function(){ rej(new Error('timeout')); }, 5000); });
-      const req = sb.auth.signUp({email, password: pass, options:{data:{pseudo}}});
-      const result = await Promise.race([req, timeout]);
-      if(result && result.data && result.data.user && !result.error) {
-        currentUser = result.data.user;
-        signupOk = true;
-      }
-    } catch(e) {
-      console.log('Supabase signup failed, local mode:', e.message);
-    }
+    sb.auth.signUp({ email: email, password: pass, options: { data: { pseudo: pseudo } } })
+      .then(function(res){
+        if(res && res.data && res.data.user) {
+          var accs = {};
+          try { accs = JSON.parse(localStorage.getItem('swivo_accounts') || '{}'); } catch(e){}
+          if(accs[email.toLowerCase()]) accs[email.toLowerCase()].supabaseId = res.data.user.id;
+          localStorage.setItem('swivo_accounts', JSON.stringify(accs));
+        }
+      }).catch(function(e){ /* silent */ });
   }
 
-  if(!signupOk) {
-    const savedAccounts = JSON.parse(localStorage.getItem('swivo_local_accounts') || '{}');
-    savedAccounts[email] = { pass, pseudo };
-    localStorage.setItem('swivo_local_accounts', JSON.stringify(savedAccounts));
-    currentUser = { email, id: 'local_' + email, user_metadata: { pseudo } };
-  }
-
-  if(btn) { btn.textContent = origText; btn.disabled = false; }
-
-  const stayConn = document.getElementById('stay-connected-signup') ? document.getElementById('stay-connected-signup').checked : true;
-  if(stayConn) {
+  if(stay) {
     localStorage.setItem('swivo_session', JSON.stringify({
-      email, pseudo, id: currentUser ? currentUser.id : 'local', savedAt: Date.now()
+      email: email, pseudo: pseudo, id: newId, savedAt: Date.now()
     }));
   }
+
+  if(btn) { btn.textContent = 'Créer mon compte 🚀'; btn.disabled = false; }
   showPage('page-choose-team');
 }
 async function handleForgot() {
-  const email = document.getElementById('forgot-email').value.trim();
-  if(!email){document.getElementById('forgot-err').textContent='⚠️ Entre ton email';return;}
-  if(sb) await sb.auth.resetPasswordForEmail(email);
-  showToast('📧 Email envoyé !');
-  setTimeout(()=>showPage('page-login'),1500);
+  var emailEl = document.getElementById('forgot-email');
+  var errEl   = document.getElementById('forgot-err');
+  var email   = emailEl ? emailEl.value.trim() : '';
+
+  if(!email) {
+    if(errEl) errEl.textContent = '⚠️ Entre ton email';
+    return;
+  }
+
+  // Check if account exists locally
+  var accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem('swivo_accounts') || '{}'); } catch(e) {}
+  var account = accounts[email.toLowerCase()];
+
+  if(account) {
+    // Show the password directly (local app - no real email needed)
+    if(errEl) errEl.textContent = '';
+    showToast('🔑 Ton mot de passe : ' + account.pass);
+    setTimeout(function(){
+      showPage('page-login');
+    }, 4000);
+    return;
+  }
+
+  // Try Supabase reset in background
+  if(sb) {
+    try {
+      await sb.auth.resetPasswordForEmail(email);
+    } catch(e) {}
+  }
+  showToast('📧 Si ce compte existe, un email a été envoyé.');
+  setTimeout(function(){ showPage('page-login'); }, 2000);
 }
 async function handleLogout() {
   if(sb) await sb.auth.signOut();
@@ -3160,4 +3199,4 @@ init();
 </script>
 
 </body>
-                                                                                                                                                                                                                                                                                                       </html>
+  </html>
