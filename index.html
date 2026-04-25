@@ -652,8 +652,8 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
       <div class="vote-q" id="vote-question">Chargement...</div>
       <div style="padding:0 14px 6px;font-size:.72rem;color:var(--muted)">100% anonyme · Aucun jugement</div>
       <div class="vote-opts" id="vote-opts">
-        <button class="vote-opt" id="vote-btn-yes" data-action="vote-yes" data-choice="yes" onclick="castVote(this,'yes')">👍 Oui</button>
-        <button class="vote-opt" id="vote-btn-no" data-action="vote-no" data-choice="no" onclick="castVote(this,'no')">👎 Non</button>
+        <button class="vote-opt" id="vote-btn-yes" data-action="vote-yes" data-choice="yes" onclick="castVote(document.getElementById('vote-btn-yes'),'yes')">👍 Oui</button>
+        <button class="vote-opt" id="vote-btn-no" data-action="vote-no" data-choice="no" onclick="castVote(document.getElementById('vote-btn-no'),'no')">👎 Non</button>
       </div>
       <div class="vote-result" id="vote-result" style="display:none">
         <div class="vote-bar-wrap"><div class="vote-bar" id="vote-bar" style="width:58%"></div></div>
@@ -1027,30 +1027,30 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outlin
     <div class="settings-section">
       <div class="settings-title">Apparence</div>
       <div class="theme-grid">
-        <div class="theme-opt selected" data-action="set-theme" data-theme=""><div class="theme-preview" style="background:#0a0a0f;border:1px solid #333"></div><div class="theme-name">🌙 Sombre</div></div>
-        <div class="theme-opt" data-action="set-theme" data-theme="light"><div class="theme-preview" style="background:#f5f5fa;border:1px solid #ddd"></div><div class="theme-name">☀️ Clair</div></div>
-        <div class="theme-opt" data-action="set-theme" data-theme="amoled"><div class="theme-preview" style="background:#000;border:1px solid #222"></div><div class="theme-name">⚡ AMOLED</div></div>
-        <div class="theme-opt" data-action="set-theme" data-theme="noir"><div class="theme-preview" style="background:#000000"></div><div class="theme-name">🖤 Noir total</div></div>
+        <div class="theme-opt selected" data-action="set-theme" data-theme="" onclick="setTheme('',this)"><div class="theme-preview" style="background:#0a0a0f;border:1px solid #333"></div><div class="theme-name">🌙 Sombre</div></div>
+        <div class="theme-opt" data-action="set-theme" data-theme="light" onclick="setTheme('light',this)"><div class="theme-preview" style="background:#f5f5fa;border:1px solid #ddd"></div><div class="theme-name">☀️ Clair</div></div>
+        <div class="theme-opt" data-action="set-theme" data-theme="amoled" onclick="setTheme('amoled',this)"><div class="theme-preview" style="background:#000;border:1px solid #222"></div><div class="theme-name">⚡ AMOLED</div></div>
+        <div class="theme-opt" data-action="set-theme" data-theme="noir" onclick="setTheme('noir',this)"><div class="theme-preview" style="background:#000000"></div><div class="theme-name">🖤 Noir total</div></div>
       </div>
       <div class="settings-title">Couleur principale</div>
       <div class="color-grid" style="margin-bottom:14px">
-        <div class="color-dot selected" style="background:#6c63ff" data-action="set-accent" data-color="#6c63ff"></div>
-        <div class="color-dot" style="background:#ff6584" data-action="set-accent" data-color="#ff6584"></div>
-        <div class="color-dot" style="background:#43e97b" data-action="set-accent" data-color="#43e97b"></div>
-        <div class="color-dot" style="background:#4facfe" data-action="set-accent" data-color="#4facfe"></div>
-        <div class="color-dot" style="background:#f7971e" data-action="set-accent" data-color="#f7971e"></div>
-        <div class="color-dot" style="background:#f953c6" data-action="set-accent" data-color="#f953c6"></div>
-        <div class="color-dot" style="background:#00e5ff" data-action="set-accent" data-color="#00e5ff"></div>
-        <div class="color-dot" style="background:#ffffff" data-action="set-accent" data-color="#ffffff"></div>
+        <div class="color-dot selected" style="background:#6c63ff" data-action="set-accent" data-color="#6c63ff" onclick="setAccent('#6c63ff',this)"></div>
+        <div class="color-dot" style="background:#ff6584" data-action="set-accent" data-color="#ff6584" onclick="setAccent('#ff6584',this)"></div>
+        <div class="color-dot" style="background:#43e97b" data-action="set-accent" data-color="#43e97b" onclick="setAccent('#43e97b',this)"></div>
+        <div class="color-dot" style="background:#4facfe" data-action="set-accent" data-color="#4facfe" onclick="setAccent('#4facfe',this)"></div>
+        <div class="color-dot" style="background:#f7971e" data-action="set-accent" data-color="#f7971e" onclick="setAccent('#f7971e',this)"></div>
+        <div class="color-dot" style="background:#f953c6" data-action="set-accent" data-color="#f953c6" onclick="setAccent('#f953c6',this)"></div>
+        <div class="color-dot" style="background:#00e5ff" data-action="set-accent" data-color="#00e5ff" onclick="setAccent('#00e5ff',this)"></div>
+        <div class="color-dot" style="background:#ffffff" data-action="set-accent" data-color="#ffffff" onclick="setAccent('#ffffff',this)"></div>
       </div>
     </div>
     <div class="settings-section" style="padding-top:0">
       <div class="settings-title">Fonctionnalités</div>
-      <div class="settings-item"><div class="settings-icon" style="background:rgba(108,99,255,.1)">🌍</div><div class="settings-label">Traduction auto (EN→FR)</div><button class="toggle" id="toggle-translation" data-action="toggle-setting" data-key="translation"></button></div>
-      <div class="settings-item"><div class="settings-icon" style="background:rgba(247,151,30,.1)">💰</div><div class="settings-label">Comparateur de prix</div><button class="toggle" id="toggle-price" data-action="toggle-setting" data-key="price"></button></div>
-      <div class="settings-item"><div class="settings-icon" style="background:rgba(67,233,123,.1)">📝</div><div class="settings-label">Bloc-notes privé</div><button class="toggle on" id="toggle-notes" data-action="toggle-setting" data-key="notes"></button></div>
-      <div class="settings-item"><div class="settings-icon" style="background:rgba(79,172,254,.1)">📅</div><div class="settings-label">Agenda privé</div><button class="toggle on" id="toggle-agenda" data-action="toggle-setting" data-key="agenda"></button></div>
-      <div class="settings-item"><div class="settings-icon" style="background:rgba(255,101,132,.1)">🌤️</div><div class="settings-label">Météo dans le feed</div><button class="toggle on" id="toggle-weather" data-action="toggle-setting" data-key="weather"></button></div>
+      <div class="settings-item"><div class="settings-icon" style="background:rgba(108,99,255,.1)">🌍</div><div class="settings-label">Traduction auto (EN→FR)</div><button class="toggle" id="toggle-translation" data-action="toggle-setting" data-key="translation" onclick="toggleSetting(this,'translation')"></button></div>
+      <div class="settings-item"><div class="settings-icon" style="background:rgba(247,151,30,.1)">💰</div><div class="settings-label">Comparateur de prix</div><button class="toggle" id="toggle-price" data-action="toggle-setting" data-key="price" onclick="toggleSetting(this,'price')"></button></div>
+      <div class="settings-item"><div class="settings-icon" style="background:rgba(67,233,123,.1)">📝</div><div class="settings-label">Bloc-notes privé</div><button class="toggle on" id="toggle-notes" data-action="toggle-setting" data-key="notes" onclick="toggleSetting(this,'notes')"></button></div>
+      <div class="settings-item"><div class="settings-icon" style="background:rgba(79,172,254,.1)">📅</div><div class="settings-label">Agenda privé</div><button class="toggle on" id="toggle-agenda" data-action="toggle-setting" data-key="agenda" onclick="toggleSetting(this,'agenda')"></button></div>
+      <div class="settings-item"><div class="settings-icon" style="background:rgba(255,101,132,.1)">🌤️</div><div class="settings-label">Météo dans le feed</div><button class="toggle on" id="toggle-weather" data-action="toggle-setting" data-key="weather" onclick="toggleSetting(this,'weather')"></button></div>
     </div>
     <div class="settings-section" style="padding-top:0">
       <div class="settings-title">Compte</div>
@@ -1794,12 +1794,13 @@ let batteryPollInterval = null;
 
 
 function updateBatteryUI() {
-  const bat = batteryObj || navigator.battery || navigator.mozBattery || navigator.webkitBattery;
-  if(!bat) return;
-  const pct = Math.round((bat.level || 0) * 100);
-  const charging = bat.charging || false;
-  const fill = document.getElementById('battery-fill');
-  const pctEl = document.getElementById('battery-pct');
+  var bat = batteryObj || navigator.battery || navigator.mozBattery || navigator.webkitBattery;
+  if(!bat) { setBatteryFallback(); return; }
+  var level = typeof bat.level === 'number' ? bat.level : 1;
+  var pct = Math.round(level * 100);
+  var charging = bat.charging === true;
+  var fill = document.getElementById('battery-fill');
+  var pctEl = document.getElementById('battery-pct');
   if(fill) {
     fill.style.width = pct + '%';
     fill.style.background = pct <= 20 ? '#ff6584' : pct <= 50 ? '#f7971e' : '#43e97b';
@@ -1810,25 +1811,37 @@ function updateBatteryUI() {
 
 async function initBattery() {
   try {
-    // Try modern Battery API
     if(navigator.getBattery) {
       batteryObj = await navigator.getBattery();
-      batteryObj.addEventListener('levelchange', updateBatteryUI);
-      batteryObj.addEventListener('chargingchange', updateBatteryUI);
-      batteryObj.addEventListener('chargingtimechange', updateBatteryUI);
-      batteryObj.addEventListener('dischargingtimechange', updateBatteryUI);
-    } else if(navigator.battery || navigator.mozBattery || navigator.webkitBattery) {
-      batteryObj = navigator.battery || navigator.mozBattery || navigator.webkitBattery;
+      // Listen to ALL battery events
+      ['levelchange','chargingchange','chargingtimechange','dischargingtimechange'].forEach(function(ev){
+        batteryObj.addEventListener(ev, updateBatteryUI);
+      });
+      updateBatteryUI();
+    } else {
+      var legacyBat = navigator.battery || navigator.mozBattery || navigator.webkitBattery;
+      if(legacyBat) {
+        batteryObj = legacyBat;
+        legacyBat.addEventListener('levelchange', updateBatteryUI);
+        legacyBat.addEventListener('chargingchange', updateBatteryUI);
+        updateBatteryUI();
+      } else {
+        setBatteryFallback();
+        return;
+      }
     }
-    updateBatteryUI();
-    // Aggressive polling every 10s for real-time feel + on focus
-    batteryPollInterval = setInterval(updateBatteryUI, 10000);
-    document.addEventListener('visibilitychange', () => {
-      if(document.visibilityState === 'visible') updateBatteryUI();
+    // Poll every 30s (battery doesn't change that fast)
+    setInterval(updateBatteryUI, 30000);
+    // Update on visibility change (phone wakes up)
+    document.addEventListener('visibilitychange', function(){
+      if(document.visibilityState === 'visible') {
+        setTimeout(updateBatteryUI, 200);
+      }
     });
     window.addEventListener('focus', updateBatteryUI);
-    window.addEventListener('resume', updateBatteryUI); // Cordova/PWA
+    window.addEventListener('pageshow', updateBatteryUI);
   } catch(e) {
+    console.log('Battery API error:', e.message);
     setBatteryFallback();
   }
 }
@@ -3944,4 +3957,4 @@ init();
 </script>
 
 </body>
-      </html>
+                                                                                                                                                                                                                                                                                                                               </html>
